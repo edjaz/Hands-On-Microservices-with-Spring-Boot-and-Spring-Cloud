@@ -21,6 +21,7 @@ sourceCompatibility = 1.8
 
 ext {
 	springCloudVersion = "Greenwich.SR1"
+	resilience4jVersion = "0.14.1"
 }
 
 repositories {
@@ -45,6 +46,8 @@ dependencies {
 	implementation('io.springfox:springfox-swagger2:3.0.0-SNAPSHOT')
 	implementation('io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT')
 	implementation('io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT')
+	implementation("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
+	implementation("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.cloud:spring-cloud-stream-test-support')
