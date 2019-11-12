@@ -8,7 +8,6 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.function.client.WebClient;
-import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -62,9 +61,6 @@ public class ProductCompositeServiceApplication {
                     emptyList()
                 ));
     }
-
-	@Autowired
-	ProductCompositeIntegration integration;
 
 	@Bean
 	@LoadBalanced

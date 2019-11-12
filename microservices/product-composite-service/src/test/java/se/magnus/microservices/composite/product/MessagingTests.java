@@ -35,12 +35,11 @@ import static se.magnus.api.event.Event.Type.DELETE;
 import static se.magnus.microservices.composite.product.IsSameEvent.sameEventExceptCreatedAt;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=RANDOM_PORT, properties = {"eureka.client.enabled=false"})
+@SpringBootTest(
+	webEnvironment=RANDOM_PORT,
+	classes = {ProductCompositeServiceApplication.class, TestSecurityConfig.class },
+	properties = {"spring.main.allow-bean-definition-overriding=true","eureka.client.enabled=false"})
 public class MessagingTests {
-
-	private static final int PRODUCT_ID_OK = 1;
-	private static final int PRODUCT_ID_NOT_FOUND = 2;
-	private static final int PRODUCT_ID_INVALID = 3;
 
     @Autowired
     private WebTestClient client;
@@ -111,7 +110,6 @@ public class MessagingTests {
 
 	@Test
 	public void deleteCompositeProduct() {
-
 		deleteAndVerifyProduct(1, OK);
 
 		// Assert one delete product event queued up
