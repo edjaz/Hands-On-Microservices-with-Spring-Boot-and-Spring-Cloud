@@ -1,28 +1,12 @@
 server.port: 8443
 
-spring.application.name: gateway
-
 server.ssl:
   key-store-type: PKCS12
   key-store: classpath:keystore/edge.p12
   key-store-password: password
   key-alias: localhost
 
-app:
-  eureka-username: u
-  eureka-password: p
-  eureka-server: localhost
-  auth-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: "http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/"
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
+app.config-server: localhost
 
 ribbon.ServerListRefreshInterval: 5000
 
@@ -61,6 +45,13 @@ spring.cloud.gateway.routes:
   predicates:
   - Path=/eureka/**
 
+- id: config-server
+  uri: http://${app.config-server}:8888
+  predicates:
+  - Path=/config/**
+  filters:
+  - RewritePath=/config/(?<segment>.*), /$\{segment}
+
 - id: host_route_200
   uri: http://httpstat.us
   predicates:
@@ -86,9 +77,6 @@ spring.cloud.gateway.routes:
 
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri: http://${app.auth-server}:9999/.well-known/jwks.json
 
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
 logging:
   level:
     root: INFO
@@ -99,6 +87,4 @@ logging:
 ---
 spring.profiles: docker
 
-app:
-  eureka-server: eureka
-  auth-server: auth-server
+app.config-server: config-server

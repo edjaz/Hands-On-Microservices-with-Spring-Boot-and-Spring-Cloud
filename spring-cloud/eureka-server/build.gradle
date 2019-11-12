@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.3.RELEASE'
+	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
 }
 
@@ -19,6 +19,8 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.retry:spring-retry'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.glassfish.jaxb:jaxb-runtime'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
