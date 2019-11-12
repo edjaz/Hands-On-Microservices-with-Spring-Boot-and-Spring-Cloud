@@ -21,8 +21,8 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
-
 
 dependencies {
 	implementation project(':api')
