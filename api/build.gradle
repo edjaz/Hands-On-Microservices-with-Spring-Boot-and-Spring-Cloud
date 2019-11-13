@@ -1,26 +1,22 @@
-buildscript {
-	ext {
-		springBootVersion = '2.1.4.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
-}
-
 plugins {
-	id "io.spring.dependency-management" version "1.0.5.RELEASE"
+	id 'org.springframework.boot' version '2.2.1.RELEASE' apply false
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
 }
 
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
-group = 'se.magnus.microservices.api'
+group = 'fr.edjaz.microservices.api'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = 1.8
+sourceCompatibility = 11
+
+jar {
+	baseName 'base-api'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -28,11 +24,19 @@ repositories {
 }
 
 dependencies {
-	implementation('org.springframework.boot:spring-boot-starter-webflux')
-	implementation('io.springfox:springfox-swagger2:3.0.0-SNAPSHOT')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation("io.springfox:springfox-swagger2:${springfoxVersion}")
 }
 
 dependencyManagement {
-    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
+
+test {
+	useJUnitPlatform()
 }

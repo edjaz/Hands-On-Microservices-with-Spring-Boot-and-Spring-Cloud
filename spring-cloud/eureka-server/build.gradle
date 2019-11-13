@@ -1,21 +1,19 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
+	id 'org.springframework.boot' version '2.2.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 }
 
-apply plugin: 'io.spring.dependency-management'
-
-group = 'se.magnus.springcloud'
-version = '1.0.0-SNAPSHOT'
-sourceCompatibility = '1.8'
+group = 'fr.edjaz.springcloud'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
 }
 
-ext {
-	set('springCloudVersion', 'Greenwich.SR1')
-}
+
 
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
@@ -27,7 +25,9 @@ dependencies {
 	implementation 'org.springframework.retry:spring-retry'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.glassfish.jaxb:jaxb-runtime'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
 dependencyManagement {
@@ -35,3 +35,8 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+
+test {
+	useJUnitPlatform()
+}
+

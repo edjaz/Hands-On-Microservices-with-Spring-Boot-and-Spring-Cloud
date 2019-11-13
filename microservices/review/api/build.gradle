@@ -1,0 +1,38 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.1.RELEASE' apply false
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'fr.edjaz.microservices.core.review'
+version = '1.0.0-SNAPSHOT'
+sourceCompatibility = 11
+
+jar {
+	baseName 'review-api'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation("io.springfox:springfox-swagger2:${springfoxVersion}")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}

@@ -1,6 +1,6 @@
 = OAuth 2.0 Authorization Server Sample
 
-This sample demonstrates an Authorization Server that supports a simple, static JWK Set.
+This fr.edjaz.springcloud.uaa.sample demonstrates an Authorization Server that supports a simple, static JWK Set.
 
 It's useful for working with the other samples in the library that want to point to an Authorization Server.
 
