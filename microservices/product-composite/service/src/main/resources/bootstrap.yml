@@ -10,8 +10,25 @@ spring:
       maxInterval: 10000
       maxAttempts: 20
     uri: http://${CONFIG_SERVER_USR}:${CONFIG_SERVER_PWD}@${app.config-server}:8888
+    kubernetes:
+      reload:
+        enabled: true
+        mode: polling
+        period: 5000
+    gateway:
+      discovery:
+        locator:
+          enabled: true
 
 ---
 spring.profiles: docker
 
 app.config-server: config-server
+
+---
+spring.profiles: kubernetes
+
+spring.cloud.kubernetes.enabled: true
+eureka:
+  client:
+    enabled: false

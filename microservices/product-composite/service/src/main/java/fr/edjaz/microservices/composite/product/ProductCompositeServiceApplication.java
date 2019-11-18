@@ -4,6 +4,7 @@ import fr.edjaz.microservices.composite.product.config.properties.ServicesProper
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,6 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
         ServicesProperties.SwaggerProperties.class
 })
 @EnableSwagger2WebFlux
+@EnableDiscoveryClient
 public class ProductCompositeServiceApplication {
 
 	@Bean

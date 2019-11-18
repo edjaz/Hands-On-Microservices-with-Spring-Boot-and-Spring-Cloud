@@ -23,6 +23,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	compile 'io.dekorate:kubernetes-spring-starter:0.9.9'
+	annotationProcessor 'io.dekorate:kubernetes-annotations:0.9.9'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -37,6 +39,13 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 	implementation 'org.springframework.retry:spring-retry'
+
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes'
+	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-ribbon'
+	implementation 'org.springframework.cloud:spring-cloud-kubernetes-discovery'
+	implementation 'org.springframework.cloud:spring-cloud-kubernetes-config'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

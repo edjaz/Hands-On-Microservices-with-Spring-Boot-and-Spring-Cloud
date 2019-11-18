@@ -14,7 +14,7 @@
 : ${PROD_ID_NOT_FOUND=13}
 : ${PROD_ID_NO_RECS=114}
 : ${PROD_ID_NO_REVS=214}
-
+: ${NAMESPACE=hands-on}
 
 EXEC="wget http://localhost:7000"
 
@@ -179,6 +179,24 @@ function setupTestdata() {
 function testCircuitBreaker() {
 
     echo "Start Circuit Breaker tests!"
+
+
+ if [ "$HOST" = "localhost" ]
+    then
+       echo "local"
+    else
+        echo "Restarting alpine-client..."
+        local ns=$NAMESPACE
+        if kubectl -n $ns get pod alpine-client > /dev/null ; then
+            kubectl -n $ns delete pod alpine-client --grace-period=1
+        fi
+        kubectl -n $ns run --restart=Never alpine-client --image=alpine --command -- sleep 600
+        echo "Waiting for alpine-client to be ready..."
+        kubectl -n $ns wait --for=condition=Ready pod/alpine-client
+
+        EXEC="kubectl -n $ns exec alpine-client --  wget product-composite:8080"
+
+    fi
 
 
     # First, use the health - endpoint to verify that the circuit breaker is closed

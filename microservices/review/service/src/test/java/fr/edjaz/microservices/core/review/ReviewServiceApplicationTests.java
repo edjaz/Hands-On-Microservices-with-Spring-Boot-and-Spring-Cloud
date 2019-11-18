@@ -30,7 +30,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @SpringBootTest(webEnvironment=RANDOM_PORT, properties = {
 	"eureka.client.enabled=false",
 	"spring.cloud.config.enabled=false",
-    "spring.datasource.url=jdbc:h2:mem:review-db"})
+    "spring.datasource.url=jdbc:h2:mem:review-db",
+	"spring.cloud.kubernetes.enabled= false"})
 public class ReviewServiceApplicationTests {
 
 	@Autowired

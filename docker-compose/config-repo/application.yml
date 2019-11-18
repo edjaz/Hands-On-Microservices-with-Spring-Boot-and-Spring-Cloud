@@ -31,6 +31,23 @@ spring.sleuth.sampler.probability: 1.0
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+spring.cloud.kubernetes.enabled: false
+
+
+---
+spring.profiles: kubernetes
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true
+eureka:
+  client:
+    enabled: false
+
+
 ---
 spring.profiles: docker
 
@@ -49,3 +66,24 @@ management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka
 spring.zipkin.sender.type: kafka
 spring.kafka.bootstrap-servers: kafka:9092
+
+---
+spring.profiles: kubernetes
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: false
+eureka:
+  client:
+    enabled: false
+
+
+---
+spring.profiles: prod
+spring.rabbitmq.host: 172.17.0.1
+
+# Only allow management endpoints over http in production for info, health and circuitbreakerevents
+management.endpoints.web.exposure.include: health,info,circuitbreakerevents

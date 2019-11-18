@@ -3,6 +3,7 @@ version: '2.1'
 services:
   product:
     build: ../microservices/product/service
+    image: edjaz/product/service
     mem_limit: 350m
     networks:
       - my-network
@@ -18,6 +19,7 @@ services:
 
   recommendation:
     build: ../microservices/recommendation/service
+    image: edjaz/recommendation/service
     mem_limit: 350m
     networks:
       - my-network
@@ -33,6 +35,7 @@ services:
 
   review:
     build: ../microservices/review/service
+    image: edjaz/review/service
     mem_limit: 350m
     networks:
       - my-network
@@ -48,6 +51,7 @@ services:
 
   product-composite:
     build: ../microservices/product-composite/service
+    image: edjaz/product-composite/service
     mem_limit: 350m
     networks:
       - my-network
@@ -61,6 +65,7 @@ services:
 
   eureka:
     build: ../spring-cloud/eureka-server
+    image: edjaz/eureka-server
     mem_limit: 350m
     networks:
       - my-network
@@ -71,6 +76,7 @@ services:
 
   gateway:
     build: ../spring-cloud/gateway
+    image: edjaz/gateway
     mem_limit: 350m
     ports:
       - "8443:8443"
@@ -83,6 +89,7 @@ services:
 
   auth-server:
     build: ../spring-cloud/authorization-server
+    image: edjaz/auth-server
     mem_limit: 350m
     networks:
       - my-network
@@ -93,6 +100,7 @@ services:
 
   config-server:
     build: ../spring-cloud/config-server
+    image: edjaz/config-server
     mem_limit: 350m
     networks:
       - my-network

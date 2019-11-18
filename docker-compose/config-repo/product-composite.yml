@@ -73,7 +73,7 @@ spring.cloud.stream:
 
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri: http://${app.auth-server}:9999/.well-known/jwks.json
 
-app.product-service.timeoutSec: 2
+app.product/service.timeoutSec: 2
 
 management.health.circuitbreakers.enabled: true
 management.health.ratelimiter.enabled: true
@@ -126,3 +126,12 @@ spring.cloud.stream.bindings.output-recommendations.producer:
 spring.cloud.stream.bindings.output-reviews.producer:
   partition-key-expression: payload.key
   partition-count: 2
+
+---
+spring.profiles: prod
+
+logging:
+  level:
+    root: WARN
+    se.magnus: WARN
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: WARN

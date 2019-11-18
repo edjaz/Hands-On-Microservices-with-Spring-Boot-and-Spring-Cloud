@@ -9,7 +9,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment=RANDOM_PORT, properties = {"spring.profiles.active=native"})
-
 public class ConfigServerApplicationTests {
 
 	@Test
