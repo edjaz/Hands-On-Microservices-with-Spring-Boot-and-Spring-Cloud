@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.2.1.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id "jacoco"
+	id "org.sonarqube"
 }
 
 group = 'fr.edjaz.springcloud'
@@ -16,6 +18,7 @@ repositories {
 
 
 dependencies {
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.cloud:spring-cloud-config-server'
@@ -32,4 +35,15 @@ dependencyManagement {
 
 test {
 	useJUnitPlatform()
+}
+
+
+
+
+
+sonarqube {
+	properties {
+		property 'sonar.sources', 'src/main/'
+		property 'sonar.tests', 'src/test/'
+	}
 }

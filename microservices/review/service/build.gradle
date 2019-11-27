@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.2.1.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id "jacoco"
+	id "org.sonarqube"
 }
 
 
@@ -33,6 +35,7 @@ repositories {
 
 
 dependencies {
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -79,4 +82,15 @@ dependencyManagement {
 
 test {
 	useJUnitPlatform()
+}
+
+
+
+
+
+sonarqube {
+	properties {
+		property 'sonar.sources', 'src/main/'
+		property 'sonar.tests', 'src/test/'
+	}
 }

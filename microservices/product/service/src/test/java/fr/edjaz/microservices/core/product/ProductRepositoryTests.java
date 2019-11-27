@@ -14,7 +14,7 @@ import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest(properties = {"spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class PersistenceTests {
+public class ProductRepositoryTests {
 
     @Autowired
     private ProductRepository repository;

@@ -1,0 +1,17 @@
+= Sonar
+
+== Launch sonar
+
+[source,]
+----
+docker-compose -f docker-compose/sonar/sonar.yml up
+----
+
+
+== Problème mémoire lors du scanne
+
+[source,]
+----
+sysctl -w vm.max_map_count=262144
+export SONAR_SCANNER_OPTS="-Xmx2048m"
+----

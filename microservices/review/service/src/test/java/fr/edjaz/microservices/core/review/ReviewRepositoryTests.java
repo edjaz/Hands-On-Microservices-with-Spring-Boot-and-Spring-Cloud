@@ -21,7 +21,7 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @RunWith(SpringRunner.class)
 @DataJpaTest(properties = {"spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
 @Transactional(propagation = NOT_SUPPORTED)
-public class PersistenceTests {
+public class ReviewRepositoryTests {
 
     @Autowired
     private ReviewRepository repository;
