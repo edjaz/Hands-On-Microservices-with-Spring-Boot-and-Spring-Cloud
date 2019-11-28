@@ -4,11 +4,11 @@
 
 [source,]
 ----
-docker-compose -f docker-compose/sonar/sonar.yml up
+docker-compose -f sonar.yml up
 ----
 
 
-== Problème mémoire lors du scanne
+== Problème mémoire lors du scan
 
 [source,]
 ----

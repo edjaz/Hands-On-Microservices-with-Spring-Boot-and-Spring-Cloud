@@ -1,10 +1,9 @@
 resources:
 - roles.yml
-- config-server.yml
 - auth-server.yml
-- gateway.yml
 - product-composite.yml
 - product.yml
 - recommendation.yml
 - review.yml
 - zipkin-server.yml
+- ingress-edge-server.yml

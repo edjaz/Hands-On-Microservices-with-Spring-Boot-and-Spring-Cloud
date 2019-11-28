@@ -1,4 +1,11 @@
+---
+spring.profiles: local
+
 app.config-server: localhost
+
+
+---
+spring.profiles: config
 
 spring:
   application.name: recommendation
@@ -15,3 +22,10 @@ spring:
 spring.profiles: docker
 
 app.config-server: config-server
+
+---
+spring.profiles: kubernetes
+
+spring.cloud.kubernetes.enabled: true
+eureka.client.enabled: false
+spring.cloud.config.enabled: false

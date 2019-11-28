@@ -60,5 +60,5 @@ spring.data.mongodb.host: 172.17.0.1
 logging:
   level:
     root: WARN
-    se.magnus: WARN
+    fr.edjaz: WARN
     org.springframework.data.mongodb.core.MongoTemplate: WARN

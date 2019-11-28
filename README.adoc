@@ -1,0 +1,80 @@
+= Hands on microservices
+
+== Start all microservices locally with spring boot
+
+=== Config server environnement variable
+
+[source,]
+----
+SPRING_PROFILES_ACTIVE=native;
+ENCRYPT_KEY=my-very-secure-encrypt-key;
+SPRING_SECURITY_USER_NAME=dev-usr;
+SPRING_SECURITY_USER_PASSWORD=dev-pwd;
+PWD=<PROJECT_PATH>/local;
+----
+
+=== Eureka environnement variable
+
+[source,]
+----
+CONFIG_SERVER_USR=dev-usr;
+CONFIG_SERVER_PWD=dev-pwd;
+----
+
+
+
+=== Gateway environnement variable
+
+[source,]
+----
+CONFIG_SERVER_USR=dev-usr;
+CONFIG_SERVER_PWD=dev-pwd;
+----
+
+=== OAuth environnement variable
+
+[source,]
+----
+SPRING_PROFILES_ACTIVE=local, config;
+CONFIG_SERVER_USR=dev-usr;
+CONFIG_SERVER_PWD=dev-pwd;
+----
+
+=== All micocroservices environnement variable
+
+[source,]
+----
+SPRING_PROFILES_ACTIVE=local, config;
+CONFIG_SERVER_USR=dev-usr;
+CONFIG_SERVER_PWD=dev-pwd;
+----
+
+=== Test that works
+
+After you lanch all services
+
+[source,]
+----
+cd local
+./test-em-all.bash
+----
+
+
+== Start all microservices locally with docker
+
+[source,]
+----
+gradle build
+cd local
+docker-compose build
+docker-compose up -d
+./test-em-all.bash docker
+----
+
+
+=== Test that works
+
+[source,]
+----
+./test-em-all.bash docker
+----

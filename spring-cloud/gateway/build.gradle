@@ -26,9 +26,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	compile 'io.dekorate:kubernetes-spring-starter:0.9.9'
-	annotationProcessor 'io.dekorate:kubernetes-annotations:0.9.9'
-
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-oauth2-resource-server'

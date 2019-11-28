@@ -249,7 +249,7 @@ HOST=$(minikube ip) PORT=31443 ./test-em-all.bash
 
 ----
 
-== Deploying to Kubernetes toi prod
+== Deploying to Kubernetes to prod
 
 [source,]
 ----
@@ -346,3 +346,46 @@ kubectl delete namespace hands-on
 eval $(minikube docker-env)
 docker-compose down
 ----
+
+
+== Running commands for deploying and testing
+
+[source,]
+----
+sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
+
+kubectl delete namespace hands-on
+kubectl create namespace hands-on
+kubectl config set-context $(kubectl config current-context) --namespace=hands-on
+
+./kubernetes/scripts/deploy-dev-env.bash
+
+HOST=minikube.me PORT=443 local/test-em-all.bash
+
+----
+
+
+=== Deploying the Cert Manager and defining Let's Encrypt issuers
+
+[source,]
+----
+kubectl create namespace cert-manager
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+kubectl wait --timeout=600s --for=condition=ready pod --all -n cert-manager
+
+
+kubectl apply -f kubernetes/cert/letsencrypt-issuer-staging.yaml
+kubectl apply -f kubernetes/cert/letsencrypt-issuer-prod.yaml
+
+
+ngrok http https://minikube.me:443
+NGROK_HOST=XXXXXXXXX.ngrok.io
+# add XXXXXXXXX.ngrok.io to // /etc/hosts in inline with minikube.me
+kubectl apply -f kubernetes/services/base/ingress-edge-server-ngrok.yml
+keytool -printcert -sslserver $NGROK_HOST:443 | grep -E "Owner:|Issuer:"
+
+HOST=$NGROK_HOST PORT=443 local/test-em-all.bash
+
+----
+
+

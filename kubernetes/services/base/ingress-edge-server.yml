@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: edge
+  annotations:
+    certmanager.k8s.io/issuer: "selfsigning-issuer"
+spec:
+  tls:
+    - hosts:
+        - minikube.me
+      secretName: tls-certificate
+  rules:
+    - host: minikube.me
+      http:
+        paths:
+          - path: /oauth
+            backend:
+              serviceName: auth-server
+              servicePort: 9999
+          - path: /product-composite
+            backend:
+              serviceName: product-composite
+              servicePort: 8080
+          - path: /actuator/health
+            backend:
+              serviceName: product-composite
+              servicePort: 8080

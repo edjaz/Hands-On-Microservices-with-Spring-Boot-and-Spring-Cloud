@@ -1,6 +1,5 @@
 package fr.edjaz.springcloud.gateway;
 
-import io.dekorate.kubernetes.annotation.KubernetesApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -10,7 +9,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@KubernetesApplication
 public class GatewayApplication {
 
 	@Bean

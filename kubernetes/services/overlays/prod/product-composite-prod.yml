@@ -13,10 +13,10 @@ spec:
     spec:
       containers:
       - name: comp
-        image: edjaz/product-composite/service:v1
+        image: hands-on/product-composite-service:v1
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: "docker,kubernetes,prod"
+          value: "docker,prod"
         resources:
           requests:
             memory: "200Mi"

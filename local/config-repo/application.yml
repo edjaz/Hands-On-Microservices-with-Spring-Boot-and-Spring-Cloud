@@ -1,0 +1,54 @@
+app:
+  eureka-username: u
+  eureka-server: localhost
+  auth-server: localhost
+  eureka-password: '{cipher}bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb'
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/"
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+spring.rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: rabbit-user-dev
+  password: rabbit-pwd-dev
+
+spring.cloud.stream.kafka.binder:
+  brokers: 127.0.0.1
+  defaultBrokerPort: 9092
+
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
+
+# WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+spring.cloud.kubernetes.enabled: false
+
+---
+spring.profiles: docker
+
+spring.rabbitmq.host: rabbitmq
+
+spring.cloud.stream.kafka.binder.brokers: kafka
+
+app:
+  eureka-server: eureka
+  auth-server: auth-server
+
+---
+spring.profiles: kafka
+
+management.health.rabbit.enabled: false
+spring.cloud.stream.defaultBinder: kafka
+spring.zipkin.sender.type: kafka
+spring.kafka.bootstrap-servers: kafka:9092
+

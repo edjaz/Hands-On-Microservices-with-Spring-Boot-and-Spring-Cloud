@@ -72,6 +72,9 @@ dependencies {
 	testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
 
 	testImplementation project(':microservices:product:api')
+
+	compile 'io.dekorate:kubernetes-spring-starter:0.9.9'
+	annotationProcessor 'io.dekorate:kubernetes-annotations:0.9.9'
 }
 
 dependencyManagement {
