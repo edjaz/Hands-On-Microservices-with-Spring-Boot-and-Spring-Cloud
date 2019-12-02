@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiali
+  namespace: istio-system
+  labels:
+    app: kiali
+    chart: kiali
+    heritage: Tiller
+    release: istio
+data:
+  config.yaml: |
+    istio_namespace: istio-system
+    deployment:
+      accessible_namespaces: ['**']
+    auth:
+      strategy: login
+    server:
+      port: 20001
+      web_root: /kiali
+    external_services:
+      tracing:
+        in_cluster_url: http://jaeger-query.istio-system:16686
+        url: http://localhost:16686/jaeger
+      grafana:
+        in_cluster_url: http://grafana.istio-system:3000
+        url: http://grafana.istio-system:3000
+      prometheus:
+        in_cluster_url: http://prometheus.istio-system:9090
+        url: http://prometheus.istio-system:9090

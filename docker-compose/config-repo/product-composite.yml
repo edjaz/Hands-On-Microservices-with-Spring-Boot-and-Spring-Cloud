@@ -75,6 +75,7 @@ spring.security.oauth2.resourceserver.jwt.jwk-set-uri: http://${app.auth-server}
 
 app.product-service.timeoutSec: 2
 
+management.endpoint.restart.enabled: true
 management.health.circuitbreakers.enabled: true
 management.health.ratelimiter.enabled: true
 management.health.retry.enabled: true
@@ -135,17 +136,3 @@ logging:
     root: WARN
     fr.edjaz: WARN
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: WARN
-
-
----
-spring.profiles: kubernetes
-
-spring:
-  cloud:
-    kubernetes:
-      enabled: true
-      reload:
-        enabled: false
-eureka:
-  client:
-    enabled: false

@@ -16,7 +16,7 @@ spec:
         image: hands-on/auth-server:v1
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: "docker,prod"
+          value: "docker,prod,kubernetes"
         resources:
           requests:
             memory: "200Mi"

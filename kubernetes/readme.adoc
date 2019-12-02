@@ -352,6 +352,7 @@ docker-compose down
 
 [source,]
 ----
+eval $(minikube docker-env)
 sudo bash -c "echo $(minikube ip) minikube.me | tee -a /etc/hosts"
 
 kubectl delete namespace hands-on
@@ -376,6 +377,7 @@ kubectl wait --timeout=600s --for=condition=ready pod --all -n cert-manager
 
 kubectl apply -f kubernetes/cert/letsencrypt-issuer-staging.yaml
 kubectl apply -f kubernetes/cert/letsencrypt-issuer-prod.yaml
+kubectl apply -f kubernetes/cert/selfsigned-issuer.yaml
 
 
 ngrok http https://minikube.me:443

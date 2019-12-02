@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-issuer-staging
 spec:
   acme:
-    email: <your email address>
+    email: dimitri@d-kahn.net
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-issuer-staging-account-key

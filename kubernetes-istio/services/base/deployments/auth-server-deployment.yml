@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-server
+  template:
+    metadata:
+      labels:
+        app: auth-server
+        version: latest
+    spec:
+      containers:
+        - name: auth-server
+          image: edjaz/auth-server
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,kubernetes"
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+          envFrom:
+            - secretRef:
+                name: rabbitmq-credentials
+          ports:
+            - containerPort: 9999
+          resources:
+            limits:
+              memory: 350Mi
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/info
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 20
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+            - name: config-repo-volume
+              mountPath: /config-repo
+      volumes:
+        - name: config-repo-volume
+          configMap:
+            name: config-repo-auth-server

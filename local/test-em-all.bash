@@ -7,14 +7,18 @@
 # Sample usage:
 #
 #   HOST=localhost PORT=7000 ./test-em-all.bash
+#   HOST=localhost PORT=8443 HEALTH_URL=https://localhost:8443 ./test-em-all.bash
 #
 : ${HOST=localhost}
 : ${PORT=8443}
+: ${HEALTH_URL=https://localhost:8443}
+: ${MGM_PORT=8080}
 : ${PROD_ID_REVS_RECS=2}
 : ${PROD_ID_NOT_FOUND=13}
 : ${PROD_ID_NO_RECS=114}
 : ${PROD_ID_NO_REVS=214}
 : ${NAMESPACE=hands-on}
+: ${SKIP_CB_TESTS=false}
 
 EXEC="wget http://localhost:7000"
 
@@ -195,12 +199,13 @@ function testCircuitBreaker() {
         kubectl -n $ns wait --for=condition=Ready pod/alpine-client
 
         EXEC="kubectl -n $ns exec alpine-client --  wget product-composite:8080"
+        EXEC_MGM="kubectl -n $ns exec alpine-client --  wget product-composite:${MGM_PORT}"
 
     fi
 
 
     # First, use the health - endpoint to verify that the circuit breaker is closed
-    assertEqual "CLOSED" "$($EXEC/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
+    assertEqual "CLOSED" "$(${EXEC_MGM}/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
 
     # Open the circuit breaker by running three slow calls in a row, i.e. that cause a timeout exception
     # Also, verify that we get 500 back and a timeout related error message
@@ -228,7 +233,7 @@ function testCircuitBreaker() {
     sleep 10
 
     # Verify that the circuit breaker is in half open state
-    assertEqual "HALF_OPEN" "$($EXEC/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
+    assertEqual "HALF_OPEN" "$(${EXEC_MGM}/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
 
     # Close the circuit breaker by running three normal calls in a row
     # Also, verify that we get 200 back and a response based on information in the product database
@@ -239,12 +244,12 @@ function testCircuitBreaker() {
     done
 
     # Verify that the circuit breaker is in closed state again
-    assertEqual "CLOSED" "$($EXEC/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
+    assertEqual "CLOSED" "$(${EXEC_MGM}/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
 
     # Verify that the expected state transitions happened in the circuit breaker
-    assertEqual "CLOSED_TO_OPEN"      "$($EXEC/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-3].stateTransition)"
-    assertEqual "OPEN_TO_HALF_OPEN"   "$($EXEC/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-2].stateTransition)"
-    assertEqual "HALF_OPEN_TO_CLOSED" "$($EXEC/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-1].stateTransition)"
+    assertEqual "CLOSED_TO_OPEN"      "$(${EXEC_MGM}/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-3].stateTransition)"
+    assertEqual "OPEN_TO_HALF_OPEN"   "$(${EXEC_MGM}/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-2].stateTransition)"
+    assertEqual "HALF_OPEN_TO_CLOSED" "$(${EXEC_MGM}/actuator/circuitbreakerevents/product/STATE_TRANSITION -qO - | jq -r .circuitBreakerEvents[-1].stateTransition)"
 }
 
 set -e
@@ -253,16 +258,23 @@ echo "Start Tests:" `date`
 
 echo "HOST=${HOST}"
 echo "PORT=${PORT}"
+echo "HEALTH_URL=${HEALTH_URL}"
+echo "MGM_PORT=${MGM_PORT}"
+echo "SKIP_CB_TESTS=${SKIP_CB_TESTS}"
+
+
 
 if [[ $@ == *"docker"* ]]
 then
     EXEC="docker run --rm -it --network=my-network alpine wget product-composite:8080"
+    EXEC_MGM="docker run --rm -it --network=my-network alpine wget product-composite:${MGM_PORT}"
 fi
 
 
 if [[ $@ == *"start"* ]]
 then
     EXEC="docker run --rm -it --network=my-network alpine wget product-composite:8080"
+    EXEC_MGM="docker run --rm -it --network=my-network alpine wget product-composite:${MGM_PORT}"
     echo "Restarting the test environment..."
     echo "$ docker-compose down --remove-orphans"
     docker-compose down --remove-orphans
@@ -270,7 +282,9 @@ then
     docker-compose up -d
 fi
 
-waitForService curl -k https://$HOST:$PORT/actuator/health
+
+waitForService curl -k $HEALTH_URL/actuator/health
+#waitForService curl -k https://$HOST:$PORT/actuator/health
 
 ACCESS_TOKEN=$(curl -k https://writer:secret@$HOST:$PORT/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq .access_token -r)
 AUTH="-H \"Authorization: Bearer $ACCESS_TOKEN\""
@@ -318,7 +332,10 @@ READER_AUTH="-H \"Authorization: Bearer $READER_ACCESS_TOKEN\""
 assertCurl 200 "curl -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS $READER_AUTH -s"
 assertCurl 403 "curl -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS $READER_AUTH -X DELETE -s"
 
-testCircuitBreaker
+if [[ $SKIP_CB_TESTS == "false" ]]
+then
+    testCircuitBreaker
+fi
 
 echo "End, all tests OK:" `date`
 

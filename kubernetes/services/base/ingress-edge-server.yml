@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: edge
   annotations:
-    certmanager.k8s.io/issuer: "selfsigning-issuer"
+    cert-manager.io/cluster-issuer: "selfsigning-issuer"
 spec:
   tls:
     - hosts:

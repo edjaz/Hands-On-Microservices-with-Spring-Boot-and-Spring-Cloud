@@ -33,7 +33,7 @@ spec:
           httpGet:
             scheme: HTTP
             path: /actuator/info
-            port: 9999
+            port: 4004
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 2
@@ -43,7 +43,7 @@ spec:
           httpGet:
             scheme: HTTP
             path: /actuator/health
-            port: 9999
+            port: 4004
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 2
