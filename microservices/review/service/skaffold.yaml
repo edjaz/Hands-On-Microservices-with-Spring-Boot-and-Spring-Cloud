@@ -1,0 +1,15 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: review
+build:
+  artifacts:
+    - image: edjaz/review/service
+      jib:
+        type: gradle
+        project: microservices:review:service
+
+deploy:
+  kubectl:
+    manifests:
+      - k8s-debug/review.yml

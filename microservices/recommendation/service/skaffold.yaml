@@ -1,0 +1,15 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: recommendation
+build:
+  artifacts:
+  - image: edjaz/recommendation/service
+    jib:
+      type: gradle
+      project: microservices:recommendation:service
+
+deploy:
+  kubectl:
+    manifests:
+    - k8s-debug/recommendation.yml

@@ -1,0 +1,15 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: auth-server
+build:
+  artifacts:
+    - image: edjaz/auth-server
+      jib:
+        type: gradle
+        project: spring-cloud:authorization-server
+
+deploy:
+  kubectl:
+    manifests:
+      - k8s-debug/auth-server.yml

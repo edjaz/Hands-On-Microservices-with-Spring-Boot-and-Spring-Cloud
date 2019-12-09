@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendation
+  template:
+    metadata:
+      labels:
+        app: recommendation
+    spec:
+      containers:
+      - name: rec
+        image: edjaz/recommendation/service
+        imagePullPolicy: Never
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker,kubernetes"
+        - name: SPRING_CONFIG_LOCATION
+          value: file:/config-repo/application.yml,file:/config-repo/recommendation.yml
+        envFrom:
+        - secretRef:
+            name: rabbitmq-credentials
+        - secretRef:
+            name: mongodb-credentials
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-repo-volume
+          mountPath: /config-repo
+      volumes:
+      - name: config-repo-volume
+        configMap:
+          name: config-repo-recommendation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation
+spec:
+  selector:
+    app: recommendation
+  ports:
+    - port: 8080
+      targetPort: 8080

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: review
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review
+  template:
+    metadata:
+      labels:
+        app: review
+    spec:
+      containers:
+      - name: rev
+        image: edjaz/review/service
+        imagePullPolicy: Never
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker,kubernetes"
+        - name: SPRING_CONFIG_LOCATION
+          value: file:/config-repo/application.yml,file:/config-repo/review.yml
+        envFrom:
+        - secretRef:
+            name: rabbitmq-credentials
+        - secretRef:
+            name: mysql-credentials
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-repo-volume
+          mountPath: /config-repo
+      volumes:
+      - name: config-repo-volume
+        configMap:
+          name: config-repo-review
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: review
+spec:
+  selector:
+    app: review
+  ports:
+    - port: 8080
+      targetPort: 8080

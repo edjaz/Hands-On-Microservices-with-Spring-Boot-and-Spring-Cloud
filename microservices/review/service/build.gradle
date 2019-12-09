@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 	id "jacoco"
 	id "org.sonarqube"
+	id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
 
@@ -14,6 +15,16 @@ sourceCompatibility = 11
 jar {
 	baseName 'review-service'
 }
+
+jib {
+	from {
+		image = 'openjdk:12.0.2'
+	}
+	to {
+		image = 'edjaz/review/service'
+	}
+}
+
 
 
 configurations {

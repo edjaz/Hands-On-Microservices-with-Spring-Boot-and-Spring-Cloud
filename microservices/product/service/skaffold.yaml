@@ -1,0 +1,14 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: product
+build:
+  artifacts:
+    - image: edjaz/product/service
+      jib:
+        type: gradle
+        project: microservices:product:service
+deploy:
+  kubectl:
+    manifests:
+      - k8s-debug/product.yml

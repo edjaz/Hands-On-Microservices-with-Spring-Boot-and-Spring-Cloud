@@ -24,4 +24,4 @@ spec:
           - path: /actuator/health
             backend:
               serviceName: product-composite
-              servicePort: 8080
+              servicePort: 4004

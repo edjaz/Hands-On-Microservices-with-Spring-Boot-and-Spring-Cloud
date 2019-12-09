@@ -85,4 +85,11 @@ docker-compose up -d
 install plugins code cloud et kubernetes plugins on intellij
 
 
+=== Create docker from gradle with jib
 
+gradle jibDockerBuild
+
+
+=== Debug with code cloud
+
+Install code cloud plugin on Intellij. Then debug on a Kubernetes cluster like a local application.
