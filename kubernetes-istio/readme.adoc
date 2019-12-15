@@ -558,7 +558,7 @@ HOST=minikube.me PORT=443  HEALTH_URL=http://${PRODUCT_COMPOSITE_HOST}:4004  MGM
 
 [source,]
 ----
-ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=magnus -d password=password -s | jq .access_token -r)
+ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq .access_token -r)
 siege https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN" -c1 -d1
 ----
 
@@ -613,7 +613,7 @@ To test :
 
 [source,]
 ----
-ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=magnus -d password=password -s | jq .access_token -r)
+ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq .access_token -r)
 for i in {1..6}; do time curl -k https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN"; done
 ----
 
@@ -660,7 +660,7 @@ SKIP_CB_TESTS=true HOST=minikube.me PORT=443  HEALTH_URL=http://${PRODUCT_COMPOS
 
 [source,]
 ----
-ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=magnus -d password=password -s | jq .access_token -r)
+ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq .access_token -r)
 curl -ks https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN" | jq .serviceAddresses
 curl -ks https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN" -H "X-group: test" | jq .serviceAddresses
 ----
