@@ -47,6 +47,8 @@ dependencies {
 	implementation 'com.sun.xml.bind:jaxb-impl'
 	implementation 'com.nimbusds:nimbus-jose-jwt:6.7'
 
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

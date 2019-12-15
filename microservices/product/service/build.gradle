@@ -80,6 +80,8 @@ dependencies {
 	testImplementation('io.projectreactor:reactor-test')
 	testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
 
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	compile 'io.dekorate:kubernetes-spring-starter:0.9.9'
 	annotationProcessor 'io.dekorate:kubernetes-annotations:0.9.9'
 }

@@ -87,6 +87,8 @@ dependencies {
 
 	compile 'io.dekorate:kubernetes-spring-starter:0.9.9'
 	annotationProcessor 'io.dekorate:kubernetes-annotations:0.9.9'
+
+	implementation("io.micrometer:micrometer-registry-prometheus")
 }
 
 dependencyManagement {

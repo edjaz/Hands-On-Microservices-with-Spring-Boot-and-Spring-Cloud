@@ -45,6 +45,7 @@ management.endpoints.web.exposure.include: health,info,circuitbreakerevents
 spring.profiles: kubernetes
 
 management.server.port: 4004
+management.metrics.tags.application: ${spring.application.name}
 
 spring:
   cloud:

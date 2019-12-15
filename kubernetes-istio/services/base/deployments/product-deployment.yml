@@ -12,6 +12,11 @@ spec:
       labels:
         app: product
         version: latest
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "4004"
+        prometheus.io/scheme: http
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: pro
