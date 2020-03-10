@@ -19,6 +19,7 @@
 : ${PROD_ID_NO_REVS=214}
 : ${NAMESPACE=hands-on}
 : ${SKIP_CB_TESTS=false}
+: ${DOCKER=}
 
 EXEC="wget http://localhost:7000"
 
@@ -188,6 +189,14 @@ function testCircuitBreaker() {
  if [ "$HOST" = "localhost" ]
     then
        echo "local"
+       EXEC_MGM="wget http://$HOST:7000"
+
+       if [ "$DOCKER" = "docker" ]
+       then
+         echo "docker"
+         EXEC="docker run --rm -it --network=my-network alpine wget product-composite"
+       fi
+
     else
         echo "Restarting alpine-client..."
         local ns=$NAMESPACE

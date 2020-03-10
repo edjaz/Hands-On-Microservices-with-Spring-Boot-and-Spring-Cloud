@@ -4,10 +4,10 @@ import java.util.Properties
 
 plugins {
   java
-  id("org.sonarqube") version "2.8"
   jacoco
-  kotlin("jvm") version "1.3.61"
-  kotlin("plugin.spring") version "1.3.61"
+  id("org.sonarqube") version "2.8"
+	kotlin("jvm") version "1.3.61"
+	kotlin("plugin.spring") version "1.3.61"
 }
 
 
@@ -15,12 +15,10 @@ group = "fr.edjaz"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-ext {
-    set("springfoxVersion", "3.0.0-SNAPSHOT")
-    set("resilience4jVersion", "1.1.0")
-    set("mapstructVersion", "1.3.1.Final")
-    set("springCloudVersion", "Hoxton.RC2")
-}
+extra["springfoxVersion"] = "3.0.0-SNAPSHOT"
+extra["mapstructVersion"] = "1.3.1.Final"
+extra["springCloudVersion"] = "Hoxton.SR3"
+extra["resilience4jVersion"] = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -28,10 +26,7 @@ repositories {
 
 
 dependencies {
-  "compileOnly"("com.google.code.findbugs:jsr305:3.0.2")
-
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 

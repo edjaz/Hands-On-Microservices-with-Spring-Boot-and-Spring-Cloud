@@ -1,9 +1,9 @@
 package fr.edjaz.microservices.core.product;
 
 import fr.edjaz.api.core.product.Product;
-import fr.edjaz.api.event.Event;
 import fr.edjaz.microservices.core.product.persistence.ProductRepository;
 import fr.edjaz.util.exceptions.InvalidInputException;
+import fr.edjaz.api.event.Event;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
