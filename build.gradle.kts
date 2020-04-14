@@ -6,8 +6,8 @@ plugins {
   java
   jacoco
   id("org.sonarqube") version "2.8"
-	kotlin("jvm") version "1.3.61"
-	kotlin("plugin.spring") version "1.3.61"
+	kotlin("jvm") version "1.3.71"
+	kotlin("plugin.spring") version "1.3.71"
 }
 
 

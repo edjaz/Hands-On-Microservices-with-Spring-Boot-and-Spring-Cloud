@@ -1,7 +1,7 @@
 import java.net.URI;
 
 plugins {
-	id ("org.springframework.boot") version "2.2.5.RELEASE"
+	id ("org.springframework.boot") version "2.2.6.RELEASE"
 	id ("io.spring.dependency-management") version "1.0.9.RELEASE"
 	id ("java")
 	id ("jacoco")
@@ -44,7 +44,7 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url = URI("http://oss.jfrog.org/artifactory/oss-snapshot-local/") }
+	maven { url = URI("https://oss.jfrog.org/artifactory/oss-snapshot-local/") }
 	maven { url = URI("https://repo.spring.io/milestone") }
 }
 
