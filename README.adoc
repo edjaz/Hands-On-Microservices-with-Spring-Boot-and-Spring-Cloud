@@ -10,7 +10,7 @@ SPRING_PROFILES_ACTIVE=native;
 ENCRYPT_KEY=my-very-secure-encrypt-key;
 SPRING_SECURITY_USER_NAME=dev-usr;
 SPRING_SECURITY_USER_PASSWORD=dev-pwd;
-PWD=<PROJECT_PATH>/local;
+CONFIG_PATH=<PROJECT_PATH>/local;
 ----
 
 === Eureka environnement variable
@@ -51,7 +51,41 @@ CONFIG_SERVER_PWD=dev-pwd;
 
 === Test that works
 
-After you lanch all services
+You must launch mongodb mysql rabbitmq zipkin
+[source,]
+----
+cd local
+docker-compose up -d mongodb mysql rabbitmq zipkin
+----
+
+
+Start all microservice on this order :
+After you lanch all services :
+
+ - eureka-server
+ - config-server
+ - gateway
+ - oauth-authorization-server
+ - all other micorservices
+
+Take a look of eureka http://localhost:8761/ with user 'u' and password 'p'
+
+to encrypt you need to use config-server
+[source,]
+----
+curl --user dev-usr:dev-pwd localhost:8888/encrypt -d p
+78a8c226ba5f1c4425981b723118be57de56c05bdd78ecef48f25df8cdfc5de1
+----
+
+to decrypt you need to use config-server.
+For example eureka-password: '{cipher}bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb'
+[source,]
+----
+curl --user dev-usr:dev-pwd localhost:8888/decrypt -d bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb
+p
+----
+
+
 
 [source,]
 ----
