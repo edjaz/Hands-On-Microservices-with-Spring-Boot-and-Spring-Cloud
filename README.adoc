@@ -85,7 +85,19 @@ curl --user dev-usr:dev-pwd localhost:8888/decrypt -d bf298f6d5f878b342f9e44bec0
 p
 ----
 
+=== Test your microservice with swagger
 
+obtain un token jwt
+
+[source,]
+----
+curl -k https://writer:secret@localhost:8443/oauth/token -d grant_type=password -d username=dkahn -d password=password
+{"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJka2FobiIsImV4cCI6MjIwNzA2OTE3NSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6IjNiNGNhMGViLTJhM2ItNDA3Ny1hMmMzLWI3ZDUzMTRkNTY0OCIsImNsaWVudF9pZCI6IndyaXRlciIsInNjb3BlIjpbInByb2R1Y3Q6cmVhZCIsInByb2R1Y3Q6d3JpdGUiXX0.K93IgO7kD6V-GqtXyF6S-jhxh2HHjzSV_z0rlYiZ4BiH4CfVY7FqswRJDzQIGsifCSe8HKheMhLbvrlMYV1yBv9_Jkn-7XDMYuHwNcDtQIcItabcQlb0o9ft4QsJp4qq3ASAbnuB3ZLIA0HiTmkGdmf9H0X8qcFXEfCrdIO-d-ppdiYTi3ppMD-ZUikTve_vmmdzVVqXbbWeZY_B1G-WcRyIVSE8U2pXijD1CUbEm6XOmr1WB9XtWNsHHae_pL93gYbv3Tobq-R45KqKEyi0rFyRM_x6Feu8_hKtMsVUZNBwHd4vPSDYYTvHY_M0gb_oUrjhzTKI5ghusLiW1S9A-g","token_type":"bearer","expires_in":599999999,"scope":"product:read product:write","jti":"3b4ca0eb-2a3b-4077-a2c3-b7d5314d5648"}%
+----
+
+access to swagger (http://localhost:7000/swagger-ui.html) and copy access_token and test microservice
+
+You can use a script for test all microservices
 
 [source,]
 ----

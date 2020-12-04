@@ -48,7 +48,10 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok")
 
     implementation ("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("io.springfox:springfox-swagger2:${property("springfoxVersion")}")
+
+  implementation( "org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
+  implementation( "org.springdoc:springdoc-openapi-security:1.5.0")
+
 
 }
 

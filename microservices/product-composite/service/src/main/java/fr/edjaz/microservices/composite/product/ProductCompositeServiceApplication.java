@@ -9,7 +9,6 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.function.client.WebClient;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
 
 @SpringBootApplication
@@ -20,7 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
         ServicesProperties.ProductServiceProperties.class,
         ServicesProperties.SwaggerProperties.class
 })
-@EnableSwagger2WebFlux
 @EnableDiscoveryClient
 public class ProductCompositeServiceApplication {
 

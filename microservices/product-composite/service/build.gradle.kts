@@ -83,9 +83,9 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 	implementation("org.springframework.cloud:spring-cloud-starter-zipkin")
 	implementation("org.springframework.retry:spring-retry")
-	implementation("io.springfox:springfox-swagger2:${property("springfoxVersion")}")
-	implementation("io.springfox:springfox-swagger-ui:${property("springfoxVersion")}")
-	implementation("io.springfox:springfox-spring-webflux:${property("springfoxVersion")}")
+
+  implementation( "org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
+  implementation( "org.springdoc:springdoc-openapi-security:1.5.0")
 
   implementation("io.github.resilience4j:resilience4j-spring-boot2:${property("resilience4jVersion")}")
   implementation("io.github.resilience4j:resilience4j-reactor:${property("resilience4jVersion")}")

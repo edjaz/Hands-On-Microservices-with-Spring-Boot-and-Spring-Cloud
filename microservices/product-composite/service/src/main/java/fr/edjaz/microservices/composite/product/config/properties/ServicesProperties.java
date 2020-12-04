@@ -1,13 +1,16 @@
 package fr.edjaz.microservices.composite.product.config.properties;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import static java.util.Collections.emptyList;
 
 @Configuration
 public class ServicesProperties {
@@ -61,17 +64,12 @@ public class ServicesProperties {
     public class SwaggerProperties {
         private ApiInfo common;
 
-        public springfox.documentation.service.ApiInfo toSwagger() {
-            return new springfox.documentation.service.ApiInfo(
-                    common.title,
-                    common.description,
-                    common.version,
-                    common.termsOfServiceUrl,
-                    new springfox.documentation.service.Contact(common.contact.name, common.contact.url,  common.contact.email),
-                    common.license,
-                    common.licenseUrl,
-                    emptyList()
-            );
+        public OpenAPI toSwagger() {
+            return new OpenAPI()
+              .components(new Components()
+                .addSecuritySchemes("bearer-key",
+                  new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
+              .info(new Info().title(common.title).version(common.version) .description(common.description).termsOfService(common.termsOfServiceUrl).license(new License().name(common.license).url(common.licenseUrl)));
         }
     }
 

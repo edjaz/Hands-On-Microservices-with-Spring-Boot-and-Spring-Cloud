@@ -16,7 +16,7 @@ public class SecurityConfig {
 		http
 			.authorizeExchange()
 				.pathMatchers("/swagger-ui.html").permitAll()
-				.pathMatchers("/v2/api-docs/**").permitAll()
+				.pathMatchers("/v3/api-docs/**").permitAll()
 				.pathMatchers("/swagger-resources/**").permitAll()
 				.pathMatchers("/webjars/**").permitAll()
 				.pathMatchers("/actuator/**").permitAll()
