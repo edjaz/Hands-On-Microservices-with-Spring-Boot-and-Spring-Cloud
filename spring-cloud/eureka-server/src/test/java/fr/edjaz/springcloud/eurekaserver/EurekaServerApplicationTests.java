@@ -15,10 +15,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"spring.cloud.config.enabled=false","management.health.rabbit.enabled=false"})
-public class EurekaServerApplicationTests {
+class EurekaServerApplicationTests {
 
 	@Test
-	public void contextLoads() {
+	void contextLoads() {
 	}
 
 	@Value("${app.eureka-username}")
@@ -28,27 +28,27 @@ public class EurekaServerApplicationTests {
 	private String password;
 
 	@Autowired
-	public void setTestRestTemplate(TestRestTemplate testRestTemplate) {
+	void setTestRestTemplate(TestRestTemplate testRestTemplate) {
 		this.testRestTemplate = testRestTemplate.withBasicAuth(username, password);
 	}
 
 	private TestRestTemplate testRestTemplate;
 
 	@Test
-	public void catalogLoads() {
+	void catalogLoads() {
 
-		String expectedReponseBody = "{\"applications\":{\"versions__delta\":\"1\",\"apps__hashcode\":\"\",\"application\":[]}}";
+		String expectedResponseBody = "{\"applications\":{\"versions__delta\":\"1\",\"apps__hashcode\":\"\",\"application\":[]}}";
 		ResponseEntity<String> entity = testRestTemplate.getForEntity("/eureka/apps", String.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
-		assertEquals(expectedReponseBody, entity.getBody());
+		assertEquals(expectedResponseBody, entity.getBody());
 	}
 
 	@Test
-	public void healthy() {
-		String expectedReponseBody = "{\"status\":\"UP\"}";
+	void healthy() {
+		String expectedResponseBody = "{\"status\":\"UP\"}";
 		ResponseEntity<String> entity = testRestTemplate.getForEntity("/actuator/health", String.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
-		assertEquals(expectedReponseBody, entity.getBody());
+		assertEquals(expectedResponseBody, entity.getBody());
 	}
 }
 

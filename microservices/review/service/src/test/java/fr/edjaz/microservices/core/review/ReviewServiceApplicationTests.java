@@ -5,9 +5,10 @@ import fr.edjaz.api.core.review.Review;
 import fr.edjaz.api.event.Event;
 import fr.edjaz.microservices.core.review.persistence.ReviewRepository;
 import fr.edjaz.util.exceptions.InvalidInputException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -15,24 +16,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.integration.channel.AbstractMessageChannel;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static fr.edjaz.api.event.Event.Type.CREATE;
 import static fr.edjaz.api.event.Event.Type.DELETE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment=RANDOM_PORT, properties = {
 	"eureka.client.enabled=false",
 	"spring.cloud.config.enabled=false",
     "spring.datasource.url=jdbc:h2:mem:review-db",
 	"spring.cloud.kubernetes.enabled= false"})
-public class ReviewServiceApplicationTests {
+class ReviewServiceApplicationTests {
 
 	@Autowired
 	private WebTestClient client;
@@ -45,14 +46,14 @@ public class ReviewServiceApplicationTests {
 
 	private AbstractMessageChannel input = null;
 
-	@Before
-	public void setupDb() {
+	@BeforeEach
+	void setupDb() {
 		input = (AbstractMessageChannel) channels.input();
 		repository.deleteAll();
 	}
 
 	@Test
-	public void getReviewsByProductId() {
+	void getReviewsByProductId() {
 
 		int productId = 1;
 
@@ -71,7 +72,7 @@ public class ReviewServiceApplicationTests {
 	}
 
 	@Test
-	public void duplicateError() {
+	void duplicateError() {
 
 		int productId = 1;
 		int reviewId = 1;
@@ -98,7 +99,7 @@ public class ReviewServiceApplicationTests {
 	}
 
 	@Test
-	public void deleteReviews() {
+	void deleteReviews() {
 
 		int productId = 1;
 		int reviewId = 1;
@@ -113,15 +114,14 @@ public class ReviewServiceApplicationTests {
 	}
 
 	@Test
-	public void getReviewsMissingParameter() {
-
+	void getReviewsMissingParameter() {
 		getAndVerifyReviewsByProductId("", BAD_REQUEST)
 			.jsonPath("$.path").isEqualTo("/review")
 			.jsonPath("$.message").isEqualTo("Required int parameter 'productId' is not present");
 	}
 
 	@Test
-	public void getReviewsInvalidParameter() {
+	void getReviewsInvalidParameter() {
 
 		getAndVerifyReviewsByProductId("?productId=no-integer", BAD_REQUEST)
 			.jsonPath("$.path").isEqualTo("/review")
@@ -129,14 +129,14 @@ public class ReviewServiceApplicationTests {
 	}
 
 	@Test
-	public void getReviewsNotFound() {
+	void getReviewsNotFound() {
 
 		getAndVerifyReviewsByProductId("?productId=213", OK)
 			.jsonPath("$.length()").isEqualTo(0);
 	}
 
 	@Test
-	public void getReviewsInvalidParameterNegativeValue() {
+	void getReviewsInvalidParameterNegativeValue() {
 
 		int productIdInvalid = -1;
 

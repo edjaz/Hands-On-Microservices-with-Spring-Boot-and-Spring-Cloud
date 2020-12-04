@@ -2,31 +2,34 @@ package fr.edjaz.microservices.core.recommendation;
 
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationEntity;
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataMongoTest(properties = {"spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class RecommendationRepositoryTests {
+class RecommendationRepositoryTests {
 
     @Autowired
     private RecommendationRepository repository;
 
     private RecommendationEntity savedEntity;
 
-    @Before
-   	public void setupDb() {
+    @BeforeEach
+   	void setupDb() {
    		repository.deleteAll().block();
 
         RecommendationEntity entity = new RecommendationEntity(1, 2, "a", 3, "c");
@@ -37,7 +40,7 @@ public class RecommendationRepositoryTests {
 
 
     @Test
-   	public void create() {
+   	void create() {
 
         RecommendationEntity newEntity = new RecommendationEntity(1, 3, "a", 3, "c");
         repository.save(newEntity).block();
@@ -49,7 +52,7 @@ public class RecommendationRepositoryTests {
     }
 
     @Test
-   	public void update() {
+   	void update() {
         savedEntity.setAuthor("a2");
         repository.save(savedEntity).block();
 
@@ -59,27 +62,27 @@ public class RecommendationRepositoryTests {
     }
 
     @Test
-   	public void delete() {
+   	void delete() {
         repository.delete(savedEntity).block();
         assertFalse(repository.existsById(savedEntity.getId()).block());
     }
 
     @Test
-   	public void getByProductId() {
+   	void getByProductId() {
         List<RecommendationEntity> entityList = repository.findByProductId(savedEntity.getProductId()).collectList().block();
 
         assertThat(entityList, hasSize(1));
         assertEqualsRecommendation(savedEntity, entityList.get(0));
     }
 
-    @Test(expected = DuplicateKeyException.class)
-   	public void duplicateError() {
+    @Test
+   	void duplicateError() {
         RecommendationEntity entity = new RecommendationEntity(1, 2, "a", 3, "c");
-        repository.save(entity).block();
+        assertThrows(DuplicateKeyException.class , () -> repository.save(entity).block());
     }
 
     @Test
-   	public void optimisticLockError() {
+   	void optimisticLockError() {
 
         // Store the saved entity in two separate entity objects
         RecommendationEntity entity1 = repository.findById(savedEntity.getId()).block();

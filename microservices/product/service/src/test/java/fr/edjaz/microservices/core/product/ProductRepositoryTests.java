@@ -2,27 +2,27 @@ package fr.edjaz.microservices.core.product;
 
 import fr.edjaz.microservices.core.product.persistence.ProductEntity;
 import fr.edjaz.microservices.core.product.persistence.ProductRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataMongoTest(properties = {"spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class ProductRepositoryTests {
+class ProductRepositoryTests {
 
     @Autowired
     private ProductRepository repository;
 
     private ProductEntity savedEntity;
 
-    @Before
-   	public void setupDb() {
+    @BeforeEach
+   	void setupDb() {
         StepVerifier.create(repository.deleteAll()).verifyComplete();
 
         ProductEntity entity = new ProductEntity(1, "n", 1);
@@ -36,7 +36,7 @@ public class ProductRepositoryTests {
 
 
     @Test
-   	public void create() {
+   	void create() {
         ProductEntity newEntity = new ProductEntity(2, "n", 2);
 
         StepVerifier.create(repository.save(newEntity))
@@ -51,7 +51,7 @@ public class ProductRepositoryTests {
     }
 
     @Test
-   	public void update() {
+   	void update() {
         savedEntity.setName("n2");
         StepVerifier.create(repository.save(savedEntity))
             .expectNextMatches(updatedEntity -> updatedEntity.getName().equals("n2"))
@@ -65,13 +65,13 @@ public class ProductRepositoryTests {
     }
 
     @Test
-   	public void delete() {
+   	void delete() {
         StepVerifier.create(repository.delete(savedEntity)).verifyComplete();
         StepVerifier.create(repository.existsById(savedEntity.getId())).expectNext(false).verifyComplete();
     }
 
     @Test
-   	public void getByProductId() {
+   	void getByProductId() {
 
         StepVerifier.create(repository.findByProductId(savedEntity.getProductId()))
             .expectNextMatches(foundEntity -> areProductEqual(savedEntity, foundEntity))
@@ -79,13 +79,13 @@ public class ProductRepositoryTests {
     }
 
     @Test
-   	public void duplicateError() {
+   	void duplicateError() {
         ProductEntity entity = new ProductEntity(savedEntity.getProductId(), "n", 1);
         StepVerifier.create(repository.save(entity)).expectError(DuplicateKeyException.class).verify();
     }
 
     @Test
-   	public void optimisticLockError() {
+   	void optimisticLockError() {
 
         // Store the saved entity in two separate entity objects
         ProductEntity entity1 = repository.findById(savedEntity.getId()).block();

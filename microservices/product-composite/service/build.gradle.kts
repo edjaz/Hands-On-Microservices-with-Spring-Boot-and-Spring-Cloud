@@ -1,8 +1,8 @@
 import java.net.URI
 
 plugins {
-	id ("org.springframework.boot") version "2.2.6.RELEASE"
-	id ("io.spring.dependency-management") version "1.0.9.RELEASE"
+	id ("org.springframework.boot") version "2.2.11.RELEASE"
+	id ("io.spring.dependency-management") version "1.0.10.RELEASE"
 	id ("java")
 	id ("jacoco")
 	id ("org.sonarqube")
@@ -31,17 +31,16 @@ jib {
 
 val developmentOnly by configurations.creating
 configurations {
-  runtimeClasspath {
-    extendsFrom(developmentOnly)
-  }
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
-  }
+	runtimeClasspath {
+		extendsFrom(developmentOnly)
+	}
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
 }
-
 repositories {
 	mavenCentral()
-	maven { url = URI("https://oss.jfrog.org/artifactory/oss-snapshot-local/") }
+
 	maven { url = URI("https://repo.spring.io/milestone") }
 }
 
@@ -66,6 +65,7 @@ dependencies {
 	implementation (project(":util"))
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation ("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.security:spring-security-oauth2-resource-server")
 	implementation("org.springframework.security:spring-security-oauth2-jose")

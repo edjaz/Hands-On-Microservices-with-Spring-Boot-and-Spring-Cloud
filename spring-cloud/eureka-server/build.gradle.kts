@@ -1,8 +1,8 @@
 import java.net.URI;
 
 plugins {
-	id ("org.springframework.boot") version "2.2.6.RELEASE"
-	id ("io.spring.dependency-management") version "1.0.9.RELEASE"
+	id ("org.springframework.boot") version "2.2.11.RELEASE"
+	id ("io.spring.dependency-management") version "1.0.10.RELEASE"
 	id ("java")
 	id ("jacoco")
 	id ("org.sonarqube")

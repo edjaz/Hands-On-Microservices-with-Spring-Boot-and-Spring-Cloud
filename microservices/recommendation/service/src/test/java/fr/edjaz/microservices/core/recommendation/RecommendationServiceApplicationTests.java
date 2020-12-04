@@ -5,9 +5,10 @@ import fr.edjaz.api.core.recommendation.Recommendation;
 import fr.edjaz.api.event.Event;
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationRepository;
 import fr.edjaz.util.exceptions.InvalidInputException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -15,20 +16,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.integration.channel.AbstractMessageChannel;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static fr.edjaz.api.event.Event.Type.CREATE;
 import static fr.edjaz.api.event.Event.Type.DELETE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment=RANDOM_PORT, properties = {"spring.data.mongodb.port: 0", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class RecommendationServiceApplicationTests {
+class RecommendationServiceApplicationTests {
 
 	@Autowired
 	private WebTestClient client;
@@ -41,14 +42,14 @@ public class RecommendationServiceApplicationTests {
 
 	private AbstractMessageChannel input = null;
 
-	@Before
-	public void setupDb() {
+	@BeforeEach
+	void setupDb() {
 		input = (AbstractMessageChannel) channels.input();
 		repository.deleteAll().block();
 	}
 
 	@Test
-	public void getRecommendationsByProductId() {
+	void getRecommendationsByProductId() {
 
 		int productId = 1;
 
@@ -65,7 +66,7 @@ public class RecommendationServiceApplicationTests {
 	}
 
 	@Test
-	public void duplicateError() {
+	void duplicateError() {
 
 		int productId = 1;
 		int recommendationId = 1;
@@ -90,7 +91,7 @@ public class RecommendationServiceApplicationTests {
 	}
 
 	@Test
-	public void deleteRecommendations() {
+	void deleteRecommendations() {
 
 		int productId = 1;
 		int recommendationId = 1;
@@ -105,15 +106,14 @@ public class RecommendationServiceApplicationTests {
 	}
 
 	@Test
-	public void getRecommendationsMissingParameter() {
-
+	void getRecommendationsMissingParameter() {
 		getAndVerifyRecommendationsByProductId("", BAD_REQUEST)
 			.jsonPath("$.path").isEqualTo("/recommendation")
 			.jsonPath("$.message").isEqualTo("Required int parameter 'productId' is not present");
 	}
 
 	@Test
-	public void getRecommendationsInvalidParameter() {
+	void getRecommendationsInvalidParameter() {
 
 		getAndVerifyRecommendationsByProductId("?productId=no-integer", BAD_REQUEST)
 			.jsonPath("$.path").isEqualTo("/recommendation")
@@ -121,14 +121,14 @@ public class RecommendationServiceApplicationTests {
 	}
 
 	@Test
-	public void getRecommendationsNotFound() {
+	void getRecommendationsNotFound() {
 
 		getAndVerifyRecommendationsByProductId("?productId=113", OK)
 			.jsonPath("$.length()").isEqualTo(0);
 	}
 
 	@Test
-	public void getRecommendationsInvalidParameterNegativeValue() {
+	void getRecommendationsInvalidParameterNegativeValue() {
 
 		int productIdInvalid = -1;
 

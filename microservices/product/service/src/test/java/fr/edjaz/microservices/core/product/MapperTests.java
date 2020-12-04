@@ -3,17 +3,18 @@ package fr.edjaz.microservices.core.product;
 import fr.edjaz.api.core.product.Product;
 import fr.edjaz.microservices.core.product.persistence.ProductEntity;
 import fr.edjaz.microservices.core.product.services.ProductMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MapperTests {
 
-    private ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
+class MapperTests {
+
+    private final ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 
     @Test
-    public void mapperTests() {
+    void mapperTests() {
 
         assertNotNull(mapper);
 

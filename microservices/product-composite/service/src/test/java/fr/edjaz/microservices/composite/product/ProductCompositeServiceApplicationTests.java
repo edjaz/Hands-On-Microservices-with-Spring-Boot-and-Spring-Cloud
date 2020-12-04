@@ -6,13 +6,14 @@ import fr.edjaz.api.core.review.Review;
 import fr.edjaz.microservices.composite.product.services.ProductCompositeIntegration;
 import fr.edjaz.util.exceptions.InvalidInputException;
 import fr.edjaz.util.exceptions.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -26,12 +27,12 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(
 	webEnvironment=RANDOM_PORT,
 	classes = {ProductCompositeServiceApplication.class, TestSecurityConfig.class },
 	properties = {"spring.main.allow-bean-definition-overriding=true","eureka.client.enabled=false","spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class ProductCompositeServiceApplicationTests {
+class ProductCompositeServiceApplicationTests {
 
 	private static final int PRODUCT_ID_OK = 1;
 	private static final int PRODUCT_ID_NOT_FOUND = 2;
@@ -43,8 +44,8 @@ public class ProductCompositeServiceApplicationTests {
 	@MockBean
 	private ProductCompositeIntegration compositeIntegration;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 
 		when(compositeIntegration.getProduct(eq(PRODUCT_ID_OK), anyInt(), anyInt())).
 			thenReturn(Mono.just(new Product(PRODUCT_ID_OK, "name", 1, "mock-address")));
@@ -61,11 +62,11 @@ public class ProductCompositeServiceApplicationTests {
 	}
 
 	@Test
-	public void contextLoads() {
+	void contextLoads() {
 	}
 
 	@Test
-	public void getProductById() {
+	void getProductById() {
 
 		getAndVerifyProduct(PRODUCT_ID_OK, OK)
             .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
@@ -74,7 +75,7 @@ public class ProductCompositeServiceApplicationTests {
 	}
 
 	@Test
-	public void getProductNotFound() {
+	void getProductNotFound() {
 
 		getAndVerifyProduct(PRODUCT_ID_NOT_FOUND, NOT_FOUND)
             .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_NOT_FOUND)
@@ -82,7 +83,7 @@ public class ProductCompositeServiceApplicationTests {
 	}
 
 	@Test
-	public void getProductInvalidInput() {
+	void getProductInvalidInput() {
 
 		getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_ENTITY)
             .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)

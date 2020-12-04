@@ -2,34 +2,35 @@ package fr.edjaz.microservices.core.review;
 
 import fr.edjaz.microservices.core.review.persistence.ReviewEntity;
 import fr.edjaz.microservices.core.review.persistence.ReviewRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest(properties = {"spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
 @Transactional(propagation = NOT_SUPPORTED)
-public class ReviewRepositoryTests {
+class ReviewRepositoryTests {
 
     @Autowired
     private ReviewRepository repository;
 
     private ReviewEntity savedEntity;
 
-    @Before
-   	public void setupDb() {
+    @BeforeEach
+   	void setupDb() {
    		repository.deleteAll();
 
         ReviewEntity entity = new ReviewEntity(1, 2, "a", "s", "c");
@@ -40,53 +41,53 @@ public class ReviewRepositoryTests {
 
 
     @Test
-   	public void create() {
+   	void create() {
 
         ReviewEntity newEntity = new ReviewEntity(1, 3, "a", "s", "c");
         repository.save(newEntity);
 
-        ReviewEntity foundEntity = repository.findById(newEntity.getId()).get();
+        ReviewEntity foundEntity = repository.findById(newEntity.getId()).orElse(null);
         assertEqualsReview(newEntity, foundEntity);
 
         assertEquals(2, repository.count());
     }
 
     @Test
-   	public void update() {
+   	void update() {
         savedEntity.setAuthor("a2");
         repository.save(savedEntity);
 
-        ReviewEntity foundEntity = repository.findById(savedEntity.getId()).get();
+        ReviewEntity foundEntity = repository.findById(savedEntity.getId()).orElse(null);
         assertEquals(1, (long)foundEntity.getVersion());
         assertEquals("a2", foundEntity.getAuthor());
     }
 
     @Test
-   	public void delete() {
+   	void delete() {
         repository.delete(savedEntity);
         assertFalse(repository.existsById(savedEntity.getId()));
     }
 
     @Test
-   	public void getByProductId() {
+   	void getByProductId() {
         List<ReviewEntity> entityList = repository.findByProductId(savedEntity.getProductId());
 
         assertThat(entityList, hasSize(1));
         assertEqualsReview(savedEntity, entityList.get(0));
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
-   	public void duplicateError() {
+    @Test
+   	void duplicateError() {
         ReviewEntity entity = new ReviewEntity(1, 2, "a", "s", "c");
-        repository.save(entity);
+        assertThrows(DataIntegrityViolationException.class, () -> repository.save(entity));
     }
 
     @Test
-   	public void optimisticLockError() {
+   	void optimisticLockError() {
 
         // Store the saved entity in two separate entity objects
-        ReviewEntity entity1 = repository.findById(savedEntity.getId()).get();
-        ReviewEntity entity2 = repository.findById(savedEntity.getId()).get();
+        ReviewEntity entity1 = repository.findById(savedEntity.getId()).orElse(null);
+        ReviewEntity entity2 = repository.findById(savedEntity.getId()).orElse(null);
 
         // Update the entity using the first entity object
         entity1.setAuthor("a1");
@@ -102,8 +103,8 @@ public class ReviewRepositoryTests {
         } catch (OptimisticLockingFailureException e) {}
 
         // Get the updated entity from the database and verify its new sate
-        ReviewEntity updatedEntity = repository.findById(savedEntity.getId()).get();
-        assertEquals(1, (int)updatedEntity.getVersion());
+        ReviewEntity updatedEntity = repository.findById(savedEntity.getId()).orElse(null);
+        assertEquals(1, updatedEntity.getVersion());
         assertEquals("a1", updatedEntity.getAuthor());
     }
 

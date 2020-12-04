@@ -36,13 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = {"eureka.client.enabled=false","spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
 @AutoConfigureMockMvc
-public class OAuth2AuthorizationServerApplicationTests {
+class OAuth2AuthorizationServerApplicationTests {
 
 	@Autowired
 	MockMvc mvc;
 
 	@Test
-	public void requestTokenWhenUsingPasswordGrantTypeThenOk()
+	void requestTokenWhenUsingPasswordGrantTypeThenOk()
 			throws Exception {
 
 		this.mvc.perform(post("/oauth/token")
@@ -54,7 +54,7 @@ public class OAuth2AuthorizationServerApplicationTests {
 	}
 
 	@Test
-	public void requestJwkSetWhenUsingDefaultsThenOk()
+	void requestJwkSetWhenUsingDefaultsThenOk()
 			throws Exception {
 
 		this.mvc.perform(get("/.well-known/jwks.json"))

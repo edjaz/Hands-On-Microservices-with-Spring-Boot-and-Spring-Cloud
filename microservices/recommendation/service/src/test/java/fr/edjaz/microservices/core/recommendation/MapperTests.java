@@ -3,20 +3,21 @@ package fr.edjaz.microservices.core.recommendation;
 import fr.edjaz.api.core.recommendation.Recommendation;
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationEntity;
 import fr.edjaz.microservices.core.recommendation.services.RecommendationMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MapperTests {
 
-    private RecommendationMapper mapper = Mappers.getMapper(RecommendationMapper.class);
+class MapperTests {
+
+    private final RecommendationMapper mapper = Mappers.getMapper(RecommendationMapper.class);
 
     @Test
-    public void mapperTests() {
+    void mapperTests() {
 
         assertNotNull(mapper);
 
@@ -41,7 +42,7 @@ public class MapperTests {
     }
 
     @Test
-    public void mapperListTests() {
+    void mapperListTests() {
 
         assertNotNull(mapper);
 

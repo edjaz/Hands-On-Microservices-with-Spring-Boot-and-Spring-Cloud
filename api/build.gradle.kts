@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-  id("org.springframework.boot") version "2.2.6.RELEASE" apply false
-  id("io.spring.dependency-management") version "1.0.9.RELEASE"
+  id("org.springframework.boot") version "2.2.11.RELEASE" apply false
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("java")
   id("jacoco")
   id("org.sonarqube")
@@ -21,17 +21,16 @@ base {
 
 val developmentOnly by configurations.creating
 configurations {
-  runtimeClasspath {
-    extendsFrom(developmentOnly)
-  }
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
-  }
+	runtimeClasspath {
+		extendsFrom(developmentOnly)
+	}
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
 }
-
 repositories {
   mavenCentral()
-  maven { url = URI("https://oss.jfrog.org/artifactory/oss-snapshot-local/") }
+
 }
 
 
@@ -43,8 +42,8 @@ dependencies {
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
-  implementation("io.springfox:springfox-swagger2:${property("springfoxVersion")}")
-}
+  implementation ("org.springframework.boot:spring-boot-starter-validation")
+  }
 
 apply(plugin = "io.spring.dependency-management")
 

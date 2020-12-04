@@ -1,6 +1,6 @@
 plugins {
-  id("org.springframework.boot") version "2.2.6.RELEASE" apply false
-  id("io.spring.dependency-management") version "1.0.9.RELEASE"
+  id("org.springframework.boot") version "2.2.11.RELEASE" apply false
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
   id("java")
   id("jacoco")
   id("org.sonarqube")
@@ -15,14 +15,13 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 val developmentOnly by configurations.creating
 configurations {
-  runtimeClasspath {
-    extendsFrom(developmentOnly)
-  }
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
-  }
+	runtimeClasspath {
+		extendsFrom(developmentOnly)
+	}
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
 }
-
 
 repositories {
   mavenCentral()
@@ -37,7 +36,9 @@ dependencies {
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")
 
+
   implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation ("org.springframework.boot:spring-boot-starter-validation")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

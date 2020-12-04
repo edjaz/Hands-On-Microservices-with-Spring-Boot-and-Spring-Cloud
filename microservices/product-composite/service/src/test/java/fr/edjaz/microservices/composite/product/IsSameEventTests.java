@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.edjaz.api.core.product.Product;
 import fr.edjaz.api.event.Event;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static fr.edjaz.api.event.Event.Type.CREATE;
 import static fr.edjaz.api.event.Event.Type.DELETE;

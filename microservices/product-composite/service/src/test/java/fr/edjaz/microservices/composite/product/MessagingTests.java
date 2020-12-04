@@ -8,16 +8,16 @@ import fr.edjaz.api.core.recommendation.Recommendation;
 import fr.edjaz.api.core.review.Review;
 import fr.edjaz.api.event.Event;
 import fr.edjaz.microservices.composite.product.services.ProductCompositeIntegration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.concurrent.BlockingQueue;
@@ -26,20 +26,20 @@ import static fr.edjaz.api.event.Event.Type.CREATE;
 import static fr.edjaz.api.event.Event.Type.DELETE;
 import static fr.edjaz.microservices.composite.product.IsSameEvent.sameEventExceptCreatedAt;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 import static org.springframework.http.HttpStatus.OK;
 import static reactor.core.publisher.Mono.just;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(
 	webEnvironment=RANDOM_PORT,
 	classes = {ProductCompositeServiceApplication.class, TestSecurityConfig.class },
 	properties = {"spring.main.allow-bean-definition-overriding=true","eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"})
-public class MessagingTests {
+class MessagingTests {
 
     @Autowired
     private WebTestClient client;
@@ -54,15 +54,15 @@ public class MessagingTests {
 	BlockingQueue<Message<?>> queueRecommendations = null;
 	BlockingQueue<Message<?>> queueReviews = null;
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		queueProducts = getQueue(channels.outputProducts());
 		queueRecommendations = getQueue(channels.outputRecommendations());
 		queueReviews = getQueue(channels.outputReviews());
 	}
 
 	@Test
-	public void createCompositeProduct1() {
+	void createCompositeProduct1() {
 
 		ProductAggregate composite = new ProductAggregate(1, "name", 1, null, null, null);
 		postAndVerifyProduct(composite, OK);
@@ -79,7 +79,7 @@ public class MessagingTests {
 	}
 
 	@Test
-	public void createCompositeProduct2() {
+	void createCompositeProduct2() {
 
 		ProductAggregate composite = new ProductAggregate(1, "name", 1,
 			singletonList(new RecommendationSummary(1, "a", 1, "c")),
@@ -109,7 +109,7 @@ public class MessagingTests {
 	}
 
 	@Test
-	public void deleteCompositeProduct() {
+	void deleteCompositeProduct() {
 		deleteAndVerifyProduct(1, OK);
 
 		// Assert one delete product event queued up
