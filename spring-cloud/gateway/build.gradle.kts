@@ -1,4 +1,5 @@
 import java.net.URI;
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("org.springframework.boot") version "2.2.11.RELEASE"
@@ -68,11 +69,16 @@ dependencyManagement {
   }
 }
 
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
+}
 
 tasks.withType<Test> {
   useJUnitPlatform()
 }
-
 
 sonarqube {
   properties {

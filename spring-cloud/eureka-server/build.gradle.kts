@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI;
 
 plugins {
@@ -43,6 +44,14 @@ dependencyManagement {
     mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
   }
 }
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
+}
+
 
 tasks.withType<Test> {
   useJUnitPlatform()
