@@ -24,7 +24,7 @@ class Event<K, T> {
     eventCreatedAt = null
   }
 
-  constructor(eventType: Type?, key: K, data: T) {
+  constructor(eventType: Type, key: K, data: T?) {
     this.eventType = eventType
     this.key = key
     this.data = data

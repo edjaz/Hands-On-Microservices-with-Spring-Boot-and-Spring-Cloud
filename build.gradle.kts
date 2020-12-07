@@ -8,6 +8,7 @@ plugins {
   id("org.sonarqube") version "2.8"
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
+  kotlin("kapt") version "1.3.72"
 }
 
 
@@ -32,7 +33,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
   kotlinOptions {
     freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "1.8"
+    jvmTarget = "11"
   }
 }
 

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI;
 
 plugins {
@@ -9,6 +10,7 @@ plugins {
 	id ("com.google.cloud.tools.jib") version "1.8.0"
   kotlin("jvm")
   kotlin("plugin.spring")
+  kotlin("kapt")
 }
 
 
@@ -54,8 +56,11 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
+/*
 	compileOnly ("org.projectlombok:lombok")
 	annotationProcessor ("org.projectlombok:lombok")
+*/
+
 
 	implementation (project(":api"))
 	implementation (project(":microservices:review:api"))
@@ -77,6 +82,7 @@ dependencies {
 	implementation("org.springframework.retry:spring-retry")
 	implementation("mysql:mysql-connector-java")
 	implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
+  kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 
 	compileOnly ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 	annotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
@@ -105,6 +111,15 @@ dependencyManagement {
     mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
   }
 }
+
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
+}
+
 
 tasks.withType<Test> {
   useJUnitPlatform()
