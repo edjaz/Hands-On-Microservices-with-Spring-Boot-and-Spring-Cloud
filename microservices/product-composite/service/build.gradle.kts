@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
@@ -40,7 +41,6 @@ configurations {
 }
 repositories {
 	mavenCentral()
-
 	maven { url = URI("https://repo.spring.io/milestone") }
 }
 
@@ -109,6 +109,15 @@ dependencyManagement {
     mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
   }
 }
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
+}
+
+
 
 tasks.withType<Test> {
   useJUnitPlatform()

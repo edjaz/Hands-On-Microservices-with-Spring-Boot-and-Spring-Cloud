@@ -1,12 +1,12 @@
-import java.net.URI
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 plugins {
-  id ("org.springframework.boot") version "2.2.11.RELEASE" apply false
-  id ("io.spring.dependency-management") version "1.0.10.RELEASE"
-  id ("java")
-  id ("jacoco")
-  id ("org.sonarqube")
+  id("org.springframework.boot") version "2.2.11.RELEASE" apply false
+  id("io.spring.dependency-management") version "1.0.10.RELEASE"
+  id("java")
+  id("jacoco")
+  id("org.sonarqube")
   kotlin("jvm")
   kotlin("plugin.spring")
 }
@@ -24,15 +24,15 @@ base {
 
 val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
+  runtimeClasspath {
+    extendsFrom(developmentOnly)
+  }
+  compileOnly {
+    extendsFrom(configurations.annotationProcessor.get())
+  }
 }
 repositories {
-    mavenCentral()
+  mavenCentral()
 
 }
 
@@ -42,14 +42,13 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
-    compileOnly ("org.projectlombok:lombok")
-    annotationProcessor ("org.projectlombok:lombok")
+  compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    implementation ("org.springframework.boot:spring-boot-starter-webflux")
 
-  implementation( "org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
-  implementation( "org.springdoc:springdoc-openapi-security:1.5.0")
+  implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+  implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
+  implementation("org.springdoc:springdoc-openapi-security:1.5.0")
 
 
 }
@@ -72,7 +71,14 @@ tasks.jacocoTestReport {
 }
 
 sonarqube {
-    properties {
-        property ("sonar.sources", "src/main/")
-    }
+  properties {
+    property("sonar.sources", "src/main/")
+  }
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
 }
