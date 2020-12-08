@@ -2,7 +2,6 @@ package fr.edjaz.microservices.core.review.services
 
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.core.review.ReviewService
-import fr.edjaz.microservices.core.review.persistence.ReviewEntity
 import fr.edjaz.microservices.core.review.persistence.ReviewRepository
 import fr.edjaz.util.exceptions.InvalidInputException
 import fr.edjaz.util.http.ServiceUtil
@@ -22,14 +21,19 @@ class ReviewServiceImpl @Autowired constructor(
     private val serviceUtil: ServiceUtil
 ) : ReviewService {
 
-  val LOG = LoggerFactory.getLogger(ReviewService::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
-    override fun createReview(body: Review): Review {
+
+  override fun createReview(body: Review): Review {
         if (body.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         return try {
             val entity = mapper.apiToEntity(body)
             val newEntity = repository.save(entity)
-            LOG.debug("createReview: created a review entity: {}/{}", body.productId, body.reviewId)
+            logger.debug("createReview: created a review entity: {}/{}", body.productId, body.reviewId)
             mapper.entityToApi(newEntity)
         } catch (dive: DataIntegrityViolationException) {
             throw InvalidInputException("Duplicate key, Product Id: " + body.productId + ", Review Id:" + body.reviewId)
@@ -45,13 +49,13 @@ class ReviewServiceImpl @Autowired constructor(
         val entityList = repository.findByProductId(productId)
         val list = mapper.entityListToApiList(entityList)
         list.forEach(Consumer { e: Review -> e.serviceAddress = serviceUtil.serviceAddress })
-        LOG.debug("getReviews: response size: {}", list.size)
+        logger.debug("getReviews: response size: {}", list.size)
         return list
     }
 
     override fun deleteReviews(productId: Int) {
         if (productId < 1) throw InvalidInputException("Invalid productId: $productId")
-        LOG.debug(
+        logger.debug(
             "deleteReviews: tries to delete reviews for the product with productId: {}",
             productId
         )

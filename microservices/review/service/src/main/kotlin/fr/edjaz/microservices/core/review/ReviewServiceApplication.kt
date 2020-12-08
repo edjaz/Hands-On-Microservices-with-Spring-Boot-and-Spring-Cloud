@@ -17,18 +17,23 @@ import java.util.concurrent.Executors
 @EnableDiscoveryClient
 @SpringBootApplication
 class ReviewServiceApplication {
-  val LOG = LoggerFactory.getLogger(ReviewServiceApplication::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
+
   private var connectionPoolSize: Int
 
   @Autowired
-  constructor(@Value("\${spring.datasource.maximum-pool-size:10}") connectionPoolSize: Int ){
+  constructor(@Value("\${spring.datasource.maximum-pool-size:10}") connectionPoolSize: Int) {
     this.connectionPoolSize = connectionPoolSize
   }
 
 
   @Bean
   fun jdbcScheduler(): Scheduler? {
-    LOG.info("Creates a jdbcScheduler with connectionPoolSize = $connectionPoolSize")
+    logger.info("Creates a jdbcScheduler with connectionPoolSize = $connectionPoolSize")
     return Schedulers.fromExecutor(Executors.newFixedThreadPool(connectionPoolSize))
   }
 
@@ -36,8 +41,7 @@ class ReviewServiceApplication {
 }
 
 fun main(args: Array<String>) {
-  val LOG = LoggerFactory.getLogger(ReviewServiceApplication::class.java)
   val ctx = runApplication<ReviewServiceApplication>(*args)
   val mysqlUri = ctx.environment.getProperty("spring.datasource.url")
-  LOG.info("Connected to MySQL: $mysqlUri")
+  ReviewServiceApplication.logger.info("Connected to MySQL: $mysqlUri")
 }

@@ -11,13 +11,19 @@ import org.springframework.context.annotation.ComponentScan
 @SpringBootApplication
 @ComponentScan("fr.edjaz")
 @EnableDiscoveryClient
-class RecommendationServiceApplication
+class RecommendationServiceApplication {
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
+
+}
 
 
 fun main(args: Array<String>) {
-  val LOG = LoggerFactory.getLogger(RecommendationServiceApplication::class.java)
   val ctx = SpringApplication.run(RecommendationServiceApplication::class.java, *args)
   val mongodDbHost = ctx.environment.getProperty("spring.data.mongodb.host")
   val mongodDbPort = ctx.environment.getProperty("spring.data.mongodb.port")
-  LOG.info("Connected to MongoDb: $mongodDbHost:$mongodDbPort")
+  RecommendationServiceApplication.logger.info("Connected to MongoDb: $mongodDbHost:$mongodDbPort")
 }

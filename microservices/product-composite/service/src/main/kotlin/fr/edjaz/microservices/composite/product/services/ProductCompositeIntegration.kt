@@ -15,7 +15,6 @@ import fr.edjaz.util.http.HttpErrorInfo
 import fr.edjaz.util.http.ServiceUtil
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import io.github.resilience4j.retry.annotation.Retry
-import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -42,7 +41,12 @@ class ProductCompositeIntegration @Autowired constructor(
     private val serviceUtil: ServiceUtil,
     @Value("\${app.product-service.timeoutSec}") private val productServiceTimeoutSec: Int
 ) : ProductService, RecommendationService, ReviewService {
-  val LOG = LoggerFactory.getLogger(ProductCompositeIntegration::class.java)
+
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
     private val productServiceUrl = "http://product"
     private val recommendationServiceUrl = "http://recommendation"
@@ -85,7 +89,7 @@ class ProductCompositeIntegration @Autowired constructor(
         val url =
             UriComponentsBuilder.fromUriString("$productServiceUrl/product/{productId}?delay={delay}&faultPercent={faultPercent}")
                 .build(productId, delay, faultPercent)
-        LOG.debug("Will call the getProduct API on URL: {}", url)
+        logger.debug("Will call the getProduct API on URL: {}", url)
         return webClient!!.get().uri(url)
             .retrieve().bodyToMono(Product::class.java).log()
             .onErrorMap(WebClientResponseException::class.java) { ex: WebClientResponseException -> handleException(ex) }
@@ -109,7 +113,7 @@ class ProductCompositeIntegration @Autowired constructor(
     override fun getRecommendations(productId: Int): Flux<Recommendation?>? {
         val url = UriComponentsBuilder.fromUriString("$recommendationServiceUrl/recommendation?productId={productId}")
             .build(productId)
-        LOG.debug("Will call the getRecommendations API on URL: {}", url)
+        logger.debug("Will call the getRecommendations API on URL: {}", url)
 
         // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
         return webClient!!.get().uri(url).retrieve().bodyToFlux(Recommendation::class.java).log()
@@ -131,7 +135,7 @@ class ProductCompositeIntegration @Autowired constructor(
 
     override fun getReviews(productId: Int): Flux<Review> {
         val url = UriComponentsBuilder.fromUriString("$reviewServiceUrl/review?productId={productId}").build(productId)
-        LOG.debug("Will call the getReviews API on URL: {}", url)
+        logger.debug("Will call the getReviews API on URL: {}", url)
 
         // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
         return webClient!!.get().uri(url).retrieve().bodyToFlux(Review::class.java).log()
@@ -146,7 +150,7 @@ class ProductCompositeIntegration @Autowired constructor(
 
     private fun handleException(ex: Throwable): Throwable {
         if (ex !is WebClientResponseException) {
-            LOG.warn("Got a unexpected error: {}, will rethrow it", ex.toString())
+            logger.warn("Got a unexpected error: {}, will rethrow it", ex.toString())
             return ex
         }
         val wcre = ex
@@ -154,11 +158,11 @@ class ProductCompositeIntegration @Autowired constructor(
             HttpStatus.NOT_FOUND -> NotFoundException(getErrorMessage(wcre))
             HttpStatus.UNPROCESSABLE_ENTITY -> InvalidInputException(getErrorMessage(wcre))
             else -> {
-                LOG.warn(
+                logger.warn(
                     "Got a unexpected HTTP error: {}, will rethrow it",
                     wcre.statusCode
                 )
-                LOG.warn("Error body: {}", wcre.responseBodyAsString)
+                logger.warn("Error body: {}", wcre.responseBodyAsString)
                 ex
             }
         }

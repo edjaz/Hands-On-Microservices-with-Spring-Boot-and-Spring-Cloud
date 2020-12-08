@@ -1,6 +1,5 @@
 package fr.edjaz.util.http
 
-import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -8,7 +7,6 @@ import java.net.InetAddress
 import java.net.UnknownHostException
 
 @Component
-@Slf4j
 class ServiceUtil @Autowired constructor(
     @Value("\${server.port}") private val port: String
 ) {

@@ -1,14 +1,12 @@
 package fr.edjaz.springcloud.gateway.config
 
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
-import lombok.extern.slf4j.Slf4j
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import java.lang.Exception
 
 @EnableWebFluxSecurity
-@Slf4j
 class SecurityConfig {
     @Bean
     @Throws(Exception::class)

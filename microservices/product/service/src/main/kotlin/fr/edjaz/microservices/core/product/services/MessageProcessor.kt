@@ -13,28 +13,32 @@ import org.springframework.cloud.stream.messaging.Sink
 
 @EnableBinding(Sink::class)
 class MessageProcessor @Autowired constructor(private val productService: ProductService) {
-  val LOG: Logger = LoggerFactory.getLogger(MessageProcessor::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
     @StreamListener(target = Sink.INPUT)
     fun process(event: Event<Int, Product>) {
-        LOG.info("Process message created at {}...", event.eventCreatedAt)
+        logger.info("Process message created at {}...", event.eventCreatedAt)
         when (event.eventType) {
             Event.Type.CREATE -> {
                 val product = event.data
-                LOG.info("Create product with ID: {}", product!!.productId)
+                logger.info("Create product with ID: {}", product!!.productId)
                 productService.createProduct(product)
             }
             Event.Type.DELETE -> {
                 val productId = event.key!!
-                LOG.info("Delete recommendations with ProductID: {}", productId)
+                logger.info("Delete recommendations with ProductID: {}", productId)
                 productService.deleteProduct(productId)
             }
             else -> {
                 val errorMessage = "Incorrect event type: " + event.eventType + ", expected a CREATE or DELETE event"
-                LOG.warn(errorMessage)
+                logger.warn(errorMessage)
                 throw EventProcessingException(errorMessage)
             }
         }
-        LOG.info("Message processing done!")
+        logger.info("Message processing done!")
     }
 }

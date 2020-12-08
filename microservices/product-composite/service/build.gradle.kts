@@ -51,8 +51,6 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
-	compileOnly ("org.projectlombok:lombok")
-	annotationProcessor ("org.projectlombok:lombok")
 
 	implementation (project(":api"))
 	implementation (project(":microservices:product-composite:api"))

@@ -19,9 +19,14 @@ class RecommendationServiceImpl @Autowired constructor(
     private val mapper: RecommendationMapper,
     private val serviceUtil: ServiceUtil
 ) : RecommendationService {
-  val LOG: Logger = LoggerFactory.getLogger(RecommendationServiceImpl::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
-    override fun createRecommendation(body: Recommendation?): Recommendation? {
+
+  override fun createRecommendation(body: Recommendation?): Recommendation? {
         if (body!!.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         val entity = mapper.apiToEntity(body)
         val newEntity = repository.save(entity)
@@ -46,7 +51,7 @@ class RecommendationServiceImpl @Autowired constructor(
 
     override fun deleteRecommendations(productId: Int) {
         if (productId < 1) throw InvalidInputException("Invalid productId: $productId")
-        LOG.debug(
+        logger.debug(
             "deleteRecommendations: tries to delete recommendations for the product with productId: {}",
             productId
         )

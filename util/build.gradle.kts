@@ -33,9 +33,6 @@ dependencies {
 
   compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-  compileOnly("org.projectlombok:lombok")
-  annotationProcessor("org.projectlombok:lombok")
-
 
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation ("org.springframework.boot:spring-boot-starter-validation")

@@ -26,7 +26,11 @@ class ProductCompositeServiceImpl @Autowired constructor(
     private val serviceUtil: ServiceUtil,
     private val integration: ProductCompositeIntegration
 ) : ProductCompositeService {
-    val LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
     private val nullSC: SecurityContext = SecurityContextImpl()
     override fun createCompositeProduct(body: ProductAggregate): Mono<Void> {
@@ -38,7 +42,7 @@ class ProductCompositeServiceImpl @Autowired constructor(
     fun internalCreateCompositeProduct(sc: SecurityContext?, body: ProductAggregate) {
         try {
             logAuthorizationInfo(sc)
-            LOG.debug(
+            logger.debug(
                 "createCompositeProduct: creates a new composite entity for productId: {}",
                 body.productId
             )
@@ -56,12 +60,12 @@ class ProductCompositeServiceImpl @Autowired constructor(
                     integration.createReview(review)
                 })
             }
-            LOG.debug(
+            logger.debug(
                 "createCompositeProduct: composite entities created for productId: {}",
                 body.productId
             )
         } catch (re: RuntimeException) {
-            LOG.warn("createCompositeProduct failed: {}", re.toString())
+            logger.warn("createCompositeProduct failed: {}", re.toString())
             throw re
         }
     }
@@ -86,7 +90,7 @@ class ProductCompositeServiceImpl @Autowired constructor(
             integration.getRecommendations(productId)!!.collectList(),
             integration.getReviews(productId).collectList())
             .doOnError { ex: Throwable ->
-                LOG.warn(
+                logger.warn(
                     "getCompositeProduct failed: {}",
                     ex.toString()
                 )
@@ -95,10 +99,10 @@ class ProductCompositeServiceImpl @Autowired constructor(
     }
 
     private fun getProductFallbackValue(productId: Int): Product {
-        LOG.warn("Creating a fallback product for productId = {}", productId)
+        logger.warn("Creating a fallback product for productId = {}", productId)
         if (productId == 13) {
             val errMsg = "Product Id: $productId not found in fallback cache!"
-            LOG.warn(errMsg)
+            logger.warn(errMsg)
             throw NotFoundException(errMsg)
         }
         return Product(productId, "Fallback product$productId", productId, serviceUtil.serviceAddress)
@@ -113,19 +117,19 @@ class ProductCompositeServiceImpl @Autowired constructor(
     private fun internalDeleteCompositeProduct(sc: SecurityContext?, productId: Int) {
         try {
             logAuthorizationInfo(sc)
-            LOG.debug(
+            logger.debug(
                 "deleteCompositeProduct: Deletes a product aggregate for productId: {}",
                 productId
             )
             integration.deleteProduct(productId)
             integration.deleteRecommendations(productId)
             integration.deleteReviews(productId)
-            LOG.debug(
+            logger.debug(
                 "deleteCompositeProduct: aggregate entities deleted for productId: {}",
                 productId
             )
         } catch (re: RuntimeException) {
-            LOG.warn("deleteCompositeProduct failed: {}", re.toString())
+            logger.warn("deleteCompositeProduct failed: {}", re.toString())
             throw re
         }
     }
@@ -170,21 +174,21 @@ class ProductCompositeServiceImpl @Autowired constructor(
             val jwtToken = (sc.authentication as JwtAuthenticationToken).token
             logAuthorizationInfo(jwtToken)
         } else {
-            LOG.warn("No JWT based Authentication supplied, running tests are we?")
+            logger.warn("No JWT based Authentication supplied, running tests are we?")
         }
     }
 
     private fun logAuthorizationInfo(jwt: Jwt?) {
         if (jwt == null) {
-            LOG.warn("No JWT supplied, running tests are we?")
+            logger.warn("No JWT supplied, running tests are we?")
         } else {
-            if (LOG.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 val issuer = jwt.issuer
                 val audience = jwt.audience
                 val subject = jwt.claims["sub"]
                 val scopes = jwt.claims["scope"]
                 val expires = jwt.claims["exp"]
-                LOG.debug(
+                logger.debug(
                     "Authorization info: Subject: {}, scopes: {}, expires {}: issuer: {}, audience: {}",
                     subject,
                     scopes,

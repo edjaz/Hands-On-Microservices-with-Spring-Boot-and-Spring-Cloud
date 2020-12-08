@@ -21,7 +21,11 @@ class ProductServiceImpl @Autowired constructor(
   private val mapper: ProductMapper,
   private val serviceUtil: ServiceUtil
 ) : ProductService {
-  val LOG: Logger = LoggerFactory.getLogger(ProductServiceImpl::class.java)
+  companion object {
+    @Suppress("JAVA_CLASS_ON_COMPANION")
+    @JvmStatic
+    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+  }
 
   override fun createProduct(body: Product): Product? {
     if (body.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
@@ -30,7 +34,7 @@ class ProductServiceImpl @Autowired constructor(
       .log()
       .onErrorMap(
         DuplicateKeyException::class.java
-      ) { ex: DuplicateKeyException -> InvalidInputException("Duplicate key, Product Id: " + body.productId) }
+      ) { InvalidInputException("Duplicate key, Product Id: " + body.productId) }
       .map { e: ProductEntity -> mapper.entityToApi(e) }
     return newEntity.block()
   }
@@ -51,26 +55,26 @@ class ProductServiceImpl @Autowired constructor(
 
   override fun deleteProduct(productId: Int) {
     if (productId < 1) throw InvalidInputException("Invalid productId: $productId")
-    LOG.debug("deleteProduct: tries to delete an entity with productId: {}", productId)
+    logger.debug("deleteProduct: tries to delete an entity with productId: {}", productId)
     repository.findByProductId(productId).log().map { e: ProductEntity -> repository.delete(e) }
       .flatMap { e: Mono<Void>? -> e }.block()
   }
 
   private fun simulateDelay(delay: Int) {
-    LOG.debug("Sleeping for {} seconds...", delay)
+    logger.debug("Sleeping for {} seconds...", delay)
     try {
       Thread.sleep((delay * 1000).toLong())
     } catch (e: InterruptedException) {
     }
-    LOG.debug("Moving on...")
+    logger.debug("Moving on...")
   }
 
   private fun throwErrorIfBadLuck(faultPercent: Int) {
     val randomThreshold = getRandomNumber(1, 100)
     if (faultPercent < randomThreshold) {
-      LOG.debug("We got lucky, no error occurred, {} < {}", faultPercent, randomThreshold)
+      logger.debug("We got lucky, no error occurred, {} < {}", faultPercent, randomThreshold)
     } else {
-      LOG.debug("Bad luck, an error occurred, {} >= {}", faultPercent, randomThreshold)
+      logger.debug("Bad luck, an error occurred, {} >= {}", faultPercent, randomThreshold)
       throw RuntimeException("Something went wrong...")
     }
   }
