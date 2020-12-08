@@ -18,7 +18,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 extra["mapstructVersion"] = "1.3.1.Final"
 extra["springCloudVersion"] = "Hoxton.SR9"
-extra["resilience4jVersion"] = "1.1.0"
+extra["resilience4jVersion"] = "1.2.0"
 
 repositories {
     mavenCentral()

@@ -82,10 +82,9 @@ dependencies {
 	implementation("org.springframework.retry:spring-retry")
 	implementation("mysql:mysql-connector-java")
 	implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
-  kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 
 	compileOnly ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
-	annotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
+  kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 	testAnnotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI;
 
 plugins {
@@ -9,6 +10,7 @@ plugins {
 	id ("com.google.cloud.tools.jib") version "1.8.0"
   kotlin("jvm")
   kotlin("plugin.spring")
+  kotlin("kapt")
 }
 
 group = "fr.edjaz.microservices.core.recommendation"
@@ -71,15 +73,10 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 	implementation("org.springframework.cloud:spring-cloud-starter-zipkin")
 	implementation("org.springframework.retry:spring-retry")
-	implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
 
-
-	compileOnly ("org.projectlombok:lombok")
-	annotationProcessor ("org.projectlombok:lombok")
-
+  implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
 	compileOnly ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
-	annotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
-
+  kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 	testAnnotationProcessor ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -103,6 +100,13 @@ dependencyManagement {
     mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
   }
 }
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
+}
+
 
 tasks.withType<Test> {
   useJUnitPlatform()
