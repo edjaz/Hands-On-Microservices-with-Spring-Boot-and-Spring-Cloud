@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
@@ -39,8 +40,6 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
-	compileOnly ("org.projectlombok:lombok")
-	annotationProcessor ("org.projectlombok:lombok")
 
 	implementation ("org.springframework.boot:spring-boot-starter-webflux")
 	}
@@ -65,4 +64,11 @@ sonarqube {
 	properties {
 		property ("sonar.sources", "src/main/")
 	}
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions {
+    freeCompilerArgs = listOf("-Xjsr305=strict")
+    jvmTarget = "11"
+  }
 }

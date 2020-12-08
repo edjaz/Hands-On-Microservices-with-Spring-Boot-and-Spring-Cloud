@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 plugins {
   id("org.springframework.boot") version "2.2.11.RELEASE" apply false
@@ -21,12 +20,12 @@ base {
 
 val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
+  runtimeClasspath {
+    extendsFrom(developmentOnly)
+  }
+  compileOnly {
+    extendsFrom(configurations.annotationProcessor.get())
+  }
 }
 repositories {
   mavenCentral()
@@ -39,11 +38,9 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-  compileOnly("org.projectlombok:lombok")
-  annotationProcessor("org.projectlombok:lombok")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
-  implementation ("org.springframework.boot:spring-boot-starter-validation")
-  }
+  implementation("org.springframework.boot:spring-boot-starter-validation")
+}
 
 apply(plugin = "io.spring.dependency-management")
 
