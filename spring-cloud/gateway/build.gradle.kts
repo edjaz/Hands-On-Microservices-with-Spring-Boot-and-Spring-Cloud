@@ -2,8 +2,8 @@ import java.net.URI;
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.springframework.boot") version "2.2.11.RELEASE"
-  id("io.spring.dependency-management") version "1.0.10.RELEASE"
+  id("org.springframework.boot")
+  id("io.spring.dependency-management")
   id("java")
   id("jacoco")
   id("org.sonarqube")

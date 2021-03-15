@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 plugins {
-	id ("org.springframework.boot") version "2.2.11.RELEASE"
-	id ("io.spring.dependency-management") version "1.0.10.RELEASE"
+	id ("org.springframework.boot")
+	id ("io.spring.dependency-management")
 	id ("java")
 	id ("jacoco")
 	id ("org.sonarqube")
-	id ("com.google.cloud.tools.jib") version "1.8.0"
+	id ("com.google.cloud.tools.jib")
   kotlin("jvm")
   kotlin("plugin.spring")
 }
