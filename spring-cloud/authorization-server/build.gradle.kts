@@ -59,6 +59,8 @@ dependencies {
 
 	implementation("io.micrometer:micrometer-registry-prometheus")
 
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
+
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
   }

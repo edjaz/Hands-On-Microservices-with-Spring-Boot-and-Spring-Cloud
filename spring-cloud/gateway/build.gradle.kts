@@ -20,11 +20,7 @@ repositories {
   maven { url = URI("https://repo.spring.io/milestone") }
 }
 
-val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
@@ -35,6 +31,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
   compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-security")

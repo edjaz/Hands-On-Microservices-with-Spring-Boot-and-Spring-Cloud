@@ -30,11 +30,7 @@ jib {
 	}
 }
 
-val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
@@ -88,6 +84,7 @@ dependencies {
   implementation("io.github.resilience4j:resilience4j-spring-boot2:${property("resilience4jVersion")}")
   implementation("io.github.resilience4j:resilience4j-reactor:${property("resilience4jVersion")}")
   implementation("org.springframework.boot:spring-boot-starter-aop")
+  implementation("org.springframework.boot:spring-boot-starter-validation")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -100,6 +97,7 @@ dependencies {
 	//annotationProcessor "io.dekorate:kubernetes-annotations:0.9.9"
 
 	implementation("io.micrometer:micrometer-registry-prometheus")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 }
 
 dependencyManagement {

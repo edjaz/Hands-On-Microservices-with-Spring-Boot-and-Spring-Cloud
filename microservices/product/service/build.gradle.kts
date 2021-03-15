@@ -30,11 +30,7 @@ jib {
 	}
 }
 
-val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
@@ -72,6 +68,7 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-zipkin")
 	implementation("org.springframework.retry:spring-retry")
 	implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
+  implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	compileOnly ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
   kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
@@ -89,6 +86,7 @@ dependencies {
 
 	//compile ("io.dekorate:kubernetes-spring-starter:0.9.9")
 	//annotationProcessor ("io.dekorate:kubernetes-annotations:0.9.9")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 }
 
 dependencyManagement {

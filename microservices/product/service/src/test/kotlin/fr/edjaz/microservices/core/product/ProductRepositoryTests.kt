@@ -2,6 +2,7 @@ package fr.edjaz.microservices.core.product
 
 import fr.edjaz.microservices.core.product.persistence.ProductEntity
 import fr.edjaz.microservices.core.product.persistence.ProductRepository
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -13,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import reactor.test.StepVerifier
 
 @ExtendWith(SpringExtension::class)
-@DataMongoTest(properties = ["spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"])
+@DataMongoTest(properties = ["spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false", "spring.data.mongodb.auto-index-creation= true"])
 class ProductRepositoryTests {
     @Autowired
     private lateinit var repository: ProductRepository

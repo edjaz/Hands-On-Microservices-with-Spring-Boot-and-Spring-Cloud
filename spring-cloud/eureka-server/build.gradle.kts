@@ -25,6 +25,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 	implementation ("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
 	implementation ("org.springframework.cloud:spring-cloud-starter-config")
 	implementation ("org.springframework.cloud:spring-cloud-starter-sleuth")

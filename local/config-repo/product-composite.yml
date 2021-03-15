@@ -107,6 +107,11 @@ logging:
     fr.edjaz: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
+
+server.error.include-message: always
+server.error.include-binding-errors: always
+
+
 ---
 spring.profiles: docker
 

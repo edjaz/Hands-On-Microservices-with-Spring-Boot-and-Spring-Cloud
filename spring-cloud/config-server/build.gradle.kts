@@ -25,6 +25,7 @@ repositories {
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 
 	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
 	implementation ("org.springframework.boot:spring-boot-starter-actuator")

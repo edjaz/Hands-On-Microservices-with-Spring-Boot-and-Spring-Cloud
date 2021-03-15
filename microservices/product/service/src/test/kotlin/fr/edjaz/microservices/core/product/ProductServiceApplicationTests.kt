@@ -24,7 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    properties = ["spring.data.mongodb.port: 0", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"]
+    properties = ["spring.data.mongodb.port: 0", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false", "spring.data.mongodb.auto-index-creation= true"]
 )
 class ProductServiceApplicationTests {
     @Autowired

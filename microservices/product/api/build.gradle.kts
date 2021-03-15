@@ -24,11 +24,7 @@ base {
   archivesBaseName = "product-api"
 }
 
-val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}

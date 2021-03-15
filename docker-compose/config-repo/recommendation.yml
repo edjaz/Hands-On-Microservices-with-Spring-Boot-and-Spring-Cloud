@@ -1,6 +1,10 @@
 server.port: 7002
 
+server.error.include-message: always
+server.error.include-binding-errors: always
+
 spring.data.mongodb:
+  auto-index-creation: true
   host: localhost
   port: 27017
   database: recommendation-db

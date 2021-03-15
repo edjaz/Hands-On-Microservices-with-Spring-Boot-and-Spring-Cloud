@@ -33,11 +33,7 @@ jib {
 
 
 
-val developmentOnly by configurations.creating
 configurations {
-	runtimeClasspath {
-		extendsFrom(developmentOnly)
-	}
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
@@ -77,6 +73,7 @@ dependencies {
 	implementation("org.springframework.retry:spring-retry")
 	implementation("mysql:mysql-connector-java")
 	implementation("org.mapstruct:mapstruct:${property("mapstructVersion")}")
+  implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	compileOnly ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
   kapt ("org.mapstruct:mapstruct-processor:${property("mapstructVersion")}")
@@ -98,6 +95,7 @@ dependencies {
 	//annotationProcessor ("io.dekorate:kubernetes-annotations:0.9.9")
 
 	implementation("io.micrometer:micrometer-registry-prometheus")
+  runtime("org.springframework.boot:spring-boot-properties-migrator")
 }
 
 dependencyManagement {

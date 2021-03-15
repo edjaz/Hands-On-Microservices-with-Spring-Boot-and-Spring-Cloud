@@ -5,10 +5,10 @@ import java.util.Properties
 plugins {
   java
   jacoco
-  id("org.sonarqube") version "2.8"
-	kotlin("jvm") version "1.3.72"
-	kotlin("plugin.spring") version "1.3.72"
-  kotlin("kapt") version "1.3.72"
+  id("org.sonarqube")
+	kotlin("jvm")
+	kotlin("plugin.spring")
+  kotlin("kapt")
 }
 
 
@@ -17,7 +17,7 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 extra["mapstructVersion"] = "1.3.1.Final"
-extra["springCloudVersion"] = "Hoxton.SR9"
+extra["springCloudVersion"] = "Hoxton.SR10"
 extra["resilience4jVersion"] = "1.2.0"
 
 repositories {
