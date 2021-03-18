@@ -3,14 +3,13 @@ package fr.edjaz.springcloud.eurekaserver
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
@@ -27,12 +26,14 @@ class EurekaServerApplicationTests {
 
     @Value("\${app.eureka-password}")
     private val password: String? = null
+
     @Autowired
     fun setTestRestTemplate(testRestTemplate: TestRestTemplate) {
         this.testRestTemplate = testRestTemplate.withBasicAuth(username, password)
     }
 
     private var testRestTemplate: TestRestTemplate? = null
+
     @Test
     fun catalogLoads() {
         val expectedResponseBody =

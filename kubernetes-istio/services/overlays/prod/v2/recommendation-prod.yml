@@ -13,13 +13,13 @@ spec:
         version: v2
     spec:
       containers:
-      - name: rec
-        image: edjaz/recommendation/service:v2
-        env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: "docker,prod,kubernetes"
-        resources:
-          requests:
-            memory: "200Mi"
-          limits:
-            memory: "400Mi"
+        - name: rec
+          image: edjaz/recommendation/service:v2
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,prod,kubernetes"
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "400Mi"

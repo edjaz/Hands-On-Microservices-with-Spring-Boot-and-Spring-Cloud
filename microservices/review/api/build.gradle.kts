@@ -1,69 +1,40 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI;
-
 plugins {
-	id ("org.springframework.boot") apply false
-	id ("io.spring.dependency-management")
-	id ("java")
-	id ("jacoco")
-	id ("org.sonarqube")
-  kotlin("jvm")
-  kotlin("plugin.spring")
+    id("org.springframework.boot") apply false
+    id("io.spring.dependency-management")
+    id("java")
+    id("jacoco")
+    id("org.sonarqube")
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
 group = "fr.edjaz.microservices.core.review"
-version = "1.0.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
 
 base {
-	archivesBaseName =  "review-api"
+    archivesBaseName = "review-api"
 }
 
 configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
 }
-repositories {
-	mavenCentral()
 
-}
+val junitVersion: String by project
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-	compileOnly ("com.google.code.findbugs:jsr305:3.0.2")
-
-	implementation ("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-commons:1.7.0")
 }
 
 apply(plugin = "io.spring.dependency-management")
 
 dependencyManagement {
-  imports {
-    mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-  }
-}
-
-tasks.jacocoTestReport {
-  reports {
-    xml.isEnabled = true
-    csv.isEnabled = false
-    html.isEnabled = true
-  }
-}
-
-sonarqube {
-	properties {
-		property ("sonar.sources", "src/main/")
-	}
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "11"
-  }
-}

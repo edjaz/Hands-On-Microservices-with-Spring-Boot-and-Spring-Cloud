@@ -3,7 +3,6 @@ package fr.edjaz.util.reactor
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux
-import java.util.ArrayList
 
 class ReactorTests {
     @Test

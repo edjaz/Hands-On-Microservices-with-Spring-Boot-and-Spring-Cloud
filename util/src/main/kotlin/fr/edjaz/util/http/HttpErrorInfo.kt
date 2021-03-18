@@ -9,21 +9,19 @@ class HttpErrorInfo {
     var httpStatus: HttpStatus?
     var message: String?
 
-  constructor(){
-    timestamp = ZonedDateTime.now()
-    this.httpStatus = null
-    this.path = null
-    this.message = null
-  }
+    constructor() {
+        timestamp = ZonedDateTime.now()
+        this.httpStatus = null
+        this.path = null
+        this.message = null
+    }
 
-
-  constructor(httpStatus: HttpStatus?, path: String?, message: String?) {
+    constructor(httpStatus: HttpStatus?, path: String?, message: String?) {
         timestamp = ZonedDateTime.now()
         this.httpStatus = httpStatus
         this.path = path
         this.message = message
     }
 
-    fun getError(): String =  httpStatus!!.reasonPhrase
-
+    fun getError(): String = httpStatus!!.reasonPhrase
 }

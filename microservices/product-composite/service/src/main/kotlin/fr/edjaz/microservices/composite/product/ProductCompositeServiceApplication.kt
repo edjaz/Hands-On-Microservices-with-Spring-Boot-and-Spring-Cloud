@@ -1,6 +1,9 @@
 package fr.edjaz.microservices.composite.product
 
-import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.*
+import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.ProductServiceProperties
+import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.RecommendationServiceProperties
+import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.ReviewServiceProperties
+import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.SwaggerProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
@@ -28,5 +31,5 @@ class ProductCompositeServiceApplication {
 }
 
 fun main(args: Array<String>) {
-  runApplication<ProductCompositeServiceApplication>(*args)
+    runApplication<ProductCompositeServiceApplication>(*args)
 }

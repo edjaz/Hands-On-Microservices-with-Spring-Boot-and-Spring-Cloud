@@ -6,10 +6,10 @@ spec:
   hosts:
     - product
   http:
-  - route:
-    - destination:
-        host: product
-    fault:
-      delay:
-        fixedDelay: 3s
-        percent: 100
+    - route:
+        - destination:
+            host: product
+      fault:
+        delay:
+          fixedDelay: 3s
+          percent: 100

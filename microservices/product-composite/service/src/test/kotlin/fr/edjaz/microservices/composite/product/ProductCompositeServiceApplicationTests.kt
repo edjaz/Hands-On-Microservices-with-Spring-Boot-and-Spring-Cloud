@@ -35,6 +35,7 @@ class ProductCompositeServiceApplicationTests {
 
     @MockBean
     private val compositeIntegration: ProductCompositeIntegration? = null
+
     @BeforeEach
     fun setUp() {
         Mockito.`when`(
@@ -90,25 +91,25 @@ class ProductCompositeServiceApplicationTests {
 
     @Test
     fun productById() {
-            getAndVerifyProduct(PRODUCT_ID_OK, HttpStatus.OK)
-                .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
-                .jsonPath("$.recommendations.length()").isEqualTo(1)
-                .jsonPath("$.reviews.length()").isEqualTo(1)
-        }
+        getAndVerifyProduct(PRODUCT_ID_OK, HttpStatus.OK)
+            .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
+            .jsonPath("$.recommendations.length()").isEqualTo(1)
+            .jsonPath("$.reviews.length()").isEqualTo(1)
+    }
 
     @Test
     fun productNotFound() {
-            getAndVerifyProduct(PRODUCT_ID_NOT_FOUND, HttpStatus.NOT_FOUND)
-                .jsonPath("$.path").isEqualTo("/product-composite/$PRODUCT_ID_NOT_FOUND")
-                .jsonPath("$.message").isEqualTo("NOT FOUND: $PRODUCT_ID_NOT_FOUND")
-        }
+        getAndVerifyProduct(PRODUCT_ID_NOT_FOUND, HttpStatus.NOT_FOUND)
+            .jsonPath("$.path").isEqualTo("/product-composite/$PRODUCT_ID_NOT_FOUND")
+            .jsonPath("$.message").isEqualTo("NOT FOUND: $PRODUCT_ID_NOT_FOUND")
+    }
 
     @Test
     fun productInvalidInput() {
-            getAndVerifyProduct(PRODUCT_ID_INVALID, HttpStatus.UNPROCESSABLE_ENTITY)
-                .jsonPath("$.path").isEqualTo("/product-composite/$PRODUCT_ID_INVALID")
-                .jsonPath("$.message").isEqualTo("INVALID: $PRODUCT_ID_INVALID")
-        }
+        getAndVerifyProduct(PRODUCT_ID_INVALID, HttpStatus.UNPROCESSABLE_ENTITY)
+            .jsonPath("$.path").isEqualTo("/product-composite/$PRODUCT_ID_INVALID")
+            .jsonPath("$.message").isEqualTo("INVALID: $PRODUCT_ID_INVALID")
+    }
 
     private fun getAndVerifyProduct(productId: Int, expectedStatus: HttpStatus): BodyContentSpec {
         return client!!.get()

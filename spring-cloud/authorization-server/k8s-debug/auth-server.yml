@@ -13,26 +13,26 @@ spec:
         app: auth-server
     spec:
       containers:
-      - name: auth-server
-        image: edjaz/auth-server
-        imagePullPolicy: Never
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "docker,kubernetes"
-        - name: SPRING_CONFIG_LOCATION
-          value: file:/config-repo/application.yml,file:/config-repo/auth-server.yml
-        envFrom:
-        - secretRef:
-            name: rabbitmq-credentials
-        ports:
-        - containerPort: 9999
-        volumeMounts:
-        - name: config-repo-volume
-          mountPath: /config-repo
+        - name: auth-server
+          image: edjaz/auth-server
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,kubernetes"
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+          envFrom:
+            - secretRef:
+                name: rabbitmq-credentials
+          ports:
+            - containerPort: 9999
+          volumeMounts:
+            - name: config-repo-volume
+              mountPath: /config-repo
       volumes:
-      - name: config-repo-volume
-        configMap:
-          name: config-repo-auth-server
+        - name: config-repo-volume
+          configMap:
+            name: config-repo-auth-server
 ---
 apiVersion: v1
 kind: Service

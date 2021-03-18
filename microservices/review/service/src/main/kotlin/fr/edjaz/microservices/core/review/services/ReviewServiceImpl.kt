@@ -21,14 +21,13 @@ class ReviewServiceImpl @Autowired constructor(
     private val serviceUtil: ServiceUtil
 ) : ReviewService {
 
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
-
-  override fun createReview(body: Review): Review {
+    override fun createReview(body: Review): Review {
         if (body.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         return try {
             val entity = mapper.apiToEntity(body)

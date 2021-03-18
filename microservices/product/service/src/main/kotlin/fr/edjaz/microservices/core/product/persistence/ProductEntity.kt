@@ -2,7 +2,6 @@ package fr.edjaz.microservices.core.product.persistence
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Version
-import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 

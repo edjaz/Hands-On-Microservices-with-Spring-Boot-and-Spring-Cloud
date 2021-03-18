@@ -4,7 +4,6 @@ import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.core.product.ProductService
 import fr.edjaz.api.event.Event
 import fr.edjaz.util.exceptions.EventProcessingException
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.stream.annotation.EnableBinding
@@ -13,11 +12,11 @@ import org.springframework.cloud.stream.messaging.Sink
 
 @EnableBinding(Sink::class)
 class MessageProcessor @Autowired constructor(private val productService: ProductService) {
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
     @StreamListener(target = Sink.INPUT)
     fun process(event: Event<Int, Product>) {

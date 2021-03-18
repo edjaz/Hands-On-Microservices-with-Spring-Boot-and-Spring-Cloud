@@ -15,7 +15,6 @@
  */
 package fr.edjaz.springcloud.uaa
 
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -26,5 +25,5 @@ import org.springframework.boot.runApplication
 class OAuth2AuthorizationServerApplication
 
 fun main(args: Array<String>) {
-  runApplication<OAuth2AuthorizationServerApplication>(*args)
+    runApplication<OAuth2AuthorizationServerApplication>(*args)
 }

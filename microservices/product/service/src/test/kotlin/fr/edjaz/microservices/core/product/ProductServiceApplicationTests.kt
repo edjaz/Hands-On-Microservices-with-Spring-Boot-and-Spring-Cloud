@@ -24,7 +24,13 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    properties = ["spring.data.mongodb.port: 0", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false", "spring.data.mongodb.auto-index-creation= true"]
+    properties = [
+        "spring.data.mongodb.port: 0",
+        "eureka.client.enabled=false",
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.data.mongodb.auto-index-creation= true"
+    ]
 )
 class ProductServiceApplicationTests {
     @Autowired
@@ -46,15 +52,15 @@ class ProductServiceApplicationTests {
 
     @Test
     fun productById() {
-            val productId = 1
-            Assertions.assertNull(repository.findByProductId(productId).block())
-            Assertions.assertEquals(0, repository.count().block() as Long)
-            sendCreateProductEvent(productId)
-            Assertions.assertNotNull(repository.findByProductId(productId).block())
-            Assertions.assertEquals(1, repository.count().block() as Long)
-            getAndVerifyProduct(productId, HttpStatus.OK)
-                .jsonPath("$.productId").isEqualTo(productId)
-        }
+        val productId = 1
+        Assertions.assertNull(repository.findByProductId(productId).block())
+        Assertions.assertEquals(0, repository.count().block() as Long)
+        sendCreateProductEvent(productId)
+        Assertions.assertNotNull(repository.findByProductId(productId).block())
+        Assertions.assertEquals(1, repository.count().block() as Long)
+        getAndVerifyProduct(productId, HttpStatus.OK)
+            .jsonPath("$.productId").isEqualTo(productId)
+    }
 
     @Test
     fun duplicateError() {
@@ -87,26 +93,26 @@ class ProductServiceApplicationTests {
 
     @Test
     fun productInvalidParameterString() {
-            getAndVerifyProduct("/no-integer", HttpStatus.BAD_REQUEST)
-                .jsonPath("$.path").isEqualTo("/product/no-integer")
-                .jsonPath("$.message").isEqualTo("Type mismatch.")
-        }
+        getAndVerifyProduct("/no-integer", HttpStatus.BAD_REQUEST)
+            .jsonPath("$.path").isEqualTo("/product/no-integer")
+            .jsonPath("$.message").isEqualTo("Type mismatch.")
+    }
 
     @Test
     fun productNotFound() {
-            val productIdNotFound = 13
-            getAndVerifyProduct(productIdNotFound, HttpStatus.NOT_FOUND)
-                .jsonPath("$.path").isEqualTo("/product/$productIdNotFound")
-                .jsonPath("$.message").isEqualTo("No product found for productId: $productIdNotFound")
-        }
+        val productIdNotFound = 13
+        getAndVerifyProduct(productIdNotFound, HttpStatus.NOT_FOUND)
+            .jsonPath("$.path").isEqualTo("/product/$productIdNotFound")
+            .jsonPath("$.message").isEqualTo("No product found for productId: $productIdNotFound")
+    }
 
     @Test
     fun productInvalidParameterNegativeValue() {
-            val productIdInvalid = -1
-            getAndVerifyProduct(productIdInvalid, HttpStatus.UNPROCESSABLE_ENTITY)
-                .jsonPath("$.path").isEqualTo("/product/$productIdInvalid")
-                .jsonPath("$.message").isEqualTo("Invalid productId: $productIdInvalid")
-        }
+        val productIdInvalid = -1
+        getAndVerifyProduct(productIdInvalid, HttpStatus.UNPROCESSABLE_ENTITY)
+            .jsonPath("$.path").isEqualTo("/product/$productIdInvalid")
+            .jsonPath("$.message").isEqualTo("Invalid productId: $productIdInvalid")
+    }
 
     private fun getAndVerifyProduct(productId: Int, expectedStatus: HttpStatus): BodyContentSpec {
         return getAndVerifyProduct("/$productId", expectedStatus)

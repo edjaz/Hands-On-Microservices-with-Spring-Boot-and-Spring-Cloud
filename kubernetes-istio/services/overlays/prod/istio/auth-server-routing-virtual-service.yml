@@ -6,19 +6,19 @@ spec:
   hosts:
     - "*"
   http:
-  - match:
-    - uri:
-        prefix: /oauth
-    route:
-    - destination:
-        host: auth-server
-        port:
-          number: 9999
-        subset: old
-      weight: 100
-    - destination:
-        host: auth-server
-        port:
-          number: 9999
-        subset: new
-      weight: 0
+    - match:
+        - uri:
+            prefix: /oauth
+      route:
+        - destination:
+            host: auth-server
+            port:
+              number: 9999
+            subset: old
+          weight: 100
+        - destination:
+            host: auth-server
+            port:
+              number: 9999
+            subset: new
+          weight: 0

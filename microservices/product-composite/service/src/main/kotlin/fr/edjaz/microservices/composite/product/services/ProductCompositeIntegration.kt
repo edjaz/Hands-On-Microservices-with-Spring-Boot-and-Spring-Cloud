@@ -42,11 +42,11 @@ class ProductCompositeIntegration @Autowired constructor(
     @Value("\${app.product-service.timeoutSec}") private val productServiceTimeoutSec: Int
 ) : ProductService, RecommendationService, ReviewService {
 
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
     private val productServiceUrl = "http://product"
     private val recommendationServiceUrl = "http://recommendation"

@@ -1,84 +1,48 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-
 plugins {
-  id("org.springframework.boot") apply false
-  id("io.spring.dependency-management")
-  id("java")
-  id("jacoco")
-  id("org.sonarqube")
-  kotlin("jvm")
-  kotlin("plugin.spring")
+    id("org.springframework.boot") apply false
+    id("io.spring.dependency-management")
+    id("java")
+    id("jacoco")
+    id("org.sonarqube")
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
-
 group = "fr.edjaz.microservices.composite.product"
-version = "1.0.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
-
-
 
 base {
-  archivesBaseName = "composite-product-api"
+    archivesBaseName = "composite-product-api"
 }
 
 val developmentOnly by configurations.creating
 configurations {
-  runtimeClasspath {
-    extendsFrom(developmentOnly)
-  }
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
-  }
-}
-repositories {
-  mavenCentral()
-
+    runtimeClasspath {
+        extendsFrom(developmentOnly)
+    }
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
 }
 
-
+val junitVersion: String by project
 
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-  compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
+    implementation("org.springdoc:springdoc-openapi-security:1.5.0")
 
-
-  implementation("org.springframework.boot:spring-boot-starter-webflux")
-
-  implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
-  implementation("org.springdoc:springdoc-openapi-security:1.5.0")
-
-
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-commons:1.7.0")
 }
 
 apply(plugin = "io.spring.dependency-management")
 
 dependencyManagement {
-  imports {
-    mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-  }
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 
 
-tasks.jacocoTestReport {
-  reports {
-    xml.isEnabled = true
-    csv.isEnabled = false
-    html.isEnabled = true
-  }
-}
-
-sonarqube {
-  properties {
-    property("sonar.sources", "src/main/")
-  }
-}
-
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "11"
-  }
-}

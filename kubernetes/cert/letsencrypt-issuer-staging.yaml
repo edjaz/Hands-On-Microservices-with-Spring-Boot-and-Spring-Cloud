@@ -9,6 +9,6 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-issuer-staging-account-key
     solvers:
-    - http01:
-        ingress:
-          class: nginx
+      - http01:
+          ingress:
+            class: nginx

@@ -3,7 +3,6 @@ package fr.edjaz.microservices.core.review.services
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.core.review.ReviewService
 import fr.edjaz.api.event.Event
-import fr.edjaz.microservices.core.review.ReviewServiceApplication
 import fr.edjaz.util.exceptions.EventProcessingException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,14 +12,13 @@ import org.springframework.cloud.stream.messaging.Sink
 
 @EnableBinding(Sink::class)
 class MessageProcessor @Autowired constructor(private val reviewService: ReviewService) {
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
-
-  @StreamListener(target = Sink.INPUT)
+    @StreamListener(target = Sink.INPUT)
     fun process(event: Event<Int?, Review?>) {
         logger.info("Process message created at {}...", event.eventCreatedAt)
         when (event.eventType) {

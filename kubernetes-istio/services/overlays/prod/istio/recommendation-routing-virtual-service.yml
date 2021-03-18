@@ -6,20 +6,20 @@ spec:
   hosts:
     - recommendation
   http:
-  - match:
-    - headers:
-        X-group:
-          exact: test
-    route:
-    - destination:
-        host: recommendation
-        subset: new
-  - route:
-    - destination:
-        host: recommendation
-        subset: old
-      weight: 100
-    - destination:
-        host: recommendation
-        subset: new
-      weight: 0        
+    - match:
+        - headers:
+            X-group:
+              exact: test
+      route:
+        - destination:
+            host: recommendation
+            subset: new
+    - route:
+        - destination:
+            host: recommendation
+            subset: old
+          weight: 100
+        - destination:
+            host: recommendation
+            subset: new
+          weight: 0

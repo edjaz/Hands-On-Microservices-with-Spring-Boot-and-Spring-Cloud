@@ -6,7 +6,6 @@ import fr.edjaz.microservices.core.recommendation.persistence.RecommendationEnti
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationRepository
 import fr.edjaz.util.exceptions.InvalidInputException
 import fr.edjaz.util.http.ServiceUtil
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DuplicateKeyException
@@ -19,14 +18,13 @@ class RecommendationServiceImpl @Autowired constructor(
     private val mapper: RecommendationMapper,
     private val serviceUtil: ServiceUtil
 ) : RecommendationService {
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
-
-  override fun createRecommendation(body: Recommendation?): Recommendation? {
+    override fun createRecommendation(body: Recommendation?): Recommendation? {
         if (body!!.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         val entity = mapper.apiToEntity(body)
         val newEntity = repository.save(entity)

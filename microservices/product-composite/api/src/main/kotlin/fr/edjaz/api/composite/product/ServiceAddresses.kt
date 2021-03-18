@@ -1,6 +1,6 @@
 package fr.edjaz.api.composite.product
 
-data class ServiceAddresses (
+data class ServiceAddresses(
     var cmp: String? = null,
     var pro: String? = null,
     var rev: String? = null,

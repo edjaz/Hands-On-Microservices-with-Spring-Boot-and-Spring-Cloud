@@ -1,7 +1,11 @@
 package fr.edjaz.microservices.core.review.persistence
 
-
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.Index
+import javax.persistence.Table
+import javax.persistence.Version
 
 @Entity
 @Table(

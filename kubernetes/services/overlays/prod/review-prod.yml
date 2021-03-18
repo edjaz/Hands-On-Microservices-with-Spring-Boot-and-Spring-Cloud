@@ -12,13 +12,13 @@ spec:
         app: review
     spec:
       containers:
-      - name: rev
-        image: hands-on/review/service:v1
-        env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: "docker,prod,kubernetes"
-        resources:
-          requests:
-            memory: "200Mi"
-          limits:
-            memory: "400Mi"
+        - name: rev
+          image: hands-on/review/service:v1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,prod,kubernetes"
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "400Mi"

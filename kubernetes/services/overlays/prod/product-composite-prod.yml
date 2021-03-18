@@ -12,13 +12,13 @@ spec:
         app: product-composite
     spec:
       containers:
-      - name: comp
-        image: hands-on/product-composite/service:v1
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "docker,prod,kubernetes"
-        resources:
-          requests:
-            memory: "200Mi"
-          limits:
-            memory: "400Mi"
+        - name: comp
+          image: hands-on/product-composite/service:v1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,prod,kubernetes"
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "400Mi"

@@ -7,7 +7,6 @@
 docker-compose -f sonar.yml up
 ----
 
-
 == Problème mémoire lors du scan
 
 [source,]

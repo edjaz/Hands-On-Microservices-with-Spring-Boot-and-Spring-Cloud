@@ -7,7 +7,7 @@ spec:
     istio: ingressgateway
   servers:
     - hosts:
-      - "*"
+        - "*"
       tls:
         mode: SIMPLE
         serverCertificate: /etc/istio/ingressgateway-certs/tls.crt

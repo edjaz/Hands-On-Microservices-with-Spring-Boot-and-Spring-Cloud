@@ -25,9 +25,15 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    properties = ["spring.data.mongodb.port: 0", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false",
-    "spring.data.mongodb.auto-index-creation= true", "server.error.include-message=always" ,
-        "server.error.include-binding-errors=always"]
+    properties = [
+        "spring.data.mongodb.port: 0",
+        "eureka.client.enabled=false",
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.data.mongodb.auto-index-creation= true",
+        "server.error.include-message=always",
+        "server.error.include-binding-errors=always"
+    ]
 )
 class RecommendationServiceApplicationTests {
     @Autowired
@@ -39,6 +45,7 @@ class RecommendationServiceApplicationTests {
     @Autowired
     private val channels: Sink? = null
     private var input: AbstractMessageChannel? = null
+
     @BeforeEach
     fun setupDb() {
         input = channels!!.input() as AbstractMessageChannel
@@ -47,16 +54,16 @@ class RecommendationServiceApplicationTests {
 
     @Test
     fun recommendationsByProductId() {
-            val productId = 1
-            sendCreateRecommendationEvent(productId, 1)
-            sendCreateRecommendationEvent(productId, 2)
-            sendCreateRecommendationEvent(productId, 3)
-            Assertions.assertEquals(3, repository!!.findByProductId(productId).count().block() as Long)
-            getAndVerifyRecommendationsByProductId(productId, HttpStatus.OK)
-                .jsonPath("$.length()").isEqualTo(3)
-                .jsonPath("$[2].productId").isEqualTo(productId)
-                .jsonPath("$[2].recommendationId").isEqualTo(3)
-        }
+        val productId = 1
+        sendCreateRecommendationEvent(productId, 1)
+        sendCreateRecommendationEvent(productId, 2)
+        sendCreateRecommendationEvent(productId, 3)
+        Assertions.assertEquals(3, repository!!.findByProductId(productId).count().block() as Long)
+        getAndVerifyRecommendationsByProductId(productId, HttpStatus.OK)
+            .jsonPath("$.length()").isEqualTo(3)
+            .jsonPath("$[2].productId").isEqualTo(productId)
+            .jsonPath("$[2].recommendationId").isEqualTo(3)
+    }
 
     @Test
     fun duplicateError() {
@@ -91,31 +98,31 @@ class RecommendationServiceApplicationTests {
 
     @Test
     fun recommendationsMissingParameter() {
-            getAndVerifyRecommendationsByProductId("", HttpStatus.BAD_REQUEST)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Required int parameter 'productId' is not present")
-        }
+        getAndVerifyRecommendationsByProductId("", HttpStatus.BAD_REQUEST)
+            .jsonPath("$.path").isEqualTo("/recommendation")
+            .jsonPath("$.message").isEqualTo("Required int parameter 'productId' is not present")
+    }
 
     @Test
     fun recommendationsInvalidParameter() {
-            getAndVerifyRecommendationsByProductId("?productId=no-integer", HttpStatus.BAD_REQUEST)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Type mismatch.")
-        }
+        getAndVerifyRecommendationsByProductId("?productId=no-integer", HttpStatus.BAD_REQUEST)
+            .jsonPath("$.path").isEqualTo("/recommendation")
+            .jsonPath("$.message").isEqualTo("Type mismatch.")
+    }
 
     @Test
     fun recommendationsNotFound() {
-            getAndVerifyRecommendationsByProductId("?productId=113", HttpStatus.OK)
-                .jsonPath("$.length()").isEqualTo(0)
-        }
+        getAndVerifyRecommendationsByProductId("?productId=113", HttpStatus.OK)
+            .jsonPath("$.length()").isEqualTo(0)
+    }
 
     @Test
     fun recommendationsInvalidParameterNegativeValue() {
-            val productIdInvalid = -1
-            getAndVerifyRecommendationsByProductId("?productId=$productIdInvalid", HttpStatus.UNPROCESSABLE_ENTITY)
-                .jsonPath("$.path").isEqualTo("/recommendation")
-                .jsonPath("$.message").isEqualTo("Invalid productId: $productIdInvalid")
-        }
+        val productIdInvalid = -1
+        getAndVerifyRecommendationsByProductId("?productId=$productIdInvalid", HttpStatus.UNPROCESSABLE_ENTITY)
+            .jsonPath("$.path").isEqualTo("/recommendation")
+            .jsonPath("$.message").isEqualTo("Invalid productId: $productIdInvalid")
+    }
 
     private fun getAndVerifyRecommendationsByProductId(productId: Int, expectedStatus: HttpStatus): BodyContentSpec {
         return getAndVerifyRecommendationsByProductId("?productId=$productId", expectedStatus)

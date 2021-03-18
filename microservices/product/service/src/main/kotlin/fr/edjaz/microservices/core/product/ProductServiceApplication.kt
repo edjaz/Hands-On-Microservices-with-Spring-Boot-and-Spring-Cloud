@@ -8,19 +8,16 @@ import org.springframework.context.annotation.ComponentScan
 @SpringBootApplication
 @ComponentScan("fr.edjaz")
 class ProductServiceApplication {
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
-
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 }
-
 
 fun main(args: Array<String>) {
-  val ctx = SpringApplication.run(ProductServiceApplication::class.java, *args)
-  val mongodDbHost = ctx.environment.getProperty("spring.data.mongodb.host")
-  val mongodDbPort = ctx.environment.getProperty("spring.data.mongodb.port")
+    val ctx = SpringApplication.run(ProductServiceApplication::class.java, *args)
+    val mongodDbHost = ctx.environment.getProperty("spring.data.mongodb.host")
+    val mongodDbPort = ctx.environment.getProperty("spring.data.mongodb.port")
     ProductServiceApplication.logger.info("Connected to MongoDb: $mongodDbHost:$mongodDbPort")
 }
-

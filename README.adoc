@@ -21,8 +21,6 @@ CONFIG_SERVER_USR=dev-usr;
 CONFIG_SERVER_PWD=dev-pwd;
 ----
 
-
-
 === Gateway environnement variable
 
 [source,]
@@ -52,25 +50,26 @@ CONFIG_SERVER_PWD=dev-pwd;
 === Test that works
 
 You must launch mongodb mysql rabbitmq zipkin
+
 [source,]
 ----
 cd local
 docker-compose up -d mongodb mysql rabbitmq zipkin
 ----
 
-
 Start all microservice on this order :
 After you lanch all services :
 
- - eureka-server
- - config-server
- - gateway
- - oauth-authorization-server
- - all other micorservices
+- eureka-server
+- config-server
+- gateway
+- oauth-authorization-server
+- all other micorservices
 
 Take a look of eureka http://localhost:8761/ with user 'u' and password 'p'
 
 to encrypt you need to use config-server
+
 [source,]
 ----
 curl --user dev-usr:dev-pwd localhost:8888/encrypt -d p
@@ -79,6 +78,7 @@ curl --user dev-usr:dev-pwd localhost:8888/encrypt -d p
 
 to decrypt you need to use config-server.
 For example eureka-password: '{cipher}bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb'
+
 [source,]
 ----
 curl --user dev-usr:dev-pwd localhost:8888/decrypt -d bf298f6d5f878b342f9e44bec08cb9ac00b4ce57e98316f030194a225fac89fb
@@ -105,7 +105,6 @@ cd local
 ./test-em-all.bash
 ----
 
-
 == Start all microservices locally with docker
 
 [source,]
@@ -117,7 +116,6 @@ docker-compose up -d
 ./test-em-all.bash docker
 ----
 
-
 === Test that works
 
 [source,]
@@ -125,17 +123,15 @@ docker-compose up -d
 ./test-em-all.bash docker
 ----
 
-
 === debugging on kubernetes
 
 install plugins code cloud et kubernetes plugins on intellij
-
 
 === Create docker from gradle with jib
 
 gradle jibDockerBuild
 
-
 === Debug with code cloud
 
-Install code cloud plugin on Intellij. Then debug on a Kubernetes cluster like a local application.
+Install code cloud plugin on Intellij.
+Then debug on a Kubernetes cluster like a local application.

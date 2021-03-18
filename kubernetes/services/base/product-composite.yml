@@ -18,49 +18,49 @@ spec:
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-      - name: comp
-        image: edjaz/product-composite/service
-        imagePullPolicy: Never
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: "docker,kubernetes"
-        - name: SPRING_CONFIG_LOCATION
-          value: file:/config-repo/application.yml,file:/config-repo/product-composite.yml
-        envFrom:
-        - secretRef:
-            name: rabbitmq-credentials
-        ports:
-        - containerPort: 8080
-        resources:
-          limits:
-            memory: 350Mi
-        livenessProbe:
-          httpGet:
-            scheme: HTTP
-            path: /actuator/info
-            port: 4004
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 20
-          successThreshold: 1
-        readinessProbe:
-          httpGet:
-            scheme: HTTP
-            path: /actuator/health
-            port: 4004
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 3
-          successThreshold: 1
-        volumeMounts:
-        - name: config-repo-volume
-          mountPath: /config-repo
+        - name: comp
+          image: edjaz/product-composite/service
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,kubernetes"
+            - name: SPRING_CONFIG_LOCATION
+              value: file:/config-repo/application.yml,file:/config-repo/product-composite.yml
+          envFrom:
+            - secretRef:
+                name: rabbitmq-credentials
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 350Mi
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/info
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 20
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+            - name: config-repo-volume
+              mountPath: /config-repo
       volumes:
-      - name: config-repo-volume
-        configMap:
-          name: config-repo-product-composite
+        - name: config-repo-volume
+          configMap:
+            name: config-repo-product-composite
 ---
 apiVersion: v1
 kind: Service

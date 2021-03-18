@@ -4,16 +4,16 @@ metadata:
   name: auth-server-vs
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - hands-on-gw
+    - hands-on-gw
   http:
-  - match:
-    - uri:
-        prefix: /oauth
-    route:
-    - destination:
-        host: auth-server
-        port:
-          number: 9999
+    - match:
+        - uri:
+            prefix: /oauth
+      route:
+        - destination:
+            host: auth-server
+            port:
+              number: 9999
 

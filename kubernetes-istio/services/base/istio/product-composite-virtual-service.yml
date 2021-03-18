@@ -4,16 +4,16 @@ metadata:
   name: product-composite-vs
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - hands-on-gw
+    - hands-on-gw
   http:
-  - match:
-    - uri:
-        prefix: /product-composite
-    route:
-    - destination:
-        port:
-          number: 8080
-        host: product-composite
+    - match:
+        - uri:
+            prefix: /product-composite
+      route:
+        - destination:
+            port:
+              number: 8080
+            host: product-composite
 

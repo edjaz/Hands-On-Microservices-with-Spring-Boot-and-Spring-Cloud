@@ -6,17 +6,15 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
 import org.springframework.web.reactive.function.client.WebClient
 
-
 @SpringBootApplication
 class GatewayApplication {
-  @Bean
-  @LoadBalanced
-  fun loadBalancedWebClientBuilder(): WebClient.Builder {
-    return WebClient.builder()
-  }
+    @Bean
+    @LoadBalanced
+    fun loadBalancedWebClientBuilder(): WebClient.Builder {
+        return WebClient.builder()
+    }
 }
 
-
 fun main(args: Array<String>) {
-  runApplication<GatewayApplication>(*args)
+    runApplication<GatewayApplication>(*args)
 }

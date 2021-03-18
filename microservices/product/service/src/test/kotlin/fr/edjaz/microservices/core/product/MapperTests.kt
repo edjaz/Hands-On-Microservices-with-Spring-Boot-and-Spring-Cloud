@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers
 
 class MapperTests {
     private val mapper = Mappers.getMapper(ProductMapper::class.java)
+
     @Test
     fun mapperTests() {
         Assertions.assertNotNull(mapper)

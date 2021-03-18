@@ -6,10 +6,10 @@ spec:
   hosts:
     - recommendation
   http:
-  - route:
-    - destination:
-        host: recommendation
-    fault:
-      abort:
-        httpStatus: 500
-        percent: 20
+    - route:
+        - destination:
+            host: recommendation
+      fault:
+        abort:
+          httpStatus: 500
+          percent: 20

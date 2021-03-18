@@ -1,9 +1,9 @@
 nameSuffix: -v1
 bases:
-- ../../../base/deployments
+  - ../../../base/deployments
 patchesStrategicMerge:
-- auth-server-prod.yml
-- product-composite-prod.yml
-- product-prod.yml
-- recommendation-prod.yml
-- review-prod.yml
+  - auth-server-prod.yml
+  - product-composite-prod.yml
+  - product-prod.yml
+  - recommendation-prod.yml
+  - review-prod.yml

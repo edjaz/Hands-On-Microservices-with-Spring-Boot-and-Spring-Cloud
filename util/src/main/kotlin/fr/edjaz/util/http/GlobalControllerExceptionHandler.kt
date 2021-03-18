@@ -64,7 +64,7 @@ internal class GlobalControllerExceptionHandler {
             path,
             message
         )
-        return HttpErrorInfo(httpStatus = httpStatus, path= path, message = message)
+        return HttpErrorInfo(httpStatus = httpStatus, path = path, message = message)
     }
 
     private fun createHttpErrorInfo(httpStatus: HttpStatus, request: ServerHttpRequest, ex: Exception): HttpErrorInfo {
@@ -76,6 +76,6 @@ internal class GlobalControllerExceptionHandler {
             path,
             message
         )
-      return HttpErrorInfo(httpStatus = httpStatus, path= path, message = message)
+        return HttpErrorInfo(httpStatus = httpStatus, path = path, message = message)
     }
 }

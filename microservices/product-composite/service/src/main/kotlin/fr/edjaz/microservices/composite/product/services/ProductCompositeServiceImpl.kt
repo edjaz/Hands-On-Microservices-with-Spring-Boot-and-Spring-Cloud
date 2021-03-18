@@ -1,6 +1,10 @@
 package fr.edjaz.microservices.composite.product.services
 
-import fr.edjaz.api.composite.product.*
+import fr.edjaz.api.composite.product.ProductAggregate
+import fr.edjaz.api.composite.product.ProductCompositeService
+import fr.edjaz.api.composite.product.RecommendationSummary
+import fr.edjaz.api.composite.product.ReviewSummary
+import fr.edjaz.api.composite.product.ServiceAddresses
 import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.core.recommendation.Recommendation
 import fr.edjaz.api.core.review.Review
@@ -8,6 +12,9 @@ import fr.edjaz.util.exceptions.NotFoundException
 import fr.edjaz.util.http.ServiceUtil
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException
 import io.github.resilience4j.reactor.retry.RetryExceptionWrapper
+import java.util.function.Consumer
+import java.util.function.Function
+import java.util.stream.Collectors
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
@@ -17,20 +24,17 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import java.util.function.Consumer
-import java.util.function.Function
-import java.util.stream.Collectors
 
 @RestController
 class ProductCompositeServiceImpl @Autowired constructor(
     private val serviceUtil: ServiceUtil,
     private val integration: ProductCompositeIntegration
 ) : ProductCompositeService {
-  companion object {
-    @Suppress("JAVA_CLASS_ON_COMPANION")
-    @JvmStatic
-    private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
-  }
+    companion object {
+        @Suppress("JAVA_CLASS_ON_COMPANION")
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
 
     private val nullSC: SecurityContext = SecurityContextImpl()
     override fun createCompositeProduct(body: ProductAggregate): Mono<Void> {
@@ -49,16 +53,20 @@ class ProductCompositeServiceImpl @Autowired constructor(
             val product = Product(body.productId, body.name, body.weight, null)
             integration.createProduct(product)
             if (body.recommendations != null) {
-                body.recommendations!!.forEach(Consumer { (recommendationId, author, rate, content) ->
-                    val recommendation = Recommendation(body.productId, recommendationId, author, rate, content, null)
-                    integration.createRecommendation(recommendation)
-                })
+                body.recommendations!!.forEach(
+                    Consumer { (recommendationId, author, rate, content) ->
+                        val recommendation = Recommendation(body.productId, recommendationId, author, rate, content, null)
+                        integration.createRecommendation(recommendation)
+                    }
+                )
             }
             if (body.reviews != null) {
-                body.reviews!!.forEach(Consumer { (reviewId, author, subject, content) ->
-                    val review = Review(body.productId, reviewId, author, subject, content, null)
-                    integration.createReview(review)
-                })
+                body.reviews!!.forEach(
+                    Consumer { (reviewId, author, subject, content) ->
+                        val review = Review(body.productId, reviewId, author, subject, content, null)
+                        integration.createReview(review)
+                    }
+                )
             }
             logger.debug(
                 "createCompositeProduct: composite entities created for productId: {}",
@@ -70,9 +78,7 @@ class ProductCompositeServiceImpl @Autowired constructor(
         }
     }
 
-    override fun getCompositeProduct(
-        productId: Int, delay: Int, faultPercent: Int
-    ): Mono<ProductAggregate> {
+    override fun getCompositeProduct(productId: Int, delay: Int, faultPercent: Int): Mono<ProductAggregate> {
         return Mono.zip(
             Function { values: Array<Any> ->
                 createProductAggregate(
@@ -88,7 +94,8 @@ class ProductCompositeServiceImpl @Autowired constructor(
                 .onErrorMap(RetryExceptionWrapper::class.java) { retryException: RetryExceptionWrapper -> retryException.cause }
                 .onErrorReturn(CallNotPermittedException::class.java, getProductFallbackValue(productId)),
             integration.getRecommendations(productId)!!.collectList(),
-            integration.getReviews(productId).collectList())
+            integration.getReviews(productId).collectList()
+        )
             .doOnError { ex: Throwable ->
                 logger.warn(
                     "getCompositeProduct failed: {}",

@@ -3,4 +3,4 @@ kind: Issuer
 metadata:
   name: selfsigning-issuer
 spec:
-  selfSigned: {}
+  selfSigned: { }

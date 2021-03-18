@@ -12,15 +12,15 @@ spec:
         run: kibana
     spec:
       containers:
-      - name: kibana
-        image: docker.elastic.co/kibana/kibana-oss:7.3.0
-        env:
-        - name: ELASTICSEARCH_URL
-          value: http://elasticsearch:9200
-        ports:
-        - containerPort: 5601
-          name: http
-          protocol: TCP
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana-oss:7.3.0
+          env:
+            - name: ELASTICSEARCH_URL
+              value: http://elasticsearch:9200
+          ports:
+            - containerPort: 5601
+              name: http
+              protocol: TCP
 
 ---
 
@@ -35,5 +35,5 @@ spec:
   selector:
     run: kibana
   ports:
-  - port: 5601
-    targetPort: 5601
+    - port: 5601
+      targetPort: 5601

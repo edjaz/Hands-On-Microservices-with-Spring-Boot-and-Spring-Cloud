@@ -1,6 +1,5 @@
 package fr.edjaz.microservices.core.recommendation
 
-
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationEntity
 import fr.edjaz.microservices.core.recommendation.persistence.RecommendationRepository
 import org.hamcrest.MatcherAssert
@@ -19,8 +18,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @DataMongoTest(properties = ["spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false", "spring.data.mongodb.auto-index-creation= true"])
 class RecommendationRepositoryTests {
     @Autowired
-    private  lateinit var repository: RecommendationRepository
+    private lateinit var repository: RecommendationRepository
     private lateinit var savedEntity: RecommendationEntity
+
     @BeforeEach
     fun setupDb() {
         repository.deleteAll().block()
@@ -55,11 +55,11 @@ class RecommendationRepositoryTests {
 
     @Test
     fun byProductId() {
-            val entityList: List<RecommendationEntity> =
-                repository.findByProductId(savedEntity.productId).collectList().block()!!
-            MatcherAssert.assertThat(entityList, Matchers.hasSize(1))
-            assertEqualsRecommendation(savedEntity, entityList[0])
-        }
+        val entityList: List<RecommendationEntity> =
+            repository.findByProductId(savedEntity.productId).collectList().block()!!
+        MatcherAssert.assertThat(entityList, Matchers.hasSize(1))
+        assertEqualsRecommendation(savedEntity, entityList[0])
+    }
 
     @Test
     fun duplicateError() {

@@ -12,13 +12,13 @@ spec:
         app: recommendation
     spec:
       containers:
-      - name: rec
-        image: hands-on/recommendation/service:v1
-        env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: "docker,prod,kubernetes"
-        resources:
-          requests:
-            memory: "200Mi"
-          limits:
-            memory: "400Mi"
+        - name: rec
+          image: hands-on/recommendation/service:v1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,prod,kubernetes"
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "400Mi"

@@ -4,12 +4,12 @@ metadata:
   name: "jwt-authentication-policy"
 spec:
   targets:
-  - name: product-composite-vs
+    - name: product-composite-vs
   peers:
-  - mtls:
-      mode: PERMISSIVE
+    - mtls:
+        mode: PERMISSIVE
   origins:
-  - jwt:
-      issuer: "http://auth-server.local"
-      jwksUri: "http://auth-server.hands-on.svc.cluster.local:9999/.well-known/jwks.json"
+    - jwt:
+        issuer: "http://auth-server.local"
+        jwksUri: "http://auth-server.hands-on.svc.cluster.local:9999/.well-known/jwks.json"
   principalBinding: USE_ORIGIN

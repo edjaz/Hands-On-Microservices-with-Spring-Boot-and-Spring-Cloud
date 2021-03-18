@@ -2,7 +2,6 @@ package fr.edjaz.microservices.core.product
 
 import fr.edjaz.microservices.core.product.persistence.ProductEntity
 import fr.edjaz.microservices.core.product.persistence.ProductRepository
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -64,10 +63,10 @@ class ProductRepositoryTests {
 
     @Test
     fun byProductId() {
-            StepVerifier.create(repository.findByProductId(savedEntity.productId))
-                .expectNextMatches { foundEntity: ProductEntity? -> areProductEqual(savedEntity, foundEntity) }
-                .verifyComplete()
-        }
+        StepVerifier.create(repository.findByProductId(savedEntity.productId))
+            .expectNextMatches { foundEntity: ProductEntity? -> areProductEqual(savedEntity, foundEntity) }
+            .verifyComplete()
+    }
 
     @Test
     fun duplicateError() {
@@ -100,9 +99,9 @@ class ProductRepositoryTests {
 
     private fun areProductEqual(expectedEntity: ProductEntity?, actualEntity: ProductEntity?): Boolean {
         return expectedEntity!!.id == actualEntity!!.id &&
-                expectedEntity.version === actualEntity.version &&
-                expectedEntity.productId == actualEntity.productId &&
-                expectedEntity.name == actualEntity.name &&
-                expectedEntity.weight == actualEntity.weight
+            expectedEntity.version === actualEntity.version &&
+            expectedEntity.productId == actualEntity.productId &&
+            expectedEntity.name == actualEntity.name &&
+            expectedEntity.weight == actualEntity.weight
     }
 }

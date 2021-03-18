@@ -4,19 +4,19 @@ metadata:
   name: product-composite-vs
 spec:
   http:
-  - match:
-    - uri:
-        prefix: /product-composite
-    route:
-    - destination:
-        host: product-composite
-        port:
-          number: 8080
-        subset: old
-      weight: 100
-    - destination:
-        host: product-composite
-        port:
-          number: 8080
-        subset: new
-      weight: 0
+    - match:
+        - uri:
+            prefix: /product-composite
+      route:
+        - destination:
+            host: product-composite
+            port:
+              number: 8080
+            subset: old
+          weight: 100
+        - destination:
+            host: product-composite
+            port:
+              number: 8080
+            subset: new
+          weight: 0

@@ -5,13 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.edjaz.api.event.Event
-import fr.edjaz.microservices.composite.product.IsSameEvent
+import java.io.IOException
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.slf4j.LoggerFactory
-import java.io.IOException
-import java.util.*
 
 class IsSameEvent private constructor(expectedEvent: Event<*, *>) : TypeSafeMatcher<String>() {
     private val mapper = ObjectMapper()

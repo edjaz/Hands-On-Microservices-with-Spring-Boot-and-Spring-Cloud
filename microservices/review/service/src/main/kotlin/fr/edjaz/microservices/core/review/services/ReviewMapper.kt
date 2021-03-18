@@ -10,6 +10,7 @@ import org.mapstruct.Mappings
 interface ReviewMapper {
     @Mappings(Mapping(target = "serviceAddress", ignore = true))
     fun entityToApi(entity: ReviewEntity): Review
+
     @Mappings(Mapping(target = "id", ignore = true), Mapping(target = "version", ignore = true))
     fun apiToEntity(api: Review): ReviewEntity
 

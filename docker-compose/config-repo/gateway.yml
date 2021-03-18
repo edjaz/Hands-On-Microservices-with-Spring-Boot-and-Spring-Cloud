@@ -7,17 +7,17 @@ server.ssl:
 
 spring.cloud.gateway.routes:
 
-- id: product-composite
-  uri: http://product-composite
-  predicates:
-  - Path=/product-composite/**
-  #        filters:
-  #        - TokenRelay=
+  - id: product-composite
+    uri: http://product-composite
+    predicates:
+      - Path=/product-composite/**
+    #        filters:
+    #        - TokenRelay=
 
-- id: oauth-server
-  uri: http://${app.auth-server}
-  predicates:
-  - Path=/oauth/**
+  - id: oauth-server
+    uri: http://${app.auth-server}
+    predicates:
+      - Path=/oauth/**
 
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri: http://${app.auth-server}:9999/.well-known/jwks.json
 

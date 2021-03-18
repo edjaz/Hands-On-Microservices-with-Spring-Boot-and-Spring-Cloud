@@ -38,17 +38,13 @@ Security use (Service-Service) or (Pod-Pod)
 
 === VirtualService Api ojbect
 
-VirtualService is used to define routing rules in the service mesh. We will use
-virtual services to describe how to route incoming traffic from an Istio gateway to
-the Kubernetes services and between services. We will also use virtual services to
-inject faults and delays in order to test the reliability and resilience capabilities of
-the service mesh.
-
+VirtualService is used to define routing rules in the service mesh.
+We will use virtual services to describe how to route incoming traffic from an Istio gateway to the Kubernetes services and between services.
+We will also use virtual services to inject faults and delays in order to test the reliability and resilience capabilities of the service mesh.
 
 Exemple :
 
-
-[source, yml]
+[source,yml]
 ----
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -72,22 +68,15 @@ spec:
         subset: v3
 ----
 
-
 === Destination rules
 
-DestinationRule is used to define policies and rules for traffic that is routed
-(using a virtual service) to a specific service (that is, a destination). We will use
-destination rules to set up encryption policies to encrypt internal HTTP traffic
-and define service subsets that describe available versions of the services. We
-will use service subsets when performing zero downtime (blue/green)
-deployments from an existing version of a microservice to a new version.
-
-
+DestinationRule is used to define policies and rules for traffic that is routed (using a virtual service) to a specific service (that is, a destination).
+We will use destination rules to set up encryption policies to encrypt internal HTTP traffic and define service subsets that describe available versions of the services.
+We will use service subsets when performing zero downtime (blue/green) deployments from an existing version of a microservice to a new version.
 
 Exemple :
 
-
-[source, yml]
+[source,yml]
 ----
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -117,17 +106,14 @@ spec:
 
 === Gateways
 
-Gateway is used to configure how to handle incoming traffic to, and outgoing
-traffic from, the service mesh. A gateway depends on a virtual service routing the
-incoming traffic to Kubernetes services. We will use a gateway object to accept
-incoming traffic to the DNS name, minikube.me , using HTTPS. Refer to the
-Kubernetes Ingress resource replaced with Istio Ingress Gateway as an edge
-server section for details.
+Gateway is used to configure how to handle incoming traffic to, and outgoing traffic from, the service mesh.
+A gateway depends on a virtual service routing the incoming traffic to Kubernetes services.
+We will use a gateway object to accept incoming traffic to the DNS name, minikube.me , using HTTPS.
+Refer to the Kubernetes Ingress resource replaced with Istio Ingress Gateway as an edge server section for details.
 
 Exemple :
 
-
-[source, yml]
+[source,yml]
 ----
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -151,18 +137,20 @@ spec:
 
 === Service entries
 
-You use a service entry to add an entry to the service registry that Istio maintains internally. After you add the service entry, the Envoy proxies can send traffic to the service as if it was a service in your mesh. Configuring service entries allows you to manage traffic for services running outside of the mesh, including the following tasks:
+You use a service entry to add an entry to the service registry that Istio maintains internally.
+After you add the service entry, the Envoy proxies can send traffic to the service as if it was a service in your mesh.
+Configuring service entries allows you to manage traffic for services running outside of the mesh, including the following tasks:
 
 * Redirect and forward traffic for external destinations, such as APIs consumed from the web, or traffic to services in legacy infrastructure.
 * Define retry, timeout, and fault injection policies for external destinations.
 * Run a mesh service in a Virtual Machine (VM) by adding VMs to your mesh.
 * Logically add services from a different cluster to the mesh to configure a multicluster Istio mesh on Kubernetes.
 
-You don’t need to add a service entry for every external service that you want your mesh services to use. By default, Istio configures the Envoy proxies to passthrough requests to unknown services. However, you can’t use Istio features to control the traffic to destinations that aren’t registered in the mesh.
+You don’t need to add a service entry for every external service that you want your mesh services to use.
+By default, Istio configures the Envoy proxies to passthrough requests to unknown services.
+However, you can’t use Istio features to control the traffic to destinations that aren’t registered in the mesh.
 
-
-
-[source, yml]
+[source,yml]
 ----
 
 apiVersion: networking.istio.io/v1alpha3
@@ -190,29 +178,22 @@ Security in Istio involves multiple components:
 * Sidecar and perimeter proxies to implement secure communication between clients and servers
 * Pilot to distribute authentication policies and secure naming information to the proxies
 * Mixer: consists of two different runtime components:
-** Policy : enforces network policies such as authentication,
-authorization, rate limits, and quotas.
-** Telemetry : collects telemetry information and sends it to
-Prometheus, for example.
+** Policy : enforces network policies such as authentication, authorization, rate limits, and quotas.
+** Telemetry : collects telemetry information and sends it to Prometheus, for example.
 
 
 image::policies.png[]
 
 == Policies
 
-Policy is used to define how requests will be authenticated. We will use policies
-to require incoming requests to the service mesh to be authenticated using a
-JWT-based OAuth 2.0/OIDC access token. Refer to the Authenticating external
-requests using OAuth 2.0/OIDC access tokens section of this chapter. A policy can
-also be used to define how to secure parts of the internal communication in the
-service mesh. For example, a policy can require that internal requests are
-encrypted using HTTPS or allow plain text requests. Finally,
-a MeshPolicy object can be used to define global policies that apply to the whole
-service mesh.
-
+Policy is used to define how requests will be authenticated.
+We will use policies to require incoming requests to the service mesh to be authenticated using a JWT-based OAuth 2.0/OIDC access token.
+Refer to the Authenticating external requests using OAuth 2.0/OIDC access tokens section of this chapter.
+A policy can also be used to define how to secure parts of the internal communication in the service mesh.
+For example, a policy can require that internal requests are encrypted using HTTPS or allow plain text requests.
+Finally, a MeshPolicy object can be used to define global policies that apply to the whole service mesh.
 
 == Observabilies
-
 
 === Metrics
 
@@ -224,43 +205,29 @@ service mesh.
 
 === Remotely Accessing Telemetry Addons
 
-
-
-
-
-
 == Introducing runtime components in Istio
 
-
-* Galley: responsible for collecting and validating configuration information and
-distribution to the other Istio components in the control plane.
+* Galley: responsible for collecting and validating configuration information and distribution to the other Istio components in the control plane.
 
 
-* Kiali: provides observability to the service mesh, visualizing what is going on in
-the mesh. Kiali is a separate open source project (see https://www.kiali.io )
-Prometheus: performs data ingestion and storage for time series-based data, for
-example, performance metrics.
+* Kiali: provides observability to the service mesh, visualizing what is going on in the mesh.
+Kiali is a separate open source project (see https://www.kiali.io ) Prometheus: performs data ingestion and storage for time series-based data, for example, performance metrics.
 
 * Prometheus is a separate open source project (refer to https://prometheus.io ).
 
-* Grafana: visualizes performance metrics and other time series-related data
-collected in Prometheus. Grafana is a separate open source project (see https://grafana.com ).
+* Grafana: visualizes performance metrics and other time series-related data collected in Prometheus.
+Grafana is a separate open source project (see https://grafana.com ).
 
-* Tracing: handles and visualizes distributed tracing information. Based on Jaeger,
-it is an open source project for distributed tracing (refer to https://www.jaegertracing.io ).
-
+* Tracing: handles and visualizes distributed tracing information.
+Based on Jaeger, it is an open source project for distributed tracing (refer to https://www.jaegertracing.io ).
 
 The Istio data plane consists of the following runtime components:
 
 * Ingress Gateway: handles incoming traffic to the service mesh
 * Egress Gateway: handles outgoing traffic from the service mesh
-* All pods with an Istio proxy are injected as a sidecar
-The runtime components in Istio's control plane and data plane are summarized in the
-following diagram:
+* All pods with an Istio proxy are injected as a sidecar The runtime components in Istio's control plane and data plane are summarized in the following diagram:
 
 image::istio-1.png[]
-
-
 
 == Deploying Istio in a Kubernetes cluster
 
@@ -393,14 +360,12 @@ https://istio.io/docs/setup/install/
 istioctl manifest apply
 ----
 
-
 === install demo profile or other profile
 
 [source,]
 ----
 istioctl manifest apply --set profile=demo
 ----
-
 
 === Display the list of available profiles
 
@@ -426,14 +391,12 @@ istioctl profile dump demo > 2.yaml
 istioctl profile diff 1.yaml 2.yaml
 ----
 
-
 === Verify a successful installation
 
 [source,]
 ----
 istioctl verify-install -f $HOME/generated-manifest.yaml
 ----
-
 
 === Kiali's config
 
@@ -443,7 +406,6 @@ kubectl -n istio-system apply -f kubernetes-istio/istio/setup/kiali-configmap.ym
 kubectl -n istio-system delete pod -l app=kiali && \
 kubectl -n istio-system wait --timeout=60s --for=condition=ready pod -l app=kiali
 ----
-
 
 === Kiali witj jaeger
 
@@ -459,6 +421,7 @@ istioctl dashboard kiali
 ----
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
 ----
+
 ou
 
 [source,]
@@ -472,12 +435,13 @@ istioctl dashboard kiali
 ----
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000
 ----
+
 ou
+
 [source,]
 ----
 istioctl dashboard grafana
 ----
-
 
 === Prometheus Dashboard
 
@@ -485,7 +449,9 @@ istioctl dashboard grafana
 ----
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090
 ----
+
 ou
+
 [source,]
 ----
 istioctl dashboard prometheus
@@ -497,7 +463,9 @@ istioctl dashboard prometheus
 ----
 kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686
 ----
+
 ou
+
 [source,]
 ----
 istioctl dashboard jaeger
@@ -520,8 +488,6 @@ Available Commands:
 * prometheus  -> Open Prometheus web UI
 * zipkin      -> Open Zipkin web UI
 
-
-
 == Run dev mode
 
 === Perform the following steps to set up the Minikube tunnel
@@ -532,7 +498,6 @@ minikube tunnel
 INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "$INGRESS_HOST minikube.me" | sudo tee -a /etc/hosts
 ----
-
 
 [source,]
 ----
@@ -553,7 +518,6 @@ PRODUCT_COMPOSITE_HOST=$( kubectl -n hands-on get service product-composite -o j
 HOST=minikube.me PORT=443  HEALTH_URL=http://${PRODUCT_COMPOSITE_HOST}:4004  MGM_PORT=4004 local/test-em-all.bash
 ----
 
-
 === DO TRAFFICS
 
 [source,]
@@ -561,7 +525,6 @@ HOST=minikube.me PORT=443  HEALTH_URL=http://${PRODUCT_COMPOSITE_HOST}:4004  MGM
 ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq .access_token -r)
 siege https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN" -c1 -d1
 ----
-
 
 == Ensuring that a service mesh is resilient
 
@@ -587,7 +550,6 @@ spec:
 ----
 
 === Testing resilience by injecting delays
-
 
 [source,yml]
 ----
@@ -617,12 +579,7 @@ ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me/oauth/token -d grant_ty
 for i in {1..6}; do time curl -k https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCESS_TOKEN"; done
 ----
 
-
-
-
-
 == Running commands for prod and testing
-
 
 === Perform the following steps to set up the Minikube tunnel
 
@@ -632,7 +589,6 @@ minikube tunnel
 INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "$INGRESS_HOST minikube.me" | sudo tee -a /etc/hosts
 ----
-
 
 [source,]
 ----
@@ -645,7 +601,6 @@ kubectl config set-context $(kubectl config current-context) --namespace=hands-o
 ./kubernetes-istio/scripts/deploy-dev-env.bash
 ----
 
-
 === Test prod mode
 
 [source,]
@@ -654,9 +609,7 @@ PRODUCT_COMPOSITE_HOST=$( kubectl -n hands-on get service product-composite -o j
 SKIP_CB_TESTS=true HOST=minikube.me PORT=443  HEALTH_URL=http://${PRODUCT_COMPOSITE_HOST}:4004  MGM_PORT=4004 local/test-em-all.bash
 ----
 
-
 === Running canary tests
-
 
 [source,]
 ----
@@ -666,7 +619,6 @@ curl -ks https://minikube.me/product-composite/2 -H "Authorization: Bearer $ACCE
 ----
 
 === Running blue/green tests
-
 
 [source,]
 ----

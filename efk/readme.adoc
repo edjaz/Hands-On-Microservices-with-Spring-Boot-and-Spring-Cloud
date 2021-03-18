@@ -2,94 +2,62 @@
 
 == Introducing Fluentd
 
-Historically, one of the most popular open source stacks for handling log records has been
-the ELK stack from Elastic ( https://www.elastic.co ), based on Elasticsearch, Logstash
-(used for log collection and transformation), and Kibana. Since Logstash runs on a Java VM,
-it requires a relatively large amount of memory. Over the years, a number of open source
-alternatives have been developed that require significantly less memory than Logstash, one
-of them being Fluentd ( https://www.fluentd.org ).
+Historically, one of the most popular open source stacks for handling log records has been the ELK stack from Elastic ( https://www.elastic.co ), based on Elasticsearch, Logstash (used for log collection and transformation), and Kibana.
+Since Logstash runs on a Java VM, it requires a relatively large amount of memory.
+Over the years, a number of open source alternatives have been developed that require significantly less memory than Logstash, one of them being Fluentd ( https://www.fluentd.org ).
 
-Fluentd is managed by the Cloud Native Computing Foundation (CNCF) ( https://www.cncf.io ),
-that is, the same organization that manages the Kubernetes project. Therefore,
-Fluentd has become a natural choice as an open source-based log collector that runs in
-Kubernetes. Together with Elastic and Kibana, it forms the EFK stack.
+Fluentd is managed by the Cloud Native Computing Foundation (CNCF) ( https://www.cncf.io ), that is, the same organization that manages the Kubernetes project.
+Therefore, Fluentd has become a natural choice as an open source-based log collector that runs in Kubernetes.
+Together with Elastic and Kibana, it forms the EFK stack.
 
-Fluentd is written in a mix of C and Ruby, using C for the performance-critical parts and
-Ruby where flexibility is of more importance, for example, allowing the simple installation
-of third-party plugins using Ruby's gem install command.
+Fluentd is written in a mix of C and Ruby, using C for the performance-critical parts and Ruby where flexibility is of more importance, for example, allowing the simple installation of third-party plugins using Ruby's gem install command.
 
 A log record is processed as an event in Fluentd and consists of the following information:
 
 * A time field describing when the log record was created
 * A tag field that identifies what type of log record it is—the tag is used by
-* Fluentd's routing engine to determine how a log record shall be processed
-A record that contains the actual log information, which is stored as a JSON
-object
+* Fluentd's routing engine to determine how a log record shall be processed A record that contains the actual log information, which is stored as a JSON object
 
-A Fluentd configuration file is used to tell Fluentd how to collect, process, and finally send
-log records to various targets, such as Elasticsearch. A configuration file consists of the
-following types of core elements:
+A Fluentd configuration file is used to tell Fluentd how to collect, process, and finally send log records to various targets, such as Elasticsearch.
+A configuration file consists of the following types of core elements:
 
-* <source> : Source elements describe where Fluentd will collect log records. For
-example, tailing log files that have been written to by Docker containers. Source
-elements typically tag the log records, describing the type of log record. It could,
-for example, be used to tag log records to state that they come from containers
-running in Kubernetes.
-* <filter> : Filter elements are used to process the log records, for example, a
-filter element can parse log records that come from Spring Boot-based
-microservices and extract interesting parts of the log message into separate fields
-in the log record. Extracting information into separate fields in the log record
-makes the information searchable by Elasticsearch. A filter element selects what
-log records to process based on their tags.
+* <source> : Source elements describe where Fluentd will collect log records.
+For example, tailing log files that have been written to by Docker containers.
+Source elements typically tag the log records, describing the type of log record.
+It could, for example, be used to tag log records to state that they come from containers running in Kubernetes.
+* <filter> : Filter elements are used to process the log records, for example, a filter element can parse log records that come from Spring Boot-based microservices and extract interesting parts of the log message into separate fields in the log record.
+Extracting information into separate fields in the log record makes the information searchable by Elasticsearch.
+A filter element selects what log records to process based on their tags.
 * <match> : Output elements are used to perform two main tasks:
 Send processed log records to targets such as Elasticsearch.
-Routing is to decide how to process log records. A routing rule can
-rewrite the tag and reemit the log record into the Fluentd routing
-engine for further processing. A routing rule is expressed as an
-embedded <rule> element inside the <match> element. Output
-elements decide what log records to process, in the same way as a
-filter: based on the tag of the log records.
+Routing is to decide how to process log records.
+A routing rule can rewrite the tag and reemit the log record into the Fluentd routing engine for further processing.
+A routing rule is expressed as an embedded <rule> element inside the <match> element.
+Output elements decide what log records to process, in the same way as a filter: based on the tag of the log records.
 
-Fluentd comes with a number of built-in and external third-party plugins that are used by
-the source, filter, and output elements. We will see some of them in action when we walk
-through the configuration file in the next section. For more information on the available
-plugins, see Fluentd's documentation, which is available at https://docs.fluentd.org .
-
+Fluentd comes with a number of built-in and external third-party plugins that are used by the source, filter, and output elements.
+We will see some of them in action when we walk through the configuration file in the next section.
+For more information on the available plugins, see Fluentd's documentation, which is available at https://docs.fluentd.org .
 
 == Configuring Fluentd
 
-The configuration of Fluentd is based on the configuration files from a Fluentd project on
-GitHub, fluentd-kubernetes-daemonset . The project contains Fluentd configuration
-files for how to collect log records from containers that run in Kubernetes and how to send
-them to Elasticsearch once they have been processed. We can reuse this configuration
-without changes and it will simplify our own configuration to a great extent. The Fluentd
-configuration files can be found at
+The configuration of Fluentd is based on the configuration files from a Fluentd project on GitHub, fluentd-kubernetes-daemonset . The project contains Fluentd configuration files for how to collect log records from containers that run in Kubernetes and how to send them to Elasticsearch once they have been processed.
+We can reuse this configuration without changes and it will simplify our own configuration to a great extent.
+The Fluentd configuration files can be found at
 https://github.com/fluent/fluentd-kubernetes-daemonset/tree/master/docker-image/v1.7/debian-elasticsearch7/conf.
 
-The configuration files that provide this functionality are kubernetes.conf and
-fluent.conf . The kubernetes.conf configuration file contains the following
-information:
+The configuration files that provide this functionality are kubernetes.conf and fluent.conf . The kubernetes.conf configuration file contains the following information:
 
-* Source elements that tail container log files and log files from processes that run
-outside of Kubernetes, for example, the kubelet and the Docker daemon. The
-source elements also tag the log records from Kubernetes with the full name of
-the log file with / replaced by . and prefixed with kubernetes . Since the tag is
-based on the full filename, the name contains the name of the namespace, pod,
-and container, among other things. So, the tag is very useful for finding log
-records of interest by matching the tag.
-* A filter element that enriches the log records that come from containers running
-inside Kubernetes, along with Kubernetes-specific fields that contain information
-such as the names of the containers and the namespace they run in.
+* Source elements that tail container log files and log files from processes that run outside of Kubernetes, for example, the kubelet and the Docker daemon.
+The source elements also tag the log records from Kubernetes with the full name of the log file with / replaced by . and prefixed with kubernetes . Since the tag is based on the full filename, the name contains the name of the namespace, pod, and container, among other things.
+So, the tag is very useful for finding log records of interest by matching the tag.
+* A filter element that enriches the log records that come from containers running inside Kubernetes, along with Kubernetes-specific fields that contain information such as the names of the containers and the namespace they run in.
 
 The main configuration file, fluent.conf , contains the following information:
 
-* @include statements for other configuration files, for example,
-the kubernetes.conf file we described previously. It also includes custom
-configuration files that are placed in a specific folder, making it very easy for us
-to reuse these configuration files without any changes and provide our own
-configuration file that only handles processing related to our own log records.
-We simply need to place our own configuration file in the folder specified by
-the fluent.conf file.
+* @include statements for other configuration files, for example, the kubernetes.conf file we described previously.
+It also includes custom configuration files that are placed in a specific folder, making it very easy for us to reuse these configuration files without any changes and provide our own configuration file that only handles processing related to our own log records.
+We simply need to place our own configuration file in the folder specified by the fluent.conf file.
 * An output element that sends log records to Elasticsearch.
 
 This processing is summarized by the following UML activity diagram:
@@ -100,8 +68,7 @@ The fluentd-hands-on-configmap.yml configuration file follows this activity diag
 
 == Deploying Elasticsearch and Kibana
 
-For the recommended deployment in a production environment on
-Kubernetes, see https://www.elastic.co/elasticsearch-kubernetes .
+For the recommended deployment in a production environment on Kubernetes, see https://www.elastic.co/elasticsearch-kubernetes .
 
 https://istio.io/docs/tasks/observability/logs/fluentd/
 
@@ -121,7 +88,6 @@ kubectl wait --timeout=120s --for=condition=Ready pod -n logging --all -n loggin
 
 == Deploying Fluentd
 
-
 [source,]
 ----
 docker build -f efk/Dockerfile -t hands-on/fluentd:v1 efk
@@ -138,42 +104,34 @@ curl http://$(kubectl get -n logging service elasticsearch -o jsonpath={.spec.cl
 
 === Trying out the EFK stack
 
-get IP kibana
-kubectl get -n logging service kibana -o jsonpath={.spec.clusterIP}
+get IP kibana kubectl get -n logging service kibana -o jsonpath={.spec.clusterIP}
 
 === Initializing Kibana
 
 . open on browser http://IP_KIBANA:5601
-. On the welcome page, Welcome to Kibana, click on the Explore on my
-own button.
-. Click on the Expand button in the lower-left corner to view the names of the
-menu choices. These will be shown on the left-hand side.
-. Click on Discover in the menu to the left. You will be asked to define a pattern
-that's used by Kibana to identify what Elasticsearch indices it shall retrieve log
-records from.
+. On the welcome page, Welcome to Kibana, click on the Explore on my own button.
+. Click on the Expand button in the lower-left corner to view the names of the menu choices.
+These will be shown on the left-hand side.
+. Click on Discover in the menu to the left.
+You will be asked to define a pattern that's used by Kibana to identify what Elasticsearch indices it shall retrieve log records from.
 . Enter the logstash-* index pattern and click on Next Step.
-. On the next page, you will be asked to specify the name of the field that contains
-the timestamp for the log records. Click on the drop-down list for the Time Filter
-field name and select the only available field, @timestamp.
+. On the next page, you will be asked to specify the name of the field that contains the timestamp for the log records.
+Click on the drop-down list for the Time Filter field name and select the only available field, @timestamp.
 . Click on the Create index pattern button.
-. Kibana will show a page that summarizes the fields that are available in the
-selected indices.
-
+. Kibana will show a page that summarizes the fields that are available in the selected indices.
 
 === Analyzing the log records
 
-We will use Kibana's visualization feature to divide the log records per Kubernetes
-namespace and then ask Kibana to show us how the log records are divided per type of
-container within each namespace. A pie chart is a suitable chart type for this type of
-analysis. Perform the following steps to create a pie chart:
+We will use Kibana's visualization feature to divide the log records per Kubernetes namespace and then ask Kibana to show us how the log records are divided per type of container within each namespace.
+A pie chart is a suitable chart type for this type of analysis.
+Perform the following steps to create a pie chart:
 
 . In Kibana's web UI, click on Visualize in the menu to the left.
 . Click on the Create new visualization button.
 . Select Pie as the visualization type.
 . Select logstash-* as the source.
-. In the time picker (a date interval selector) above the pie chart, set a date interval
-of your choice (set to the last 7 days in the following screenshot). Click on its
-calendar icon to adjust the time interval.
+. In the time picker (a date interval selector) above the pie chart, set a date interval of your choice (set to the last 7 days in the following screenshot).
+Click on its calendar icon to adjust the time interval.
 . Click on Add to create the first bucket, as follows:
 .. Select the bucket type, that is, Split slices.
 .. For the aggregation type, select Terms from the drop-down list.
@@ -181,8 +139,8 @@ calendar icon to adjust the time interval.
 .. For the size, select 10.
 .. Enable Group other values in separate bucket.
 .. Enable Show missing values.
-.. Press the Apply changes button (the blue play icon above the Bucket
-definition). Expect a pie chart that looks similar to the following:
+.. Press the Apply changes button (the blue play icon above the Bucket definition).
+Expect a pie chart that looks similar to the following:
 
 image::pie-1.png[]
 
@@ -193,29 +151,25 @@ image::pie-1.png[]
 .. For the size, select 10.
 .. Enable Group other values in separate bucket.
 .. Enable Show missing values.
-.. Press the Apply changes button again. Expect a pie chart that looks
-similar to the following:
+.. Press the Apply changes button again.
+Expect a pie chart that looks similar to the following:
 
 image::pie-2.png[]
 
-. At the top of the pie chart, we have a group of log records labeled missing , that
-is, they neither have a Kubernetes namespace nor a container name specified.
-What's behind these missing log records? These log records come from processes
-running outside of the Kubernetes cluster in the Minikube instance and they are
-stored using Syslog. They can be analyzed using Syslog-specific fields,
-specifically the identifier field. Let's create a third bucket that divides log records
-based on their Syslog identifier field, if any.
+. At the top of the pie chart, we have a group of log records labeled missing , that is, they neither have a Kubernetes namespace nor a container name specified.
+What's behind these missing log records?
+These log records come from processes running outside of the Kubernetes cluster in the Minikube instance and they are stored using Syslog.
+They can be analyzed using Syslog-specific fields, specifically the identifier field.
+Let's create a third bucket that divides log records based on their Syslog identifier field, if any.
 . Click on Add again to create a third bucket:
 .. Select the bucket type, that is, Split slices.
 .. As the sub-aggregation type, select Terms from the drop-down list.
 .. As the field, select SYSLOG_IDENTIFIER.keyword.
 .. Enable Group other values in separate bucket.
 .. Enable Show missing values.
-.. Press the Apply changes button and expect a pie chart that looks
-similar to the following:
+.. Press the Apply changes button and expect a pie chart that looks similar to the following:
 
 image::pie-3.png[]
-
 
 === Find logs with Kibana
 
@@ -229,9 +183,7 @@ curl -X POST -k https://minikube.me/product-composite \
 curl -H "Authorization: Bearer $ACCESS_TOKEN" -k 'https://minikube.me/product-composite/1234'
 ----
 
-
-Perform the following steps to use the API to create log records and then use Kibana to look
-up the log records:
+Perform the following steps to use the API to create log records and then use Kibana to look up the log records:
 
 . Get an access token with the following command:
 
@@ -240,10 +192,8 @@ up the log records:
     ACCESS_TOKEN=$(curl -k https://writer:secret@minikube.me:443/oauth/token -d grant_type=password -d username=dkahn -d password=password -s | jq -r .access_token)
     ----
 
-. As mentioned in the introduction to this section we will start by creating a
-product with a unique product ID. Create a minimalistic product (without
-recommendations and reviews) for "productId" :1234 by executing the
-following command:
+. As mentioned in the introduction to this section we will start by creating a product with a unique product ID.
+Create a minimalistic product (without recommendations and reviews) for "productId" :1234 by executing the following command:
 
     [source,]
     ----
@@ -260,63 +210,49 @@ following command:
     curl -H "Authorization: Bearer $ACCESS_TOKEN" -k 'https://minikube.me/product-composite/1234'
     ----
 
-. On the Kibana web page, click on the Discover menu on the left. You will see
-something like the following:
+. On the Kibana web page, click on the Discover menu on the left.
+You will see something like the following:
 
     On the Kibana web page, click on the Discover menu on the left. You will see
     something like the following:
 
-. If you want to change the time interval, you can use the time picker. Click on its
-calendar icon to adjust the time interval.
-. To get a better view of the content in the log records, add some fields from the
-log records to the table under the histogram. Select the fields from the list of
-available fields to the left. Scroll down until the field is found. Hold the cursor
-over the field and an add button will appear; click on it to add the field as a
-column in the table. Select the following fields, in order:
+. If you want to change the time interval, you can use the time picker.
+Click on its calendar icon to adjust the time interval.
+. To get a better view of the content in the log records, add some fields from the log records to the table under the histogram.
+Select the fields from the list of available fields to the left.
+Scroll down until the field is found.
+Hold the cursor over the field and an add button will appear; click on it to add the field as a column in the table.
+Select the following fields, in order:
 .. spring.level, the log level
 .. kubernetes.container_name, the name of the container
 .. spring.trace, the trace ID used for distributed tracing
-.. spring.level, the log level
-    The table now contains information that is of interest regarding the log records!
+.. spring.level, the log level The table now contains information that is of interest regarding the log records!
 
-. To find log records from the call to the GET API, we can ask Kibana to find log
-records where the log field contains the text product.id=1234. This matches the
-log output from the product composite microservice that was shown
-previously. This can be done by entering log:"product.id=1234" in
-the Search field and clicking on the Update button (this button can also be
-labeled Refresh). Expect one log record to be found:
-. Verify that the timestamp is from when you called the GET API and verify that
-the name of the container that created the log record is comp, that is, verify that
-the log record was sent by the product composite microservice.
-. Now, we want to see the related log records from the other microservices that
-participated in the process of returning information about the product with
-productId 1234, that is, finding log records with the same trace ID as that of the
-log record we found. To do that, place the cursor over the spring.trace field
-for the log record. Two small magnifying glasses will be shown to the right of the
-field, one with a + sign and one with a - sign. Click on the magnifying glass with
-the + sign to filter on the trace ID.
+. To find log records from the call to the GET API, we can ask Kibana to find log records where the log field contains the text product.id=1234. This matches the log output from the product composite microservice that was shown previously.
+This can be done by entering log:"product.id=1234" in the Search field and clicking on the Update button (this button can also be labeled Refresh).
+Expect one log record to be found:
+. Verify that the timestamp is from when you called the GET API and verify that the name of the container that created the log record is comp, that is, verify that the log record was sent by the product composite microservice.
+. Now, we want to see the related log records from the other microservices that participated in the process of returning information about the product with productId 1234, that is, finding log records with the same trace ID as that of the log record we found.
+To do that, place the cursor over the spring.trace field for the log record.
+Two small magnifying glasses will be shown to the right of the field, one with a + sign and one with a - sign.
+Click on the magnifying glass with the + sign to filter on the trace ID.
 . Clean the Search field so that the only search criteria is the filter of the trace field.
-Then, click on the Update button to see the result. Expect a response similar to
-the following:
+Then, click on the Update button to see the result.
+Expect a response similar to the following:
 
     We can see a lot of detailed debug and trace messages that clutter the view; let's
     get rid of them!
 
-. Place the cursor over a TRACE value and click on the magnifying glass with the -
-sign to filter out log records with the log level set to TRACE.
+. Place the cursor over a TRACE value and click on the magnifying glass with the - sign to filter out log records with the log level set to TRACE.
 . Repeat the preceding step for the DEBUG log record.
-. We should now be able to see the four expected log records, one for each
-microservice involved in the lookup of product information for the product with
-product ID 1234:
+. We should now be able to see the four expected log records, one for each microservice involved in the lookup of product information for the product with product ID 1234:
 
     Also, note the filters that were applied included the trace ID but excluded log records with
     the log level set to DEBUG or TRACE.
 
-
 === Performing root cause analyses
 
-. Run the following command to generate a fault in the product microservice
-while searching for product information on the product with product ID 666 :
+. Run the following command to generate a fault in the product microservice while searching for product information on the product with product ID 666 :
 
     curl -H "Authorization: Bearer $ACCESS_TOKEN" -k https://minikube.me/product-composite/666?faultPercent=100
 
@@ -326,60 +262,43 @@ while searching for product information on the product with product ID 666 :
     problems that just occurred while an end user tried to look up information
     regarding a product with product ID 666 .
 
-. Before we start to analyze the problem, let's delete the previous search filters in
-the Kibana web UI so that we can start from scratch. For each filter we defined in
-the previous section, click on their close icon (an x) to remove them. After all of
-the filters have been removed, the web page should look similar to the following:
+. Before we start to analyze the problem, let's delete the previous search filters in the Kibana web UI so that we can start from scratch.
+For each filter we defined in the previous section, click on their close icon (an x) to remove them.
+After all of the filters have been removed, the web page should look similar to the following:
 
-. Start by selecting a time interval that includes the point in time when the
-problem occurred using the time picker. For example, search the last seven days
-if you know that the problem occurred within the last seven days.
+. Start by selecting a time interval that includes the point in time when the problem occurred using the time picker.
+For example, search the last seven days if you know that the problem occurred within the last seven days.
 
-. Next, search for log records with the log level set to ERROR within this
-timeframe. This can be done by clicking on the spring.level field in the list
-of selected fields. When you click on this field, its most commonly used values
-will be displayed under it. Filter on the ERROR value by clicking on its
-magnifier, shown with the + sign. Kibana will now show log records within the
-selected time frame with its log level set to ERROR, like so:
+. Next, search for log records with the log level set to ERROR within this timeframe.
+This can be done by clicking on the spring.level field in the list of selected fields.
+When you click on this field, its most commonly used values will be displayed under it.
+Filter on the ERROR value by clicking on its magnifier, shown with the + sign.
+Kibana will now show log records within the selected time frame with its log level set to ERROR, like so:
 
 
-. We can see a number of error messages related to product ID 666 . The top four
-have the same trace ID, so this seems like a trace ID of interest to use for further
-investigation.
-. We can also see more error messages below the top four that seem to be related
-to the same error but with different trace IDs. Those are caused by the retry
-mechanism in the product composite microservice, that is, it retries the request a
-couple of times before giving up and returning an error message to the caller.
-. Filter on the trace ID of the first log record in the same way we did in the
-previous section.
+. We can see a number of error messages related to product ID 666 . The top four have the same trace ID, so this seems like a trace ID of interest to use for further investigation.
+. We can also see more error messages below the top four that seem to be related to the same error but with different trace IDs.
+Those are caused by the retry mechanism in the product composite microservice, that is, it retries the request a couple of times before giving up and returning an error message to the caller.
+. Filter on the trace ID of the first log record in the same way we did in the previous section.
 
-. Remove the filter of the ERROR log level to be able to see all of the records
-belonging to this trace ID. Expect Kibana to respond with a lot of log records.
-Look to the oldest log record, that is, the one that occurred first, that looks
-suspicious. For example, it may have a WARN or ERROR log level or a strange
-log message. The default sort order is showing the latest log record at the top, so
-scroll down to the end and search backward (you can also change the sort order
-to show the oldest log record first by clicking on the small up/down arrow next
-to the Time column header). The WARN log message that says Bad luck, and
-error occurred looks like it could be the root cause of the problem. Let's
-investigate it further:
+. Remove the filter of the ERROR log level to be able to see all of the records belonging to this trace ID.
+Expect Kibana to respond with a lot of log records.
+Look to the oldest log record, that is, the one that occurred first, that looks suspicious.
+For example, it may have a WARN or ERROR log level or a strange log message.
+The default sort order is showing the latest log record at the top, so scroll down to the end and search backward (you can also change the sort order to show the oldest log record first by clicking on the small up/down arrow next to the Time column header).
+The WARN log message that says Bad luck, and error occurred looks like it could be the root cause of the problem.
+Let's investigate it further:
 
-. Once a log record has been found that might be the root cause of the problem, it
-is of great interest to be able to find the nearby stack trace describing where
-exceptions were thrown in the source code. Unfortunately, the Fluentd plugin we
-use for collecting multiline exceptions, fluent-plugin-detect-exceptions ,
-is unable to relate stack traces to the trace ID that was used. Therefore, stack
-traces will not show up in Kibana when we filter on a trace ID. Instead, we can
-use a feature in Kibana for finding surrounding log records that show log records
-that have occurred in near time to a specific log record.
-. Expand the log record that says bad luck using the arrow to the left of the log
-record. Detailed information about this specific log record will be revealed. There
-is also a link named View surrounding documents; click on it to see nearby log
-records. Expect a web page similar to the following:
+. Once a log record has been found that might be the root cause of the problem, it is of great interest to be able to find the nearby stack trace describing where exceptions were thrown in the source code.
+Unfortunately, the Fluentd plugin we use for collecting multiline exceptions, fluent-plugin-detect-exceptions , is unable to relate stack traces to the trace ID that was used.
+Therefore, stack traces will not show up in Kibana when we filter on a trace ID.
+Instead, we can use a feature in Kibana for finding surrounding log records that show log records that have occurred in near time to a specific log record.
+. Expand the log record that says bad luck using the arrow to the left of the log record.
+Detailed information about this specific log record will be revealed.
+There is also a link named View surrounding documents; click on it to see nearby log records.
+Expect a web page similar to the following:
 
-. The log record above the bad luck log record with the stack trace for the error
-message Something went wrong... looks interesting and was logged by the
-product microservice just two milliseconds after it logged the bad luck log record.
-They seem to be related! The stack trace in that log record points to line 90
-in ProductServiceImpl.java . Looking in the source code (see ProductServiceImpl.java ), line 90 looks as follows:
+. The log record above the bad luck log record with the stack trace for the error message Something went wrong... looks interesting and was logged by the product microservice just two milliseconds after it logged the bad luck log record.
+They seem to be related!
+The stack trace in that log record points to line 90 in ProductServiceImpl.java . Looking in the source code (see ProductServiceImpl.java ), line 90 looks as follows:
 throw new RuntimeException("Something went wrong...");

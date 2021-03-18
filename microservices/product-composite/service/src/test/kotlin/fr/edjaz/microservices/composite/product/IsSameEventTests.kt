@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.event.Event
-import fr.edjaz.microservices.composite.product.IsSameEvent
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 class IsSameEventTests {
     var mapper = ObjectMapper()
+
     @Test
     @Throws(JsonProcessingException::class)
     fun testEventObjectCompare() {
