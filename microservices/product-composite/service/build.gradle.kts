@@ -33,7 +33,7 @@ configurations {
 val resilience4jVersion: String by project
 
 dependencies {
-    implementation(project(":api"))
+    implementation(project(":event-api"))
     implementation(project(":product-composite-api"))
     implementation(project(":product-api"))
     implementation(project(":review-api"))

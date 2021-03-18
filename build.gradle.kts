@@ -57,6 +57,7 @@ subprojects {
             property("sonar.sources", "src/main/")
             property("sonar.tests", "src/test/")
             property("sonar.exclusions", "**/*Configuration.kt,**/*Application.kt,**/*Entity.kt,**/*Config.kt,**/*Exception.kt")
+            property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
         }
     }
 
@@ -97,10 +98,9 @@ subprojects {
         jacocoTestReport {
             reports {
                 xml.isEnabled = true
-                csv.isEnabled = true
-                html.isEnabled = true
+                csv.isEnabled = false
+                html.isEnabled = false
             }
-            dependsOn(test)
         }
     }
 
@@ -124,20 +124,5 @@ sonarqube {
         sonarProperties.forEach {
             property(it.key as String, it.value)
         }
-    }
-}
-
-task<JacocoReport>("jacocoRootReport") {
-    dependsOn(subprojects.map { it.tasks.withType<Test>() })
-    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
-    additionalSourceDirs.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
-    sourceDirectories.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
-    classDirectories.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].output })
-    executionData.setFrom(project.fileTree(".") { include("**/build/jacoco/test.exec") })
-    reports {
-        xml.isEnabled = true
-        csv.isEnabled = true
-        html.isEnabled = true
-        html.destination = file("$buildDir/reports/jacoco/html")
     }
 }

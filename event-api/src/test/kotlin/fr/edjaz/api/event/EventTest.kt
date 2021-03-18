@@ -1,6 +1,5 @@
-package fr.edjaz.api.event.fr.edjaz.api.event
+package fr.edjaz.api.event
 
-import fr.edjaz.api.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import org.junit.jupiter.api.Test

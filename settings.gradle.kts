@@ -33,7 +33,7 @@ pluginManagement {
 
 rootProject.name = "handsOn"
 
-include(":api")
+include(":event-api")
 include(":util")
 
 include(":product-api")
@@ -49,7 +49,7 @@ include(":gateway")
 include(":authorization-server")
 include(":config-server")
 
-project(":api").projectDir = file("api")
+project(":event-api").projectDir = file("event-api")
 project(":util").projectDir = file("util")
 project(":product-api").projectDir = file("microservices/product/api")
 project(":product-service").projectDir = file("microservices/product/service")

@@ -8,17 +8,9 @@ plugins {
     kotlin("plugin.spring")
 }
 
-group = "fr.edjaz.microservices.api"
+group = "fr.edjaz.microservices.event-api"
 
-base {
-    archivesBaseName = "base-api"
-}
-
-val developmentOnly by configurations.creating
 configurations {
-    runtimeClasspath {
-        extendsFrom(developmentOnly)
-    }
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
@@ -27,6 +19,10 @@ configurations {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
 }
 
 apply(plugin = "io.spring.dependency-management")

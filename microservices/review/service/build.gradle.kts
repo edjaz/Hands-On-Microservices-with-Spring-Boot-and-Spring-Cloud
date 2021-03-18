@@ -34,7 +34,7 @@ configurations {
 val mapstructVersion: String by project
 
 dependencies {
-    implementation(project(":api"))
+    implementation(project(":event-api"))
     implementation(project(":review-api"))
     implementation(project(":util"))
 
