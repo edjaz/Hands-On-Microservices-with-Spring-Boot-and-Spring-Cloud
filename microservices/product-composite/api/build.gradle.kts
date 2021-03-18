@@ -31,10 +31,6 @@ dependencies {
 
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
     implementation("org.springdoc:springdoc-openapi-security:1.5.0")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-commons:1.7.0")
 }
 
 apply(plugin = "io.spring.dependency-management")
@@ -44,5 +40,3 @@ dependencyManagement {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     }
 }
-
-

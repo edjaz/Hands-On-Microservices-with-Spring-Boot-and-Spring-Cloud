@@ -1,8 +1,8 @@
 import io.gitlab.arturbosch.detekt.detekt
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 import java.time.Instant
 import java.util.Properties
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 description = "HandsOn Ms"
 group = "fr.edjaz"
@@ -46,6 +46,7 @@ subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "jacoco")
+    apply(plugin = "org.sonarqube")
     apply(plugin = "java-library")
 
     version = "0.0.1-SNAPSHOT"
@@ -55,6 +56,7 @@ subprojects {
         properties {
             property("sonar.sources", "src/main/")
             property("sonar.tests", "src/test/")
+            property("sonar.exclusions", "**/*Configuration.kt,**/*Application.kt,**/*Entity.kt,**/*Config.kt,**/*Exception.kt")
         }
     }
 
@@ -92,6 +94,14 @@ subprojects {
             useJUnitPlatform()
             finalizedBy(jacocoTestReport)
         }
+        jacocoTestReport {
+            reports {
+                xml.isEnabled = true
+                csv.isEnabled = true
+                html.isEnabled = true
+            }
+            dependsOn(test)
+        }
     }
 
     dependencies {
@@ -100,6 +110,9 @@ subprojects {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutinesVersion")
         testImplementation(kotlin("test", kotlinVersion))
         testImplementation(kotlin("test-junit5", kotlinVersion))
+        testImplementation("org.springframework.boot:spring-boot-starter-test") {
+            exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+        }
         compileOnly("com.google.code.findbugs:jsr305:3.0.2")
     }
 }
@@ -111,5 +124,20 @@ sonarqube {
         sonarProperties.forEach {
             property(it.key as String, it.value)
         }
+    }
+}
+
+task<JacocoReport>("jacocoRootReport") {
+    dependsOn(subprojects.map { it.tasks.withType<Test>() })
+    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
+    additionalSourceDirs.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
+    sourceDirectories.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
+    classDirectories.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].output })
+    executionData.setFrom(project.fileTree(".") { include("**/build/jacoco/test.exec") })
+    reports {
+        xml.isEnabled = true
+        csv.isEnabled = true
+        html.isEnabled = true
+        html.destination = file("$buildDir/reports/jacoco/html")
     }
 }

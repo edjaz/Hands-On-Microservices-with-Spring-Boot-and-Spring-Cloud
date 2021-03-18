@@ -33,5 +33,3 @@ dependencyManagement {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     }
 }
-
-
