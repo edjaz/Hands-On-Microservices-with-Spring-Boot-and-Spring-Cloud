@@ -52,15 +52,6 @@ subprojects {
     version = "0.0.1-SNAPSHOT"
     java.sourceCompatibility = JavaVersion.VERSION_11
 
-    sonarqube {
-        properties {
-            property("sonar.sources", "src/main/")
-            property("sonar.tests", "src/test/")
-            property("sonar.exclusions", "**/*Configuration.kt,**/*Application.kt,**/*Entity.kt,**/*Config.kt,**/*Exception.kt")
-            property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-        }
-    }
-
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
