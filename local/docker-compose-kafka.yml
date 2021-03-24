@@ -9,8 +9,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+        - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       - kafka
       - mongodb
@@ -23,8 +22,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       - kafka
       - mongodb
@@ -37,8 +35,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       - kafka
       - mongodb
@@ -51,8 +48,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       - kafka
       - mongodb
@@ -65,8 +61,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mysql:
         condition: service_healthy
@@ -81,8 +76,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mysql:
         condition: service_healthy
@@ -97,8 +91,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       - kafka
 
@@ -112,8 +105,7 @@ services:
       - "8443:8443"
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
 
   auth-server:
     build: ../spring-cloud/authorization-server
@@ -123,8 +115,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,kafka
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
 
   config-server:
     build: ../spring-cloud/config-server

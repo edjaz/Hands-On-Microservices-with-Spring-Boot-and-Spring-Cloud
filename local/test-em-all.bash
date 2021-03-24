@@ -194,7 +194,8 @@ function testCircuitBreaker() {
        if [ "$DOCKER" = "docker" ]
        then
          echo "docker"
-         EXEC="docker run --rm -it --network=my-network alpine wget product-composite"
+         EXEC="docker run --rm -it --network=my-network alpine wget product-composite:8080"
+         EXEC_MGM="docker run --rm -it --network=my-network alpine wget product-composite:${MGM_PORT}"
        fi
 
     else
@@ -211,7 +212,6 @@ function testCircuitBreaker() {
         EXEC_MGM="kubectl -n $ns exec alpine-client --  wget product-composite:${MGM_PORT}"
 
     fi
-
 
     # First, use the health - endpoint to verify that the circuit breaker is closed
     assertEqual "CLOSED" "$(${EXEC_MGM}/actuator/health -qO -  | jq -r .components.circuitBreakers.details.product.details.state)"
@@ -275,6 +275,7 @@ echo "SKIP_CB_TESTS=${SKIP_CB_TESTS}"
 
 if [[ $@ == *"docker"* ]]
 then
+    DOCKER="docker"
     EXEC="docker run --rm -it --network=my-network alpine wget product-composite:8080"
     EXEC_MGM="docker run --rm -it --network=my-network alpine wget product-composite:${MGM_PORT}"
 fi

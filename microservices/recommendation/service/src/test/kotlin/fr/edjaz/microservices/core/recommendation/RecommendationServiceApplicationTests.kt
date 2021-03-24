@@ -30,6 +30,8 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "eureka.client.enabled=false",
         "spring.cloud.config.enabled=false",
         "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "spring.data.mongodb.auto-index-creation= true",
         "server.error.include-message=always",
         "server.error.include-binding-errors=always"

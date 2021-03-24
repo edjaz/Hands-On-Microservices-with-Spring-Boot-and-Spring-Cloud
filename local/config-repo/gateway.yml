@@ -85,7 +85,7 @@ logging:
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 ---
-spring.profiles: docker
+spring.config.activate.on-profile: docker
 
 app.config-server: config-server
 

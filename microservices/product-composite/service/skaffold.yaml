@@ -1,14 +1,14 @@
-apiVersion: skaffold/v1
+apiVersion: skaffold/v2beta12
 kind: Config
 metadata:
   name: product-composite
 build:
   artifacts:
-    - image: edjaz/product-composite/service
-      jib:
-        type: gradle
-        project: microservices:product-composite:service
+  - image: edjaz/product-composite/service
+    jib:
+      project: microservices:product-composite:service
+      type: gradle
 deploy:
   kubectl:
     manifests:
-      - k8s-debug/product-composite.yml
+    - k8s-debug/product-composite.yml

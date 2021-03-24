@@ -53,13 +53,12 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes")
-    implementation("org.springframework.cloud:spring-cloud-kubernetes-discovery")
-    implementation("org.springframework.cloud:spring-cloud-kubernetes-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
 
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
-    implementation("org.springframework.cloud:spring-cloud-starter-zipkin")
     implementation("org.springframework.retry:spring-retry")
 
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")

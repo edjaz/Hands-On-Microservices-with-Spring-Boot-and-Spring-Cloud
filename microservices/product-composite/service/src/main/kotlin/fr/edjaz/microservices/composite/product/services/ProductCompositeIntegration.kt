@@ -173,6 +173,8 @@ class ProductCompositeIntegration @Autowired constructor(
             mapper.readValue(ex.responseBodyAsString, HttpErrorInfo::class.java).message
         } catch (ioex: IOException) {
             ex.message
+        } catch (io: Exception) {
+            ex.message
         }
     }
 }

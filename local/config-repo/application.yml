@@ -31,10 +31,15 @@ spring.sleuth.sampler.probability: 1.0
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+server.error.include-message: always
+server.error.include-binding-errors: always
+
 spring.cloud.kubernetes.enabled: false
+spring.cloud.kubernetes.discovery.enabled: false
+spring.cloud.kubernetes.loadbalancer.enabled: false
 
 ---
-spring.profiles: docker
+spring.config.activate.on-profile: docker
 
 spring.rabbitmq.host: rabbitmq
 
@@ -45,7 +50,7 @@ app:
   auth-server: auth-server
 
 ---
-spring.profiles: kafka
+spring.config.activate.on-profile: kafka
 
 management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka

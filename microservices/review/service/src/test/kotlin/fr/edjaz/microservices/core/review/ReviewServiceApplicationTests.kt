@@ -30,6 +30,8 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "spring.cloud.config.enabled=false",
         "spring.datasource.url=jdbc:h2:mem:review-db",
         "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "server.error.include-message=always",
         "server.error.include-binding-errors=always"
     ]

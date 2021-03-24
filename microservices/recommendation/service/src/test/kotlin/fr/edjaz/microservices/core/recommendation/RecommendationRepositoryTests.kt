@@ -15,7 +15,15 @@ import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
-@DataMongoTest(properties = ["spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false", "spring.data.mongodb.auto-index-creation= true"])
+@DataMongoTest(
+    properties = [
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
+        "spring.data.mongodb.auto-index-creation= true"
+    ]
+)
 class RecommendationRepositoryTests {
     @Autowired
     private lateinit var repository: RecommendationRepository

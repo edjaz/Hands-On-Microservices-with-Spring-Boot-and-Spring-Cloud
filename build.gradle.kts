@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 description = "HandsOn Ms"
 group = "fr.edjaz"
-extra["springCloudVersion"] = "Hoxton.SR10"
 
 plugins {
     kotlin("jvm")

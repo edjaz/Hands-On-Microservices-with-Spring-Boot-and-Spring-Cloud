@@ -11,7 +11,6 @@ import fr.edjaz.api.core.review.Review
 import fr.edjaz.util.exceptions.NotFoundException
 import fr.edjaz.util.http.ServiceUtil
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException
-import io.github.resilience4j.reactor.retry.RetryExceptionWrapper
 import java.util.function.Consumer
 import java.util.function.Function
 import java.util.stream.Collectors
@@ -91,7 +90,7 @@ class ProductCompositeServiceImpl @Autowired constructor(
             },
             ReactiveSecurityContextHolder.getContext().defaultIfEmpty(nullSC),
             integration.getProduct(productId, delay, faultPercent)
-                .onErrorMap(RetryExceptionWrapper::class.java) { retryException: RetryExceptionWrapper -> retryException.cause }
+                // .onErrorMap(RetryExceptionWrapper::class.java) { retryException: RetryExceptionWrapper -> retryException.cause }
                 .onErrorReturn(CallNotPermittedException::class.java, getProductFallbackValue(productId)),
             integration.getRecommendations(productId)!!.collectList(),
             integration.getReviews(productId).collectList()
@@ -158,7 +157,10 @@ class ProductCompositeServiceImpl @Autowired constructor(
         // 2. Copy summary recommendation info, if available
         val recommendationSummaries = recommendations?.stream()?.map { (_, recommendationId, author, rate, content) ->
             RecommendationSummary(
-                recommendationId, author, rate, content
+                recommendationId,
+                author,
+                rate,
+                content
             )
         }?.collect(Collectors.toList())
 

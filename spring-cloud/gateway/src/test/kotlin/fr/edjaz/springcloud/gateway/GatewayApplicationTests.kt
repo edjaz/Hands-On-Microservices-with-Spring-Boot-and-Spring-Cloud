@@ -9,7 +9,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
-    properties = ["eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"]
+    properties = [
+        "eureka.client.enabled=false",
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled=false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false"
+    ]
 )
 class GatewayApplicationTests {
     @Test

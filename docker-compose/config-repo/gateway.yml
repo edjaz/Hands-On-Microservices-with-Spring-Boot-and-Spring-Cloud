@@ -29,7 +29,7 @@ logging:
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 ---
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 
 logging:
   level:

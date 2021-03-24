@@ -9,8 +9,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -25,8 +24,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -41,8 +39,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -57,8 +54,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -73,8 +69,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_0
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mysql:
         condition: service_healthy
@@ -89,8 +84,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned,streaming_instance_1
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       mysql:
         condition: service_healthy
@@ -105,8 +99,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config,streaming_partitioned
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -121,8 +114,7 @@ services:
       - "8443:8443"
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
 
   auth-server:
     build: ../spring-cloud/authorization-server
@@ -132,8 +124,7 @@ services:
       - my-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker,config
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
+      - SPRING_CLOUD_CONFIG_URI=${SPRING_CLOUD_CONFIG_URI}
 
   config-server:
     build: ../spring-cloud/config-server

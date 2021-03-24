@@ -17,16 +17,14 @@ CONFIG_PATH=<PROJECT_PATH>/local;
 
 [source,]
 ----
-CONFIG_SERVER_USR=dev-usr;
-CONFIG_SERVER_PWD=dev-pwd;
+SPRING_CLOUD_CONFIG_URI=http://dev-usr:dev-pwd@localhost:8888
 ----
 
 === Gateway environnement variable
 
 [source,]
 ----
-CONFIG_SERVER_USR=dev-usr;
-CONFIG_SERVER_PWD=dev-pwd;
+SPRING_CLOUD_CONFIG_URI=http://dev-usr:dev-pwd@localhost:8888
 ----
 
 === OAuth environnement variable
@@ -34,8 +32,7 @@ CONFIG_SERVER_PWD=dev-pwd;
 [source,]
 ----
 SPRING_PROFILES_ACTIVE=local, config;
-CONFIG_SERVER_USR=dev-usr;
-CONFIG_SERVER_PWD=dev-pwd;
+SPRING_CLOUD_CONFIG_URI=http://dev-usr:dev-pwd@localhost:8888
 ----
 
 === All micocroservices environnement variable
@@ -43,8 +40,7 @@ CONFIG_SERVER_PWD=dev-pwd;
 [source,]
 ----
 SPRING_PROFILES_ACTIVE=local, config;
-CONFIG_SERVER_USR=dev-usr;
-CONFIG_SERVER_PWD=dev-pwd;
+SPRING_CLOUD_CONFIG_URI=http://dev-usr:dev-pwd@localhost:8888
 ----
 
 === Test that works

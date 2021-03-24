@@ -27,7 +27,14 @@ import reactor.core.publisher.Mono
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
     classes = [ProductCompositeServiceApplication::class, TestSecurityConfig::class],
-    properties = ["spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"]
+    properties = [
+        "spring.main.allow-bean-definition-overriding=true",
+        "eureka.client.enabled=false",
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
+    ]
 )
 class ProductCompositeServiceApplicationTests {
     @Autowired
@@ -46,14 +53,24 @@ class ProductCompositeServiceApplicationTests {
             )
         ).thenReturn(
             Mono.just(
-                Product(PRODUCT_ID_OK, "name", 1, "mock-address")
+                Product(
+                    PRODUCT_ID_OK,
+                    "name",
+                    1,
+                    "mock-address"
+                )
             )
         )
         Mockito.`when`(compositeIntegration.getRecommendations(PRODUCT_ID_OK)).thenReturn(
             Flux.fromIterable(
                 listOf(
                     Recommendation(
-                        PRODUCT_ID_OK, 1, "author", 1, "content", "mock address"
+                        PRODUCT_ID_OK,
+                        1,
+                        "author",
+                        1,
+                        "content",
+                        "mock address"
                     )
                 )
             )
@@ -62,7 +79,12 @@ class ProductCompositeServiceApplicationTests {
             Flux.fromIterable(
                 listOf(
                     Review(
-                        PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"
+                        PRODUCT_ID_OK,
+                        1,
+                        "author",
+                        "subject",
+                        "content",
+                        "mock address"
                     )
                 )
             )

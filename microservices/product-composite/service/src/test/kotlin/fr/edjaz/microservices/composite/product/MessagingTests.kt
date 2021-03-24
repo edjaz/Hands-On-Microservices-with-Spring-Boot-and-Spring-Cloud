@@ -8,6 +8,7 @@ import fr.edjaz.api.core.recommendation.Recommendation
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.event.Event
 import fr.edjaz.microservices.composite.product.services.ProductCompositeIntegration.MessageSources
+import java.util.concurrent.BlockingQueue
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Assertions
@@ -25,13 +26,19 @@ import org.springframework.messaging.MessageChannel
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Mono
-import java.util.concurrent.BlockingQueue
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
     classes = [ProductCompositeServiceApplication::class, TestSecurityConfig::class],
-    properties = ["spring.main.allow-bean-definition-overriding=true", "eureka.client.enabled=false", "spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"]
+    properties = [
+        "spring.main.allow-bean-definition-overriding=true",
+        "eureka.client.enabled=false",
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false"
+    ]
 )
 class MessagingTests {
     @Autowired
@@ -83,9 +90,26 @@ class MessagingTests {
     @Test
     fun createCompositeProduct2() {
         val composite = ProductAggregate(
-            1, "name", 1,
-            listOf(RecommendationSummary(1, "a", 1, "c")),
-            listOf(ReviewSummary(1, "a", "s", "c")), null
+            1,
+            "name",
+            1,
+            listOf(
+                RecommendationSummary(
+                    1,
+                    "a",
+                    1,
+                    "c"
+                )
+            ),
+            listOf(
+                ReviewSummary(
+                    1,
+                    "a",
+                    "s",
+                    "c"
+                )
+            ),
+            null
         )
         postAndVerifyProduct(composite, HttpStatus.OK)
 

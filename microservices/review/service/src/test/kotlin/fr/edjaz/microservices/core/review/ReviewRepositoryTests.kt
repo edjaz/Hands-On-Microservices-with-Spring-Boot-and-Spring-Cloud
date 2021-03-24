@@ -17,7 +17,14 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @ExtendWith(SpringExtension::class)
-@DataJpaTest(properties = ["spring.cloud.config.enabled=false", "spring.cloud.kubernetes.enabled= false"])
+@DataJpaTest(
+    properties = [
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.discovery.enabled=false",
+        "spring.cloud.kubernetes.loadbalancer.enabled=false"
+    ]
+)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 class ReviewRepositoryTests {
     @Autowired

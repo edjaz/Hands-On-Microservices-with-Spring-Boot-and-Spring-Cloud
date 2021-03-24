@@ -112,12 +112,12 @@ server.error.include-message: always
 server.error.include-binding-errors: always
 
 ---
-spring.profiles: docker
+spring.config.activate.on-profile: docker
 
 server.port: 8080
 
 ---
-spring.profiles: streaming_partitioned
+spring.config.activate.on-profile: streaming_partitioned
 
 spring.cloud.stream.bindings.output-products.producer:
   partition-key-expression: payload.key
@@ -132,7 +132,7 @@ spring.cloud.stream.bindings.output-reviews.producer:
   partition-count: 2
 
 ---
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 
 logging:
   level:
