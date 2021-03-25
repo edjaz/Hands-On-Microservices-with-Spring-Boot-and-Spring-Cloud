@@ -98,6 +98,7 @@ subprojects {
         implementation(kotlin("stdlib", kotlinVersion))
         implementation(kotlin("reflect", kotlinVersion))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinCoroutinesVersion")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         testImplementation(kotlin("test", kotlinVersion))
         testImplementation(kotlin("test-junit5", kotlinVersion))
         testImplementation("org.springframework.boot:spring-boot-starter-test") {

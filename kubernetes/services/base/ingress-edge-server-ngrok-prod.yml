@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: edge-ngrok
@@ -15,13 +15,19 @@ spec:
         paths:
           - path: /oauth
             backend:
-              serviceName: auth-server
-              servicePort: 9999
+              service:
+                name: auth-server
+                port:
+                  number: 9999
           - path: /product-composite
             backend:
-              serviceName: product-composite
-              servicePort: 8080
+              service:
+                name: product-composite
+                port:
+                  number: 8080
           - path: /actuator/health
             backend:
-              serviceName: product-composite
-              servicePort: 8080
+              service:
+                name: product-composite
+                port:
+                  number: 8080

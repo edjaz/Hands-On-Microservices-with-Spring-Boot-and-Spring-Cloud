@@ -16,6 +16,10 @@ configurations {
     }
 }
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/gateway"
+}
+
 dependencies {
     runtime("org.springframework.boot:spring-boot-properties-migrator")
 
@@ -32,9 +36,6 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-stream-rabbit")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.retry:spring-retry")
-
-    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
-    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

@@ -17,10 +17,12 @@ package fr.edjaz.springcloud.uaa
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 /**
  * @author Josh Cummings
  */
+@EnableDiscoveryClient
 @SpringBootApplication
 class OAuth2AuthorizationServerApplication
 

@@ -11,11 +11,6 @@ spec:
     metadata:
       labels:
         app: product-composite
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "4004"
-        prometheus.io/scheme: http
-        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: comp
@@ -33,11 +28,11 @@ spec:
             - containerPort: 8080
           resources:
             limits:
-              memory: 350Mi
+              memory: 500Mi
           livenessProbe:
             httpGet:
               scheme: HTTP
-              path: /actuator/info
+              path: /actuator/health/liveness
               port: 4004
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -47,7 +42,7 @@ spec:
           readinessProbe:
             httpGet:
               scheme: HTTP
-              path: /actuator/health
+              path: /actuator/health/readiness
               port: 4004
             initialDelaySeconds: 10
             periodSeconds: 10

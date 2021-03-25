@@ -310,7 +310,7 @@ kubectl config set-context $(kubectl config current-context) --namespace=hands-o
 
 ./kubernetes/scripts/deploy-dev-env.bash
 
-HOST=minikube.me PORT=443 local/test-em-all.bash
+HOST=minikube.me PORT=443  HEALTH_URL=https://minikube.me MGM_PORT=4004 local/test-em-all.bash
 
 ----
 

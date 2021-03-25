@@ -19,16 +19,12 @@ management.endpoints.web.exposure.include: "*"
 server.error.include-message: always
 server.error.include-binding-errors: always
 
-spring.cloud.kubernetes.enabled: false
-spring.cloud.kubernetes.discovery.enabled: false
-spring.cloud.kubernetes.loadbalancer.enabled: false
-
 ---
 spring.config.activate.on-profile: docker
 
 spring.rabbitmq.host: rabbitmq
-
 spring.cloud.stream.kafka.binder.brokers: kafka
+spring.cloud.stream.default-binder: rabbit
 
 app:
   auth-server: auth-server
@@ -52,6 +48,9 @@ management.endpoints.web.exposure.include: health,info,circuitbreakerevents
 spring.config.activate.on-profile: kubernetes
 
 management.server.port: 4004
+management.endpoint.health.probes.enabled: true
+management.health.livenessState.enabled: true
+management.health.readinessState.enabled: true
 management.metrics.tags.application: ${spring.application.name}
 
 spring:
@@ -60,6 +59,6 @@ spring:
       enabled: true
       reload:
         enabled: true
-eureka:
-  client:
-    enabled: false
+
+eureka.client.enabled: false
+spring.cloud.config.enabled: false

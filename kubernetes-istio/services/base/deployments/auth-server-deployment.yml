@@ -34,11 +34,11 @@ spec:
             - containerPort: 9999
           resources:
             limits:
-              memory: 350Mi
+              memory: 500Mi
           livenessProbe:
             httpGet:
               scheme: HTTP
-              path: /actuator/info
+              path: /actuator/health/liveness
               port: 4004
             initialDelaySeconds: 10
             periodSeconds: 10
@@ -48,7 +48,7 @@ spec:
           readinessProbe:
             httpGet:
               scheme: HTTP
-              path: /actuator/health
+              path: /actuator/health/readiness
               port: 4004
             initialDelaySeconds: 10
             periodSeconds: 10

@@ -1,5 +1,12 @@
 spring:
   application.name: product-composite
+
+
+---
+spring.config.activate.on-profile: config
+spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}
+
+spring:
   cloud.config:
     failFast: true
     retry:
@@ -9,21 +16,6 @@ spring:
       maxAttempts: 20
 
 ---
-spring.config.activate.on-profile: config
-spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}
-spring.cloud:
-    kubernetes:
-      reload:
-        enabled: true
-        mode: polling
-        period: 5000
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-
----
 spring.config.activate.on-profile: kubernetes
-spring.cloud.kubernetes.enabled: true
+
 eureka.client.enabled: false
-spring.cloud.config.enabled: false

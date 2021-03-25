@@ -10,6 +10,10 @@ plugins {
 
 group = "fr.edjaz.springcloud"
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/eureka-server"
+}
+
 dependencies {
     runtime("org.springframework.boot:spring-boot-properties-migrator")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")

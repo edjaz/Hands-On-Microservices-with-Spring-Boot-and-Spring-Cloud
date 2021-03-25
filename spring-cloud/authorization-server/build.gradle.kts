@@ -13,11 +13,15 @@ group = "fr.edjaz.springcloud"
 
 jib {
     from {
-        image = "openjdk:12.0.2"
+        image = "openjdk:11"
     }
     to {
         image = "edjaz/auth-server"
     }
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/auth-server"
 }
 
 dependencies {
@@ -33,6 +37,9 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-stream-rabbit")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.retry:spring-retry")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
 
     implementation("javax.xml.bind:jaxb-api")
     implementation("com.sun.xml.bind:jaxb-core")

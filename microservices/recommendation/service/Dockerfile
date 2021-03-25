@@ -1,7 +1,7 @@
-FROM openjdk:12.0.2
+FROM openjdk:12
 
 EXPOSE 8080
 
 ADD ./build/libs/*.jar app.jar
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-Djdk.tls.client.protocols=TLSv1.2","-jar","/app.jar"]

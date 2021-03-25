@@ -17,11 +17,15 @@ base {
 
 jib {
     from {
-        image = "openjdk:12.0.2"
+        image = "openjdk:11"
     }
     to {
         image = "edjaz/product-composite/service"
     }
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/product-composite/service"
 }
 
 configurations {
@@ -42,6 +46,8 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     implementation(project(":util"))
+
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -53,13 +59,14 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
-    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
-
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
     implementation("org.springframework.retry:spring-retry")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-loadbalancer")
 
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
     implementation("org.springdoc:springdoc-openapi-security:1.5.0")

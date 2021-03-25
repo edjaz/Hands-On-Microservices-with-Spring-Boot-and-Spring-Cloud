@@ -10,6 +10,10 @@ plugins {
 
 group = "fr.edjaz.springcloud"
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/config-server"
+}
+
 dependencies {
     runtime("org.springframework.boot:spring-boot-properties-migrator")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

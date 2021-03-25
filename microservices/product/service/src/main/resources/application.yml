@@ -15,6 +15,5 @@ spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}
 
 ---
 spring.config.activate.on-profile: kubernetes
-spring.cloud.kubernetes.enabled: true
 eureka.client.enabled: false
 spring.cloud.config.enabled: false

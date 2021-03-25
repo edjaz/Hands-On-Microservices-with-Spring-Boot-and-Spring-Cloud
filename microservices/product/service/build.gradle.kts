@@ -18,11 +18,15 @@ base {
 
 jib {
     from {
-        image = "openjdk:12.0.2"
+        image = "openjdk:11"
     }
     to {
         image = "edjaz/product/service"
     }
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "edjaz/product/service"
 }
 
 configurations {

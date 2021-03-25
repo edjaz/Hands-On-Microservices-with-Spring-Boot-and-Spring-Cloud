@@ -22,8 +22,4 @@ spring:
 
 spring.cloud.kubernetes.enabled: false
 
----
-spring.config.activate.on-profile: kubernetes
-spring.cloud.kubernetes.enabled: true
-eureka.client.enabled: false
-spring.cloud.config.enabled: false
+
