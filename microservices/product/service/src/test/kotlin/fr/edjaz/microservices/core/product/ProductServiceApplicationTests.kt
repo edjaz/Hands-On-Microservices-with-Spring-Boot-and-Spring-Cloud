@@ -31,7 +31,9 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "spring.cloud.kubernetes.enabled= false",
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
-        "spring.data.mongodb.auto-index-creation= true"
+        "spring.data.mongodb.auto-index-creation= true",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 class ProductServiceApplicationTests {

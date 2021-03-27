@@ -31,9 +31,11 @@ import reactor.core.publisher.Mono
         "spring.main.allow-bean-definition-overriding=true",
         "eureka.client.enabled=false",
         "spring.cloud.config.enabled=false",
-        "spring.cloud.kubernetes.enabled= false",
+        "spring.cloud.kubernetes.enabled=false",
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 class ProductCompositeServiceApplicationTests {

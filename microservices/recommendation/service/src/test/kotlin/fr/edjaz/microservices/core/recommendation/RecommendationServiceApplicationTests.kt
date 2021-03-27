@@ -34,7 +34,9 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "spring.data.mongodb.auto-index-creation= true",
         "server.error.include-message=always",
-        "server.error.include-binding-errors=always"
+        "server.error.include-binding-errors=always",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 class RecommendationServiceApplicationTests {

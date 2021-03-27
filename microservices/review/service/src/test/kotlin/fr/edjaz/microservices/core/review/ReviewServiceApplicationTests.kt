@@ -33,7 +33,9 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "server.error.include-message=always",
-        "server.error.include-binding-errors=always"
+        "server.error.include-binding-errors=always",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 class ReviewServiceApplicationTests {

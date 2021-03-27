@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional
         "spring.cloud.config.enabled=false",
         "spring.cloud.kubernetes.enabled= false",
         "spring.cloud.kubernetes.discovery.enabled=false",
-        "spring.cloud.kubernetes.loadbalancer.enabled=false"
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 @Transactional(propagation = Propagation.NOT_SUPPORTED)

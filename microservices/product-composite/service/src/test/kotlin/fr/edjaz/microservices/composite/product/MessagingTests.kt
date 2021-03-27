@@ -37,7 +37,9 @@ import reactor.core.publisher.Mono
         "spring.cloud.config.enabled=false",
         "spring.cloud.kubernetes.enabled= false",
         "spring.cloud.kubernetes.discovery.enabled=false",
-        "spring.cloud.kubernetes.loadbalancer.enabled=false"
+        "spring.cloud.kubernetes.loadbalancer.enabled=false",
+        "kubernetes.manifests.enabled=false",
+        "kubernetes.informer.enabled=false"
     ]
 )
 class MessagingTests {

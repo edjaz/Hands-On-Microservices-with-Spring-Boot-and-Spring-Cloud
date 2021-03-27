@@ -84,7 +84,7 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
-    runtime("org.springframework.boot:spring-boot-properties-migrator")
+    runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
 }
 
 dependencyManagement {
