@@ -1,13 +1,12 @@
-apiVersion: skaffold/v2beta12
+apiVersion: skaffold/v2beta13
 kind: Config
 metadata:
   name: recommendation
 build:
   artifacts:
   - image: edjaz/recommendation/service
-    jib:
-      project: microservices:recommendation:service
-      type: gradle
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

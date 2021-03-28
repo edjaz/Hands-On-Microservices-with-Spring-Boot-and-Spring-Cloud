@@ -1,13 +1,12 @@
-apiVersion: skaffold/v2beta12
+apiVersion: skaffold/v2beta13
 kind: Config
 metadata:
   name: auth-server
 build:
   artifacts:
   - image: edjaz/auth-server
-    jib:
-      project: spring-cloud:authorization-server
-      type: gradle
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

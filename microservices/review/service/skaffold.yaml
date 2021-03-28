@@ -1,13 +1,12 @@
-apiVersion: skaffold/v2beta12
+apiVersion: skaffold/v2beta13
 kind: Config
 metadata:
   name: review
 build:
   artifacts:
   - image: edjaz/review/service
-    jib:
-      project: microservices:review:service
-      type: gradle
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
