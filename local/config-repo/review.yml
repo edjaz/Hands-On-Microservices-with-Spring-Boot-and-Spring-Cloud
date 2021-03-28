@@ -16,7 +16,7 @@ spring.datasource.hikari.initializationFailTimeout: 60000
 spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
-  bindings.input:
+  bindings.sink-in-0:
     destination: reviews
     group: reviewsGroup
 

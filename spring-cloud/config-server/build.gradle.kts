@@ -15,7 +15,7 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("
 }
 
 dependencies {
-    runtime("org.springframework.boot:spring-boot-properties-migrator")
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.cloud:spring-cloud-config-server")

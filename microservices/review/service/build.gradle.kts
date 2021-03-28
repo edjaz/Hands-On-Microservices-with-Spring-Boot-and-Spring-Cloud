@@ -77,7 +77,7 @@ dependencies {
     testImplementation(project(":product-api"))
 
     implementation("io.micrometer:micrometer-registry-prometheus")
-    runtime("org.springframework.boot:spring-boot-properties-migrator")
+
 }
 
 dependencyManagement {

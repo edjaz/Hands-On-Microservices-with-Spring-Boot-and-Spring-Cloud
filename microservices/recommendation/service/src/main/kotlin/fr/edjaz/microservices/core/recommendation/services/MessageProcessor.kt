@@ -5,13 +5,12 @@ import fr.edjaz.api.core.recommendation.RecommendationService
 import fr.edjaz.api.event.Event
 import fr.edjaz.util.exceptions.EventProcessingException
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cloud.stream.annotation.EnableBinding
-import org.springframework.cloud.stream.annotation.StreamListener
-import org.springframework.cloud.stream.messaging.Sink
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import java.util.function.Consumer
 
-@EnableBinding(Sink::class)
-class MessageProcessor @Autowired constructor(private val recommendationService: RecommendationService) {
+@Configuration
+class MessageProcessor {
 
     companion object {
         @Suppress("JAVA_CLASS_ON_COMPANION")
@@ -19,30 +18,34 @@ class MessageProcessor @Autowired constructor(private val recommendationService:
         private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
     }
 
-    @StreamListener(target = Sink.INPUT)
-    fun process(event: Event<Int?, Recommendation?>) {
-        logger.info("Process message created at {}...", event.eventCreatedAt)
-        when (event.eventType) {
-            Event.Type.CREATE -> {
-                val recommendation = event.data
-                logger.info(
-                    "Create recommendation with ID: {}/{}",
-                    recommendation!!.productId,
-                    recommendation.recommendationId
-                )
-                recommendationService.createRecommendation(recommendation)
-            }
-            Event.Type.DELETE -> {
-                val productId = event.key!!
-                logger.info("Delete recommendations with ProductID: {}", productId)
-                recommendationService.deleteRecommendations(productId)
-            }
-            else -> {
-                val errorMessage = "Incorrect event type: " + event.eventType + ", expected a CREATE or DELETE event"
-                logger.warn(errorMessage)
-                throw EventProcessingException(errorMessage)
+    @Bean
+    fun sink(recommendationService: RecommendationService): Consumer<Event<Int, Recommendation>> {
+        return Consumer { event: Event<Int, Recommendation> ->
+            run {
+                logger.info("Process message created at {}...", event.eventCreatedAt)
+                when (event.eventType) {
+                    Event.Type.CREATE -> {
+                        val recommendation = event.data
+                        logger.info(
+                            "Create recommendation with ID: {}/{}",
+                            recommendation!!.productId,
+                            recommendation.recommendationId
+                        )
+                        recommendationService.createRecommendation(recommendation)
+                    }
+                    Event.Type.DELETE -> {
+                        val productId = event.key!!
+                        logger.info("Delete recommendations with ProductID: {}", productId)
+                        recommendationService.deleteRecommendations(productId)
+                    }
+                    else -> {
+                        val errorMessage = "Incorrect event type: " + event.eventType + ", expected a CREATE or DELETE event"
+                        logger.warn(errorMessage)
+                        throw EventProcessingException(errorMessage)
+                    }
+                }
+                logger.info("Message processing done!")
             }
         }
-        logger.info("Message processing done!")
     }
 }

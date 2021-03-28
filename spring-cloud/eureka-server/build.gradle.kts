@@ -15,7 +15,7 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("
 }
 
 dependencies {
-    runtime("org.springframework.boot:spring-boot-properties-migrator")
+
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
