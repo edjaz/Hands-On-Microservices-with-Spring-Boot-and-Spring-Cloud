@@ -30,4 +30,10 @@ class Event<K, T> {
         this.data = data
         eventCreatedAt = LocalDateTime.now()
     }
+
+    override fun toString(): String {
+        return "Event(eventType=$eventType, key=$key, data=$data, eventCreatedAt=$eventCreatedAt)"
+    }
+
+
 }

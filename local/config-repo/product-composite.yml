@@ -58,15 +58,15 @@ spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
   bindings:
-    output-products:
+    output-products-out-0:
       destination: products
       producer:
         required-groups: auditGroup
-    output-recommendations:
+    output-recommendations-out-0:
       destination: recommendations
       producer:
         required-groups: auditGroup
-    output-reviews:
+    output-reviews-out-0:
       destination: reviews
       producer:
         required-groups: auditGroup

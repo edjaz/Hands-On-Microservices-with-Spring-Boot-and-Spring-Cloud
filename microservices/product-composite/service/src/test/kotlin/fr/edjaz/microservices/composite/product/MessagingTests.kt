@@ -7,7 +7,7 @@ import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.core.recommendation.Recommendation
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.event.Event
-import fr.edjaz.microservices.composite.product.services.ProductCompositeIntegration.MessageSources
+import fr.edjaz.microservices.composite.product.services.MessageSources
 import java.util.concurrent.BlockingQueue
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers

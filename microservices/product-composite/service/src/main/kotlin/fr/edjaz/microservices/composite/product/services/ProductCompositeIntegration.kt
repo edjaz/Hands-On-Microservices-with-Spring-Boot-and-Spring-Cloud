@@ -8,7 +8,6 @@ import fr.edjaz.api.core.recommendation.RecommendationService
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.core.review.ReviewService
 import fr.edjaz.api.event.Event
-import fr.edjaz.microservices.composite.product.services.ProductCompositeIntegration.MessageSources
 import fr.edjaz.util.exceptions.InvalidInputException
 import fr.edjaz.util.exceptions.NotFoundException
 import fr.edjaz.util.http.HttpErrorInfo
@@ -19,9 +18,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.stream.annotation.EnableBinding
-import org.springframework.cloud.stream.annotation.Output
 import org.springframework.http.HttpStatus
-import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -32,7 +29,6 @@ import reactor.core.publisher.Mono
 import java.io.IOException
 import java.time.Duration
 
-@EnableBinding(MessageSources::class)
 @Component
 class ProductCompositeIntegration @Autowired constructor(
     private val webClientBuilder: WebClient.Builder,
@@ -59,27 +55,8 @@ class ProductCompositeIntegration @Autowired constructor(
             return field
         }
 
-    interface MessageSources {
-        @Output(OUTPUT_PRODUCTS)
-        fun outputProducts(): MessageChannel
-
-        @Output(OUTPUT_RECOMMENDATIONS)
-        fun outputRecommendations(): MessageChannel
-
-        @Output(OUTPUT_REVIEWS)
-        fun outputReviews(): MessageChannel
-
-        companion object {
-            const val OUTPUT_PRODUCTS = "output-products"
-            const val OUTPUT_RECOMMENDATIONS = "output-recommendations"
-            const val OUTPUT_REVIEWS = "output-reviews"
-        }
-    }
-
     override fun createProduct(body: Product): Product? {
-        messageSources.outputProducts().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.CREATE, body.productId, body)).build()
-        )
+        messageSources.outputProducts(Event(Event.Type.CREATE, body.productId, body))
         return body
     }
 
@@ -97,16 +74,11 @@ class ProductCompositeIntegration @Autowired constructor(
     }
 
     override fun deleteProduct(productId: Int) {
-        messageSources.outputProducts().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.DELETE, productId, null)).build()
-        )
+        messageSources.outputProducts(Event(Event.Type.DELETE, productId, null))
     }
 
     override fun createRecommendation(body: Recommendation?): Recommendation? {
-        messageSources.outputRecommendations().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.CREATE, body!!.productId, body))
-                .build()
-        )
+        messageSources.outputRecommendations(Event(Event.Type.CREATE, body!!.productId, body))
         return body
     }
 
@@ -121,15 +93,11 @@ class ProductCompositeIntegration @Autowired constructor(
     }
 
     override fun deleteRecommendations(productId: Int) {
-        messageSources.outputRecommendations().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.DELETE, productId, null)).build()
-        )
+        messageSources.outputRecommendations(Event(Event.Type.DELETE, productId, null))
     }
 
     override fun createReview(body: Review): Review {
-        messageSources.outputReviews().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.CREATE, body.productId, body)).build()
-        )
+        messageSources.outputReviews(Event(Event.Type.CREATE, body.productId, body))
         return body
     }
 
@@ -143,9 +111,7 @@ class ProductCompositeIntegration @Autowired constructor(
     }
 
     override fun deleteReviews(productId: Int) {
-        messageSources.outputReviews().send(
-            MessageBuilder.withPayload<Event<*, *>>(Event<Any?, Any?>(Event.Type.DELETE, productId, null)).build()
-        )
+        messageSources.outputReviews(Event(Event.Type.DELETE, productId, null))
     }
 
     private fun handleException(ex: Throwable): Throwable {
