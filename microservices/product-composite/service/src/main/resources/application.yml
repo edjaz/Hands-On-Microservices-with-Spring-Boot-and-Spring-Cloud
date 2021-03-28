@@ -1,12 +1,5 @@
 spring:
   application.name: product-composite
-
-
----
-spring.config.activate.on-profile: config
-spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}
-
-spring:
   cloud.config:
     failFast: true
     retry:
@@ -14,6 +7,11 @@ spring:
       multiplier: 1.3
       maxInterval: 10000
       maxAttempts: 20
+
+
+---
+spring.config.activate.on-profile: config
+spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}
 
 ---
 spring.config.activate.on-profile: kubernetes
