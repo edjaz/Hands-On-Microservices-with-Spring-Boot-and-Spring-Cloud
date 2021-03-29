@@ -7,7 +7,10 @@ import fr.edjaz.api.event.Event
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.stream.function.StreamBridge
+import org.springframework.context.annotation.Bean
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Service
+import java.util.function.Consumer
 
 @Service
 class MessageSources @Autowired constructor(val streamBridge: StreamBridge) {
@@ -20,16 +23,16 @@ class MessageSources @Autowired constructor(val streamBridge: StreamBridge) {
 
     fun outputProducts(event: Event<*, Product>) {
         logger.debug("send event {}", event)
-        streamBridge.send("output-products-out-0", event);
+        streamBridge.send("output-products-out-0", event)
     }
 
     fun outputRecommendations(event: Event<*, Recommendation>) {
         logger.debug("send event {}", event)
-        streamBridge.send("output-recommendations-out-0", event);
+        streamBridge.send("output-recommendations-out-0", event)
     }
 
     fun outputReviews(event: Event<*, Review>) {
         logger.debug("send event {}", event)
-        streamBridge.send("output-reviews-out-0", event);
+        streamBridge.send("output-reviews-out-0", event)
     }
 }

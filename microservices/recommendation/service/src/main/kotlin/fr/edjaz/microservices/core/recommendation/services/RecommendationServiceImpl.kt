@@ -24,7 +24,7 @@ class RecommendationServiceImpl @Autowired constructor(
         private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
     }
 
-    override fun createRecommendation(body: Recommendation?): Recommendation? {
+    override fun createRecommendation(body: Recommendation): Recommendation? {
         if (body!!.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         val entity = mapper.apiToEntity(body)
         val newEntity = repository.save(entity)

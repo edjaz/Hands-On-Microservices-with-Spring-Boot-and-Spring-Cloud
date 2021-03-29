@@ -34,6 +34,4 @@ class Event<K, T> {
     override fun toString(): String {
         return "Event(eventType=$eventType, key=$key, data=$data, eventCreatedAt=$eventCreatedAt)"
     }
-
-
 }

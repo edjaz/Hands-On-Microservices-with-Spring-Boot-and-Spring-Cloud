@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import reactor.core.publisher.Flux
 
 interface RecommendationService {
-    fun createRecommendation(@RequestBody body: Recommendation?): Recommendation?
+    fun createRecommendation(@RequestBody body: Recommendation): Recommendation?
 
     /**
      * Sample usage:

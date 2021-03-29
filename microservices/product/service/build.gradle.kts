@@ -65,17 +65,13 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:$mapstructVersion")
     testAnnotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation("org.springframework.cloud:spring-cloud-stream-test-support")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
-
-
 }
 
 dependencyManagement {
