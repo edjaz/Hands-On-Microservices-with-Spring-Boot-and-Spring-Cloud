@@ -17,6 +17,8 @@ spring.cloud.stream:
   bindings.sink-in-0:
     destination: reviews
     group: reviewsGroup
+    consumer:
+      auto-bind-dlq=true:
 
 spring.cloud.stream.bindings.input.consumer:
   maxAttempts: 3

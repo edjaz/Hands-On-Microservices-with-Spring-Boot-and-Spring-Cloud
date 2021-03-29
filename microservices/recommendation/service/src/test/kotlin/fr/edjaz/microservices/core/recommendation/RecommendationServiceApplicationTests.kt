@@ -12,10 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.cloud.stream.messaging.Sink
+import org.springframework.cloud.stream.binder.test.InputDestination
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.integration.channel.AbstractMessageChannel
 import org.springframework.messaging.MessagingException
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -23,6 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpec
 
 @ExtendWith(SpringExtension::class)
+@Import(TestChannelBinderConfiguration::class)
 @SpringBootTest(
     webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = [
@@ -36,7 +38,11 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "server.error.include-message=always",
         "server.error.include-binding-errors=always",
         "kubernetes.manifests.enabled=false",
-        "kubernetes.informer.enabled=false"
+        "kubernetes.informer.enabled=false",
+        "spring.cloud.stream.bindings.sink-in-0.destination=recommendations",
+        "spring.cloud.stream.bindings.sink-in-0.group=recommendationsGroup",
+        "spring.cloud.stream.bindings.sink-in-0.consumer.auto-bind-dlq=true"
+
     ]
 )
 class RecommendationServiceApplicationTests {
@@ -47,12 +53,10 @@ class RecommendationServiceApplicationTests {
     private val repository: RecommendationRepository? = null
 
     @Autowired
-    private val channels: Sink? = null
-    private var input: AbstractMessageChannel? = null
+    private lateinit var input: InputDestination
 
     @BeforeEach
     fun setupDb() {
-        input = channels!!.input() as AbstractMessageChannel
         repository!!.deleteAll().block()
     }
 

@@ -52,7 +52,6 @@ class MessagingTests {
     @Autowired
     private lateinit var serviceUtil: ServiceUtil
 
-
     @Test
     fun createCompositeProduct1() {
         val composite = ProductAggregate(1, "name", 1, null, null, null)

@@ -68,7 +68,8 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    testImplementation("org.springframework.cloud:spring-cloud-stream-test-support")
+    testImplementation(group = "org.springframework.cloud", name = "spring-cloud-stream", ext = "jar", classifier = "test-binder")
+
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("com.h2database:h2")
 

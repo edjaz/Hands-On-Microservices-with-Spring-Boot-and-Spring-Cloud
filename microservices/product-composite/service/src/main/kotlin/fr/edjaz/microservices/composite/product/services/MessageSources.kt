@@ -7,10 +7,7 @@ import fr.edjaz.api.event.Event
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.stream.function.StreamBridge
-import org.springframework.context.annotation.Bean
-import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Service
-import java.util.function.Consumer
 
 @Service
 class MessageSources @Autowired constructor(val streamBridge: StreamBridge) {
