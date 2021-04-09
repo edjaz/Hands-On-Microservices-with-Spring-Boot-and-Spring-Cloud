@@ -25,13 +25,13 @@ class RecommendationServiceImpl @Autowired constructor(
     }
 
     override fun createRecommendation(body: Recommendation): Recommendation? {
-        if (body!!.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
+        if (body.productId < 1) throw InvalidInputException("Invalid productId: " + body.productId)
         val entity = mapper.apiToEntity(body)
         val newEntity = repository.save(entity)
             .log()
             .onErrorMap(
                 DuplicateKeyException::class.java
-            ) { ex: DuplicateKeyException? -> InvalidInputException("Duplicate key, Product Id: " + body.productId + ", Recommendation Id:" + body.recommendationId) }
+            ) { InvalidInputException("Duplicate key, Product Id: " + body.productId + ", Recommendation Id:" + body.recommendationId) }
             .map { e: RecommendationEntity -> mapper.entityToApi(e) }
         return newEntity.block()
     }

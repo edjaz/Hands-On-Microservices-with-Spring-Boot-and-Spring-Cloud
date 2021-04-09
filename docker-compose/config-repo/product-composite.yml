@@ -54,19 +54,39 @@ ribbon.ServerListRefreshInterval: 5000
 
 ribbon.NFLoadBalancerPingInterval: 5
 
+reactive:
+  feign:
+    client:
+      config:
+        product:
+          url: "http://product:8080"
+        review:
+          url: "http://review:8080"
+        recommendation:
+          url: "http://recommendation:8080"
+    ribbon:
+      enabled: false
+    hystrix:
+      enabled: false
+    loadbalancer:
+      enabled: false
+    circuit:
+      breaker:
+        enabled: false
+
 spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
   bindings:
-    output-products:
+    output-products-out-0:
       destination: products
       producer:
         required-groups: auditGroup
-    output-recommendations:
+    output-recommendations-out-0:
       destination: recommendations
       producer:
         required-groups: auditGroup
-    output-reviews:
+    output-reviews-out-0:
       destination: reviews
       producer:
         required-groups: auditGroup

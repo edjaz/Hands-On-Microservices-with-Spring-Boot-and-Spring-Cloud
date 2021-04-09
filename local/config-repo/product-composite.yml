@@ -54,6 +54,17 @@ ribbon.ServerListRefreshInterval: 5000
 
 ribbon.NFLoadBalancerPingInterval: 5
 
+reactive:
+  feign:
+    client:
+      config:
+        product:
+          url: "http://product"
+        review:
+          url: "http://review"
+        recommendation:
+          url: "http://recommendation"
+
 spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json

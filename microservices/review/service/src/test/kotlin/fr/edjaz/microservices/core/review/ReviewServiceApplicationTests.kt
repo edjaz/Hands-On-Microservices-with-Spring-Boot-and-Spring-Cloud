@@ -45,23 +45,23 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 )
 class ReviewServiceApplicationTests {
     @Autowired
-    private val client: WebTestClient? = null
+    private lateinit var client: WebTestClient
 
     @Autowired
-    private val repository: ReviewRepository? = null
+    private lateinit var repository: ReviewRepository
 
     @Autowired
     private lateinit var input: InputDestination
 
     @BeforeEach
     fun setupDb() {
-        repository!!.deleteAll()
+        repository.deleteAll()
     }
 
     @Test
     fun reviewsByProductId() {
         val productId = 1
-        Assertions.assertEquals(0, repository!!.findByProductId(productId).size)
+        Assertions.assertEquals(0, repository.findByProductId(productId).size)
         sendCreateReviewEvent(productId, 1)
         sendCreateReviewEvent(productId, 2)
         sendCreateReviewEvent(productId, 3)
@@ -76,7 +76,7 @@ class ReviewServiceApplicationTests {
     fun duplicateError() {
         val productId = 1
         val reviewId = 1
-        Assertions.assertEquals(0, repository!!.count())
+        Assertions.assertEquals(0, repository.count())
         sendCreateReviewEvent(productId, reviewId)
         Assertions.assertEquals(1, repository.count())
         try {
@@ -98,7 +98,7 @@ class ReviewServiceApplicationTests {
         val productId = 1
         val reviewId = 1
         sendCreateReviewEvent(productId, reviewId)
-        Assertions.assertEquals(1, repository!!.findByProductId(productId).size)
+        Assertions.assertEquals(1, repository.findByProductId(productId).size)
         sendDeleteReviewEvent(productId)
         Assertions.assertEquals(0, repository.findByProductId(productId).size)
         sendDeleteReviewEvent(productId)
@@ -137,7 +137,7 @@ class ReviewServiceApplicationTests {
     }
 
     private fun getAndVerifyReviewsByProductId(productIdQuery: String, expectedStatus: HttpStatus): BodyContentSpec {
-        return client!!.get()
+        return client.get()
             .uri("/review$productIdQuery")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -149,11 +149,11 @@ class ReviewServiceApplicationTests {
     private fun sendCreateReviewEvent(productId: Int, reviewId: Int) {
         val review = Review(productId, reviewId, "Author $reviewId", "Subject $reviewId", "Content $reviewId", "SA")
         val event: Event<Int, Review> = Event(Event.Type.CREATE, productId, review)
-        input!!.send(GenericMessage(event))
+        input.send(GenericMessage(event))
     }
 
     private fun sendDeleteReviewEvent(productId: Int) {
         val event: Event<Int, Product> = Event(Event.Type.DELETE, productId, null)
-        input!!.send(GenericMessage(event))
+        input.send(GenericMessage(event))
     }
 }

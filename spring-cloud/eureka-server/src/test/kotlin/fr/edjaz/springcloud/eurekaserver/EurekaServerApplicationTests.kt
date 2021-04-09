@@ -22,10 +22,10 @@ class EurekaServerApplicationTests {
     }
 
     @Value("\${app.eureka-username}")
-    private val username: String? = null
+    private lateinit var username: String
 
     @Value("\${app.eureka-password}")
-    private val password: String? = null
+    private lateinit var password: String
 
     @Autowired
     fun setTestRestTemplate(testRestTemplate: TestRestTemplate) {

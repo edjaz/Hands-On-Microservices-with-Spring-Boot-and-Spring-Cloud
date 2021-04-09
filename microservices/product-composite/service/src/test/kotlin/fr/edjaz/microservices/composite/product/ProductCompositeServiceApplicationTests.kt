@@ -35,12 +35,19 @@ import reactor.core.publisher.Mono
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "kubernetes.manifests.enabled=false",
-        "kubernetes.informer.enabled=false"
+        "kubernetes.informer.enabled=false",
+        "reactive.feign.client.config.product.url=http://product",
+        "reactive.feign.client.config.review.url=http://review",
+        "reactive.feign.client.config.recommendation.url=http://recommendation",
+        "reactive.feign.client.ribbon.enabled=false",
+        "reactive.feign.client.hystrix.enabled=false",
+        "reactive.feign.client.loadbalancer.enabled=false",
+        "reactive.feign.client.circuit.breaker.enabled=false"
     ]
 )
 class ProductCompositeServiceApplicationTests {
     @Autowired
-    private val client: WebTestClient? = null
+    private lateinit var client: WebTestClient
 
     @MockBean
     private val compositeIntegration: ProductCompositeIntegration? = null
@@ -136,7 +143,7 @@ class ProductCompositeServiceApplicationTests {
     }
 
     private fun getAndVerifyProduct(productId: Int, expectedStatus: HttpStatus): BodyContentSpec {
-        return client!!.get()
+        return client.get()
             .uri("/product-composite/$productId")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()

@@ -214,14 +214,13 @@ internal class IntrospectEndpoint(var tokenStore: TokenStore) {
  */
 @FrameworkEndpoint
 internal class JwkSetEndpoint(var keyPair: KeyPair) {
-    @get:ResponseBody
-    @get:GetMapping("/.well-known/jwks.json")
-    val key: Map<String, Any>
-        get() {
-            val publicKey = keyPair.public as RSAPublicKey
-            val key = RSAKey.Builder(publicKey).build()
-            return JWKSet(key).toJSONObject()
-        }
+    @ResponseBody
+    @GetMapping("/.well-known/jwks.json")
+    fun getKey(): Map<String, Any> {
+        val publicKey = keyPair.public as RSAPublicKey
+        val key = RSAKey.Builder(publicKey).build()
+        return JWKSet(key).toJSONObject()
+    }
 }
 
 /**

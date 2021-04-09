@@ -39,7 +39,12 @@ import reactor.core.publisher.Mono
         "kubernetes.informer.enabled=false",
         "spring.cloud.stream.bindings.output-products-out-0.destination= products",
         "spring.cloud.stream.bindings.output-recommendations-out-0.destination= recommendations",
-        "spring.cloud.stream.bindings.output-reviews-out-0.destination= reviews"
+        "spring.cloud.stream.bindings.output-reviews-out-0.destination= reviews",
+        "reactive.feign.client.config.product.url=http://product",
+        "reactive.feign.client.config.review.url=http://review",
+        "reactive.feign.client.config.recommendation.url=http://recommendation",
+        "reactive.feign.client.ribbon.enabled=false",
+        "reactive.feign.client.hystrix.enabled=false",
     ]
 )
 class MessagingTests {

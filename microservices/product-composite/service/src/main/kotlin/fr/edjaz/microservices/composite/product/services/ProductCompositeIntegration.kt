@@ -1,6 +1,8 @@
 package fr.edjaz.microservices.composite.product.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.netflix.hystrix.exception.HystrixRuntimeException
+import feign.FeignException
 import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.core.product.ProductService
 import fr.edjaz.api.core.recommendation.Recommendation
@@ -8,6 +10,9 @@ import fr.edjaz.api.core.recommendation.RecommendationService
 import fr.edjaz.api.core.review.Review
 import fr.edjaz.api.core.review.ReviewService
 import fr.edjaz.api.event.Event
+import fr.edjaz.microservices.composite.product.client.ProductClient
+import fr.edjaz.microservices.composite.product.client.RecommendationClient
+import fr.edjaz.microservices.composite.product.client.ReviewClient
 import fr.edjaz.util.exceptions.InvalidInputException
 import fr.edjaz.util.exceptions.NotFoundException
 import fr.edjaz.util.http.HttpErrorInfo
@@ -19,9 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import org.springframework.web.util.UriComponentsBuilder
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.io.IOException
@@ -29,11 +31,13 @@ import java.time.Duration
 
 @Component
 class ProductCompositeIntegration @Autowired constructor(
-    private val webClientBuilder: WebClient.Builder,
     private val mapper: ObjectMapper,
     private val messageSources: MessageSources,
     private val serviceUtil: ServiceUtil,
-    @Value("\${app.product-service.timeoutSec}") private val productServiceTimeoutSec: Int
+    @Value("\${app.product-service.timeoutSec}") private val productServiceTimeoutSec: Int,
+    private val productClient: ProductClient,
+    private val recommendationClient: RecommendationClient,
+    private val reviewClient: ReviewClient,
 ) : ProductService, RecommendationService, ReviewService {
 
     companion object {
@@ -41,17 +45,6 @@ class ProductCompositeIntegration @Autowired constructor(
         @JvmStatic
         private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
     }
-
-    private val productServiceUrl = "http://product"
-    private val recommendationServiceUrl = "http://recommendation"
-    private val reviewServiceUrl = "http://review"
-    private var webClient: WebClient? = null
-        private get() {
-            if (field == null) {
-                field = webClientBuilder.build()
-            }
-            return field
-        }
 
     override fun createProduct(body: Product): Product? {
         body.serviceAddress = serviceUtil.serviceAddress
@@ -62,13 +55,9 @@ class ProductCompositeIntegration @Autowired constructor(
     @Retry(name = "product")
     @CircuitBreaker(name = "product")
     override fun getProduct(productId: Int, delay: Int, faultPercent: Int): Mono<Product> {
-        val url =
-            UriComponentsBuilder.fromUriString("$productServiceUrl/product/{productId}?delay={delay}&faultPercent={faultPercent}")
-                .build(productId, delay, faultPercent)
-        logger.debug("Will call the getProduct API on URL: {}", url)
-        return webClient!!.get().uri(url)
-            .retrieve().bodyToMono(Product::class.java).log()
-            .onErrorMap(WebClientResponseException::class.java) { ex: WebClientResponseException -> handleException(ex) }
+        return productClient.getProduct(productId, delay, faultPercent)
+            .log()
+            .onErrorMap { handleException(it) }
             .timeout(Duration.ofSeconds(productServiceTimeoutSec.toLong()))
     }
 
@@ -78,18 +67,13 @@ class ProductCompositeIntegration @Autowired constructor(
 
     override fun createRecommendation(body: Recommendation): Recommendation? {
         body.serviceAddress = serviceUtil.serviceAddress
-        messageSources.outputRecommendations(Event(Event.Type.CREATE, body!!.productId, body))
+        messageSources.outputRecommendations(Event(Event.Type.CREATE, body.productId, body))
         return body
     }
 
     override fun getRecommendations(productId: Int): Flux<Recommendation?>? {
-        val url = UriComponentsBuilder.fromUriString("$recommendationServiceUrl/recommendation?productId={productId}")
-            .build(productId)
-        logger.debug("Will call the getRecommendations API on URL: {}", url)
-
-        // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
-        return webClient!!.get().uri(url).retrieve().bodyToFlux(Recommendation::class.java).log()
-            .onErrorResume { error: Throwable? -> Flux.empty() }
+        return recommendationClient.getRecommendations(productId).log()
+            .onErrorResume { Flux.empty() }
     }
 
     override fun deleteRecommendations(productId: Int) {
@@ -103,12 +87,8 @@ class ProductCompositeIntegration @Autowired constructor(
     }
 
     override fun getReviews(productId: Int): Flux<Review> {
-        val url = UriComponentsBuilder.fromUriString("$reviewServiceUrl/review?productId={productId}").build(productId)
-        logger.debug("Will call the getReviews API on URL: {}", url)
-
-        // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
-        return webClient!!.get().uri(url).retrieve().bodyToFlux(Review::class.java).log()
-            .onErrorResume { error: Throwable? -> Flux.empty() }
+        return reviewClient.getReviews(productId).log()
+            .onErrorResume { Flux.empty() }
     }
 
     override fun deleteReviews(productId: Int) {
@@ -116,28 +96,34 @@ class ProductCompositeIntegration @Autowired constructor(
     }
 
     private fun handleException(ex: Throwable): Throwable {
-        if (ex !is WebClientResponseException) {
-            logger.warn("Got a unexpected error: {}, will rethrow it", ex.toString())
-            return ex
+        var rootEx = ex
+
+        if (ex is HystrixRuntimeException) {
+            rootEx = ex.cause!!
         }
-        val wcre = ex
-        return when (wcre.statusCode) {
-            HttpStatus.NOT_FOUND -> NotFoundException(getErrorMessage(wcre))
-            HttpStatus.UNPROCESSABLE_ENTITY -> InvalidInputException(getErrorMessage(wcre))
-            else -> {
-                logger.warn(
-                    "Got a unexpected HTTP error: {}, will rethrow it",
-                    wcre.statusCode
-                )
-                logger.warn("Error body: {}", wcre.responseBodyAsString)
-                ex
+
+        if (rootEx is FeignException) {
+            val wcre = rootEx
+            return when (HttpStatus.valueOf(wcre.status())) {
+                HttpStatus.NOT_FOUND -> NotFoundException(getErrorMessage(wcre))
+                HttpStatus.UNPROCESSABLE_ENTITY -> InvalidInputException(getErrorMessage(wcre))
+                else -> {
+                    logger.warn(
+                        "Got a unexpected HTTP error: {}, will rethrow it",
+                        HttpStatus.valueOf(wcre.status())
+                    )
+                    logger.warn("Error body: {}", wcre.contentUTF8())
+                    ex
+                }
             }
         }
+        logger.warn("Got a unexpected error: {}, will rethrow it", rootEx.toString())
+        return rootEx
     }
 
-    private fun getErrorMessage(ex: WebClientResponseException): String? {
+    private fun getErrorMessage(ex: FeignException): String? {
         return try {
-            mapper.readValue(ex.responseBodyAsString, HttpErrorInfo::class.java).message
+            mapper.readValue(ex.contentUTF8(), HttpErrorInfo::class.java).message
         } catch (ioex: IOException) {
             ex.message
         } catch (io: Exception) {

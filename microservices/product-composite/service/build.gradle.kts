@@ -35,6 +35,8 @@ configurations {
 }
 
 val resilience4jVersion: String by project
+val feignReactorSpringCloudVersion: String by project
+val springDocOpenapiVersion: String by project
 
 dependencies {
     implementation(project(":event-api"))
@@ -59,6 +61,11 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
+    implementation("com.playtika.reactivefeign:feign-reactor-spring-cloud-starter:$feignReactorSpringCloudVersion")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
+
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
@@ -68,8 +75,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
     implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-loadbalancer")
 
-    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.0")
-    implementation("org.springdoc:springdoc-openapi-security:1.5.0")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:$springDocOpenapiVersion")
+    implementation("org.springdoc:springdoc-openapi-security:$springDocOpenapiVersion")
 
     implementation("io.github.resilience4j:resilience4j-spring-boot2:$resilience4jVersion")
     implementation("io.github.resilience4j:resilience4j-reactor:$resilience4jVersion")
@@ -81,13 +88,16 @@ dependencies {
     testImplementation(group = "org.springframework.cloud", name = "spring-cloud-stream", ext = "jar", classifier = "test-binder")
 
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-netflix-ribbon:2.2.7.RELEASE")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
 }
 
+val springCloudVersion: String by project
+
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
     }
 }

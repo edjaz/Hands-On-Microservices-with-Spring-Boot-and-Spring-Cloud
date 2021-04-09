@@ -1,5 +1,6 @@
 resources:
   - roles.yml
+  - gateway.yml
   - auth-server.yml
   - product-composite.yml
   - product.yml

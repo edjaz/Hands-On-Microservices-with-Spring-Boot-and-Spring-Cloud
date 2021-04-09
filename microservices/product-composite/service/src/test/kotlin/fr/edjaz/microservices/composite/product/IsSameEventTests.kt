@@ -9,7 +9,7 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 class IsSameEventTests {
-    var mapper = ObjectMapper()
+    private var mapper = ObjectMapper()
 
     @Test
     @Throws(JsonProcessingException::class)
@@ -22,8 +22,8 @@ class IsSameEventTests {
         val event3 = Event<Int, Product>(Event.Type.DELETE, 1, null)
         val event4 = Event(Event.Type.CREATE, 1, Product(2, "name", 1, null))
         val event1JSon = mapper.writeValueAsString(event1)
-        MatcherAssert.assertThat(event1JSon, Matchers.`is`(IsSameEvent.Companion.sameEventExceptCreatedAt(event2)))
-        MatcherAssert.assertThat(event1JSon, Matchers.not(IsSameEvent.Companion.sameEventExceptCreatedAt(event3)))
-        MatcherAssert.assertThat(event1JSon, Matchers.not(IsSameEvent.Companion.sameEventExceptCreatedAt(event4)))
+        MatcherAssert.assertThat(event1JSon, Matchers.`is`(IsSameEvent.sameEventExceptCreatedAt(event2)))
+        MatcherAssert.assertThat(event1JSon, Matchers.not(IsSameEvent.sameEventExceptCreatedAt(event3)))
+        MatcherAssert.assertThat(event1JSon, Matchers.not(IsSameEvent.sameEventExceptCreatedAt(event4)))
     }
 }

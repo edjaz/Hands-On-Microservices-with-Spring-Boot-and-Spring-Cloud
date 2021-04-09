@@ -38,7 +38,7 @@ class IsSameEvent private constructor(expectedEvent: Event<*, *>) : TypeSafeMatc
 
     private fun convertObjectToMap(`object`: Any): MutableMap<*, *> {
         val node = mapper.convertValue(`object`, JsonNode::class.java)
-        return mapper.convertValue<MutableMap<*, *>>(node, MutableMap::class.java)
+        return mapper.convertValue(node, MutableMap::class.java)
     }
 
     private fun convertObjectToJsonString(`object`: Any?): String {

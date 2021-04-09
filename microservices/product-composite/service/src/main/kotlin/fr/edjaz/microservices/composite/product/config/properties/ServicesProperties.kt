@@ -10,23 +10,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ServicesProperties {
-    @ConfigurationProperties(prefix = "app.product-service")
-    data class ProductServiceProperties(
-        var host: String? = null,
-        var port: Int? = null
-    )
-
-    @ConfigurationProperties(prefix = "app.recommendation-service")
-    data class RecommendationServiceProperties(
-        var host: String? = null,
-        var port: Int? = null
-    )
-
-    @ConfigurationProperties(prefix = "app.review-service")
-    data class ReviewServiceProperties(
-        var host: String? = null,
-        var port: Int? = null
-    )
 
     data class Contact(
         var name: String? = null,

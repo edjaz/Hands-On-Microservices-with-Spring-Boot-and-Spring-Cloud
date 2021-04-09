@@ -8,7 +8,6 @@ spring:
       maxInterval: 10000
       maxAttempts: 20
 
-
 ---
 spring.config.activate.on-profile: config
 spring.config.import: configserver:${SPRING_CLOUD_CONFIG_URI}

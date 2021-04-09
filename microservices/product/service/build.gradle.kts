@@ -75,8 +75,10 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus")
 }
 
+val springCloudVersion: String by project
+
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
     }
 }

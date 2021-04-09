@@ -47,17 +47,17 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
 )
 class RecommendationServiceApplicationTests {
     @Autowired
-    private val client: WebTestClient? = null
+    private lateinit var client: WebTestClient
 
     @Autowired
-    private val repository: RecommendationRepository? = null
+    private lateinit var repository: RecommendationRepository
 
     @Autowired
     private lateinit var input: InputDestination
 
     @BeforeEach
     fun setupDb() {
-        repository!!.deleteAll().block()
+        repository.deleteAll().block()
     }
 
     @Test
@@ -66,7 +66,7 @@ class RecommendationServiceApplicationTests {
         sendCreateRecommendationEvent(productId, 1)
         sendCreateRecommendationEvent(productId, 2)
         sendCreateRecommendationEvent(productId, 3)
-        Assertions.assertEquals(3, repository!!.findByProductId(productId).count().block() as Long)
+        Assertions.assertEquals(3, repository.findByProductId(productId).count().block() as Long)
         getAndVerifyRecommendationsByProductId(productId, HttpStatus.OK)
             .jsonPath("$.length()").isEqualTo(3)
             .jsonPath("$[2].productId").isEqualTo(productId)
@@ -78,7 +78,7 @@ class RecommendationServiceApplicationTests {
         val productId = 1
         val recommendationId = 1
         sendCreateRecommendationEvent(productId, recommendationId)
-        Assertions.assertEquals(1, repository!!.count().block() as Long)
+        Assertions.assertEquals(1, repository.count().block() as Long)
         try {
             sendCreateRecommendationEvent(productId, recommendationId)
             Assertions.fail<Any>("Expected a MessagingException here!")
@@ -98,7 +98,7 @@ class RecommendationServiceApplicationTests {
         val productId = 1
         val recommendationId = 1
         sendCreateRecommendationEvent(productId, recommendationId)
-        Assertions.assertEquals(1, repository!!.findByProductId(productId).count().block() as Long)
+        Assertions.assertEquals(1, repository.findByProductId(productId).count().block() as Long)
         sendDeleteRecommendationEvent(productId)
         Assertions.assertEquals(0, repository.findByProductId(productId).count().block() as Long)
         sendDeleteRecommendationEvent(productId)
@@ -140,7 +140,7 @@ class RecommendationServiceApplicationTests {
         productIdQuery: String,
         expectedStatus: HttpStatus
     ): BodyContentSpec {
-        return client!!.get()
+        return client.get()
             .uri("/recommendation$productIdQuery")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
@@ -159,11 +159,11 @@ class RecommendationServiceApplicationTests {
             "SA"
         )
         val event: Event<Int, Recommendation> = Event(Event.Type.CREATE, productId, recommendation)
-        input!!.send(GenericMessage(event))
+        input.send(GenericMessage(event))
     }
 
     private fun sendDeleteRecommendationEvent(productId: Int) {
         val event: Event<Int, Product> = Event(Event.Type.DELETE, productId, null)
-        input!!.send(GenericMessage(event))
+        input.send(GenericMessage(event))
     }
 }

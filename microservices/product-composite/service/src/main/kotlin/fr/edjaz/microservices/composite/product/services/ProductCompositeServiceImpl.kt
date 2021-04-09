@@ -12,7 +12,6 @@ import fr.edjaz.util.exceptions.NotFoundException
 import fr.edjaz.util.http.ServiceUtil
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException
 import java.util.function.Consumer
-import java.util.function.Function
 import java.util.stream.Collectors
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -79,12 +78,12 @@ class ProductCompositeServiceImpl @Autowired constructor(
 
     override fun getCompositeProduct(productId: Int, delay: Int, faultPercent: Int): Mono<ProductAggregate> {
         return Mono.zip(
-            Function { values: Array<Any> ->
+            { values: Array<Any> ->
                 createProductAggregate(
                     values[0] as SecurityContext,
                     values[1] as Product,
-                    values[2] as List<Recommendation>,
-                    values[3] as List<Review>,
+                    values[2] as? List<Recommendation>,
+                    values[3] as? List<Review>,
                     serviceUtil.serviceAddress
                 )
             },
