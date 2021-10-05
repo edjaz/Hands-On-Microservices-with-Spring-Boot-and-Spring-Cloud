@@ -1,5 +1,7 @@
 package fr.edjaz.microservices.composite.product
 
+import com.fasterxml.jackson.databind.Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.edjaz.microservices.composite.product.config.properties.ServicesProperties.SwaggerProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -25,6 +27,11 @@ class ProductCompositeServiceApplication {
     @LoadBalanced
     fun loadBalancedWebClientBuilder(): WebClient.Builder {
         return WebClient.builder()
+    }
+
+    @Bean
+    fun javaTimeModule(): Module {
+        return JavaTimeModule()
     }
 }
 

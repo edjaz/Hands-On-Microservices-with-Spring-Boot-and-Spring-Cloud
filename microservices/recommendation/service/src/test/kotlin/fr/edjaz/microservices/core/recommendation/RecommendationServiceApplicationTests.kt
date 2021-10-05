@@ -10,13 +10,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.cloud.stream.binder.test.InputDestination
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.MessagingException
 import org.springframework.messaging.support.GenericMessage
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -53,7 +54,8 @@ class RecommendationServiceApplicationTests {
     private lateinit var repository: RecommendationRepository
 
     @Autowired
-    private lateinit var input: InputDestination
+    @Qualifier("sink-in-0")
+    private lateinit var input: MessageChannel
 
     @BeforeEach
     fun setupDb() {

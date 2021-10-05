@@ -1,9 +1,12 @@
 package fr.edjaz.microservices.core.product
 
+import com.fasterxml.jackson.databind.Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
@@ -14,6 +17,11 @@ class ProductServiceApplication {
         @Suppress("JAVA_CLASS_ON_COMPANION")
         @JvmStatic
         val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
+    }
+
+    @Bean
+    fun javaTimeModule(): Module {
+        return JavaTimeModule()
     }
 }
 

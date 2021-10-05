@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.edjaz.api.event.Event
 import java.io.IOException
 import org.hamcrest.Description
@@ -66,5 +67,6 @@ class IsSameEvent private constructor(expectedEvent: Event<*, *>) : TypeSafeMatc
 
     init {
         this.expectedEvent = expectedEvent
+        this.mapper.registerModule(JavaTimeModule())
     }
 }

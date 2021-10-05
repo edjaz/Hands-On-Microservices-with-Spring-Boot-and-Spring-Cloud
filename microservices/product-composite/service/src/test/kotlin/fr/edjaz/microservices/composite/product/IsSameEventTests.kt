@@ -2,6 +2,7 @@ package fr.edjaz.microservices.composite.product
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.event.Event
 import org.hamcrest.MatcherAssert
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.Test
 
 class IsSameEventTests {
     private var mapper = ObjectMapper()
+
+    init {
+        mapper.registerModule(JavaTimeModule())
+    }
 
     @Test
     @Throws(JsonProcessingException::class)

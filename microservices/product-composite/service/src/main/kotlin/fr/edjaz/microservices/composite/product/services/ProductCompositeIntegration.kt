@@ -1,7 +1,6 @@
 package fr.edjaz.microservices.composite.product.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.netflix.hystrix.exception.HystrixRuntimeException
 import feign.FeignException
 import fr.edjaz.api.core.product.Product
 import fr.edjaz.api.core.product.ProductService
@@ -98,9 +97,9 @@ class ProductCompositeIntegration @Autowired constructor(
     private fun handleException(ex: Throwable): Throwable {
         var rootEx = ex
 
-        if (ex is HystrixRuntimeException) {
+/*        if (ex is HystrixRuntimeException) {
             rootEx = ex.cause!!
-        }
+        }*/
 
         if (rootEx is FeignException) {
             val wcre = rootEx

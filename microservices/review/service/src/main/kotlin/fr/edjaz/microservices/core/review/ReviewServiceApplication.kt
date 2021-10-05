@@ -1,5 +1,7 @@
 package fr.edjaz.microservices.core.review
 
+import com.fasterxml.jackson.databind.Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import java.util.concurrent.Executors
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,6 +35,11 @@ class ReviewServiceApplication {
     fun jdbcScheduler(): Scheduler? {
         logger.info("Creates a jdbcScheduler with connectionPoolSize = $connectionPoolSize")
         return Schedulers.fromExecutor(Executors.newFixedThreadPool(connectionPoolSize))
+    }
+
+    @Bean
+    fun javaTimeModule(): Module {
+        return JavaTimeModule()
     }
 }
 

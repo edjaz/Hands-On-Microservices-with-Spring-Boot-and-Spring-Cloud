@@ -83,12 +83,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(group = "org.springframework.cloud", name = "spring-cloud-stream", ext = "jar", classifier = "test-binder")
 
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.springframework.cloud:spring-cloud-starter-netflix-ribbon:2.2.7.RELEASE")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
