@@ -20,6 +20,12 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("
     imageName = "edjaz/gateway"
 }
 
+tasks {
+    jar {
+        enabled = false
+    }
+}
+
 dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")

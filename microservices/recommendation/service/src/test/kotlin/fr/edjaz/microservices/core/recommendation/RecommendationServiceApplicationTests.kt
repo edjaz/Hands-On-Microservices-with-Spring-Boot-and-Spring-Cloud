@@ -36,6 +36,7 @@ import org.springframework.test.web.reactive.server.WebTestClient.BodyContentSpe
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "spring.data.mongodb.auto-index-creation= true",
+        "spring.mongodb.embedded.version= 2.6.10",
         "server.error.include-message=always",
         "server.error.include-binding-errors=always",
         "kubernetes.manifests.enabled=false",

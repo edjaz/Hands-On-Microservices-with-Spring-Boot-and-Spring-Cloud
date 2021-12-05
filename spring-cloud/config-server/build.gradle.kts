@@ -14,6 +14,12 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("
     imageName = "edjaz/config-server"
 }
 
+tasks {
+    jar {
+        enabled = false
+    }
+}
+
 dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")

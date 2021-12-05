@@ -20,6 +20,7 @@ import reactor.test.StepVerifier
         "spring.cloud.kubernetes.discovery.enabled=false",
         "spring.cloud.kubernetes.loadbalancer.enabled=false",
         "spring.data.mongodb.auto-index-creation= true",
+        "spring.mongodb.embedded.version= 2.6.10",
         "kubernetes.manifests.enabled=false",
         "kubernetes.informer.enabled=false"
     ]

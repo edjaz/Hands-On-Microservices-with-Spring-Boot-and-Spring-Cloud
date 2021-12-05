@@ -14,6 +14,12 @@ tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("
     imageName = "edjaz/eureka-server"
 }
 
+tasks {
+    jar {
+        enabled = false
+    }
+}
+
 dependencies {
 
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
