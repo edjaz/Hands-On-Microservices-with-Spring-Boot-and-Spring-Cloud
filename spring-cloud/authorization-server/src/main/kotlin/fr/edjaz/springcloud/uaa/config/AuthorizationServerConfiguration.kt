@@ -28,6 +28,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer
@@ -170,8 +171,9 @@ internal class UserConfig : WebSecurityConfigurerAdapter() {
 
     @Bean
     public override fun userDetailsService(): UserDetailsService {
+        var encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
         return InMemoryUserDetailsManager(
-            User.withDefaultPasswordEncoder()
+            User.builder().passwordEncoder(encoder::encode)
                 .username("dkahn")
                 .password("password")
                 .roles("USER")
