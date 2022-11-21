@@ -84,8 +84,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-webflux-ui:$springDocOpenapiVersion")
     implementation("org.springdoc:springdoc-openapi-security:$springDocOpenapiVersion")
 
-    implementation("io.github.resilience4j:resilience4j-spring-boot2:$resilience4jVersion")
-    implementation("io.github.resilience4j:resilience4j-reactor:$resilience4jVersion")
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 

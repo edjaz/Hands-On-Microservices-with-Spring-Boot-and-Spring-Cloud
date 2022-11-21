@@ -49,7 +49,7 @@ subprojects {
     apply(plugin = "java-library")
 
     version = "0.0.1-SNAPSHOT"
-    java.sourceCompatibility = JavaVersion.VERSION_11
+    java.sourceCompatibility = JavaVersion.VERSION_17
 
     tasks {
         withType<KotlinCompile> {
@@ -81,7 +81,7 @@ subprojects {
                 attributes["Implementation-Version"] = project.version
             }
         }
-        test {
+        withType<Test> {
             useJUnitPlatform()
             finalizedBy(jacocoTestReport)
         }

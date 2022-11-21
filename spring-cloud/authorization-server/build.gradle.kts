@@ -42,16 +42,16 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-rabbit")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+//    implementation("org.springframework.cloud:spring-cloud-starter-stream-rabbit")
+//    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
     implementation("org.springframework.retry:spring-retry")
 
     implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client")
     implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-client-config")
 
     implementation("javax.xml.bind:jaxb-api")
-    implementation("com.sun.xml.bind:jaxb-core")
-    implementation("com.sun.xml.bind:jaxb-impl")
+//    implementation("com.sun.xml.bind:jaxb-core")
+//    implementation("com.sun.xml.bind:jaxb-impl")
     implementation("com.nimbusds:nimbus-jose-jwt:6.7")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
